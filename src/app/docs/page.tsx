@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BLUR_FADE_DELAY } from "@/data";
+import { getDocsByCategory } from "@/lib/docs";
 import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
 
 type PageProps = {
@@ -26,25 +27,8 @@ export default async function DocsPage({ searchParams }: PageProps) {
   const locale = await getLocaleFromSearchParams(searchParams);
   const dict = await getDictionary(locale);
 
-  // 示例文档列表
-  const docs = [
-    {
-      title: locale === "en" ? "Getting Started" : "快速开始",
-      href: "/docs/getting-started",
-      description:
-        locale === "en"
-          ? "Learn how to install and use XDYou"
-          : "了解如何安装和使用XDYou",
-    },
-    {
-      title: locale === "en" ? "FAQ" : "常见问题",
-      href: "/docs/faq",
-      description:
-        locale === "en"
-          ? "Frequently asked questions and troubleshooting"
-          : "常见问题解答和故障排除",
-    },
-  ];
+  // 从文件系统读取文档
+  const docsByCategory = getDocsByCategory();
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20 xl:px-32 xl:py-24">
@@ -63,39 +47,48 @@ export default async function DocsPage({ searchParams }: PageProps) {
       </section>
 
       {/* Docs Grid */}
-      <section>
-        <div className="grid gap-6 sm:grid-cols-2">
-          {docs.map((doc, idx) => (
-            <BlurFade key={doc.href} delay={BLUR_FADE_DELAY * 2 + idx * 0.05}>
-              <Link href={doc.href}>
-                <Card className="h-full transition-colors hover:bg-accent">
-                  <CardHeader>
-                    <CardTitle>{doc.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">
-                      {doc.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            </BlurFade>
-          ))}
-        </div>
+      <section className="space-y-12">
+        {Object.entries(docsByCategory).length > 0 ? (
+          Object.entries(docsByCategory).map(([category, docs], catIdx) => (
+            <div key={category} className="space-y-4">
+              <BlurFade delay={BLUR_FADE_DELAY * 2 + catIdx * 0.1}>
+                <h2 className="text-2xl font-bold">{category}</h2>
+              </BlurFade>
+              <div className="grid gap-6 sm:grid-cols-2">
+                {docs.map((doc, idx) => (
+                  <BlurFade
+                    key={doc.slug}
+                    delay={BLUR_FADE_DELAY * 2 + catIdx * 0.1 + idx * 0.05}
+                  >
+                    <Link href={`/docs/${doc.slug}`}>
+                      <Card className="h-full transition-shadow hover:shadow-lg">
+                        <CardHeader>
+                          <CardTitle>{doc.metadata.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p>{doc.metadata.description}</p>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  </BlurFade>
+                ))}
+              </div>
+            </div>
+          ))
+        ) : (
+          <BlurFade delay={BLUR_FADE_DELAY * 2}>
+            <Card className="bg-muted/50">
+              <CardContent className="p-8 text-center">
+                <p className="text-muted-foreground">
+                  {locale === "en"
+                    ? "Documentation is coming soon. Please visit our GitHub repository for detailed information."
+                    : "文档即将推出。请访问我们的GitHub仓库获取详细信息。"}
+                </p>
+              </CardContent>
+            </Card>
+          </BlurFade>
+        )}
       </section>
-
-      {/* Coming Soon Notice */}
-      <BlurFade delay={BLUR_FADE_DELAY * 3}>
-        <Card className="bg-muted/50">
-          <CardContent className="p-8 text-center">
-            <p className="text-muted-foreground">
-              {locale === "en"
-                ? "More documentation is coming soon. For now, please visit our GitHub repository for detailed information."
-                : "更多文档即将推出。目前，请访问我们的GitHub仓库获取详细信息。"}
-            </p>
-          </CardContent>
-        </Card>
-      </BlurFade>
     </main>
   );
 }

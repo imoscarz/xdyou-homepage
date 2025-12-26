@@ -1,5 +1,7 @@
 ---
-title: "欢迎使用XDYou"
+title: "快速开始"
+description: "了解如何安装和使用XDYou"
+category: "入门指南"
 order: 1
 ---
 

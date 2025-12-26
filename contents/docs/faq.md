@@ -1,5 +1,7 @@
 ---
 title: "常见问题"
+description: "常见问题解答和故障排除"
+category: "帮助"
 order: 2
 ---
 

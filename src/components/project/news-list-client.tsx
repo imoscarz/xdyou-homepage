@@ -5,7 +5,6 @@ import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { NewsPost } from "@/lib/news";
 
@@ -54,33 +53,31 @@ export default function NewsListClient({
 
       {/* News Grid */}
       {filteredPosts.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredPosts.map((post, idx) => (
             <BlurFade key={post.slug} delay={delay + 0.1 + idx * 0.05}>
-              <Card className="flex h-full flex-col">
-                <CardHeader>
-                  <div className="mb-2 flex flex-wrap gap-2">
-                    {post.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                  <CardTitle className="line-clamp-2">{post.title}</CardTitle>
-                  <div className="text-xs text-muted-foreground">
-                    {dict.by}
-                    {post.author} • {dict.publishedOn} {post.date}
-                  </div>
-                </CardHeader>
-                <CardContent className="flex flex-grow flex-col">
-                  <p className="mb-4 line-clamp-3 flex-grow text-sm text-muted-foreground">
-                    {post.excerpt}
-                  </p>
-                  <Button asChild variant="ghost" size="sm" className="w-fit">
-                    <Link href={`/news/${post.slug}`}>{dict.readMore} →</Link>
-                  </Button>
-                </CardContent>
-              </Card>
+              <Link href={`/news/${post.slug}`}>
+                <Card className="flex h-full flex-col transition-shadow hover:shadow-lg">
+                  <CardHeader>
+                    <div className="mb-2 flex flex-wrap gap-2">
+                      {post.tags.map((tag) => (
+                        <Badge key={tag} variant="secondary">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                    <CardTitle className="line-clamp-2">{post.title}</CardTitle>
+                    <div className="text-xs text-muted-foreground">
+                      {dict.by} {post.author} • {dict.publishedOn} {post.date}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="flex flex-grow flex-col">
+                    <p className="line-clamp-3 flex-grow">
+                      {post.excerpt}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
             </BlurFade>
           ))}
         </div>

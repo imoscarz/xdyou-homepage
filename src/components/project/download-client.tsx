@@ -102,7 +102,6 @@ export default function DownloadClient({
                             key={asset.id}
                             asChild
                             size="sm"
-                            variant="outline"
                             className="w-full"
                           >
                             <Link
@@ -116,11 +115,7 @@ export default function DownloadClient({
                         ))}
                       </div>
                     ) : (
-                      <Button
-                        asChild
-                        size="sm"
-                        className="w-full"
-                      >
+                      <Button asChild size="sm" className="w-full">
                         <Link
                           href={
                             platformVersions[0]?.browser_download_url ||
@@ -136,12 +131,7 @@ export default function DownloadClient({
 
                     {/* 显示备用下载链接 */}
                     {platform.alternativeUrl && (
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="w-full"
-                      >
+                      <Button asChild variant="outline" size="sm" className="w-full">
                         <Link
                           href={platform.alternativeUrl}
                           target="_blank"
