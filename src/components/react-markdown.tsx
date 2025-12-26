@@ -1,5 +1,7 @@
 "use client";
 
+import "katex/dist/katex.min.css";
+
 import { Check, Copy } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +10,9 @@ import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 
 import { Button } from "@/components/ui/button";
 
@@ -66,14 +70,14 @@ function CustomCode({
 
   if (!inline && language) {
     return (
-      <div className="my-6 overflow-hidden rounded-lg border border-gray-700">
+      <div className="my-6 overflow-hidden rounded-lg shadow-sm bg-card border">
         {/* Language label and copy button */}
-        <div className="flex items-center justify-between bg-gray-800 px-4 py-2 text-xs border-b border-gray-700">
-          <span className="font-mono text-gray-400 uppercase">{language}</span>
+        <div className="flex items-center justify-between bg-muted/50 px-4 py-2 text-xs border-b">
+          <span className="font-mono text-muted-foreground uppercase">{language}</span>
           <Button
             variant="ghost"
             size="sm"
-            className="h-6 px-2 text-gray-400 hover:bg-gray-700 hover:text-gray-200"
+            className="h-6 px-2 text-muted-foreground hover:bg-muted hover:text-foreground"
             onClick={copyToClipboard}
           >
             {copied ? (
@@ -280,8 +284,10 @@ function CustomParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagr
 // Custom blockquote component
 function CustomBlockquote({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) {
   return (
-    <blockquote className="my-6 border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-700 dark:text-gray-300" {...props}>
-      {children}
+    <blockquote className="my-6 rounded-lg border bg-card p-4 shadow-sm border-l-4 border-l-primary" {...props}>
+      <div className="italic text-muted-foreground">
+        {children}
+      </div>
     </blockquote>
   );
 }
@@ -330,17 +336,19 @@ function CustomLi({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
 // Custom table components
 function CustomTable({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="my-6 overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700 border border-gray-300 dark:border-gray-700" {...props}>
-        {children}
-      </table>
+    <div className="my-6 overflow-hidden rounded-lg border shadow-sm bg-card">
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-border" {...props}>
+          {children}
+        </table>
+      </div>
     </div>
   );
 }
 
 function CustomThead({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
   return (
-    <thead className="bg-gray-50 dark:bg-gray-800" {...props}>
+    <thead className="bg-muted/50" {...props}>
       {children}
     </thead>
   );
@@ -348,7 +356,7 @@ function CustomThead({ children, ...props }: React.HTMLAttributes<HTMLTableSecti
 
 function CustomTbody({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
   return (
-    <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900" {...props}>
+    <tbody className="divide-y divide-border bg-card" {...props}>
       {children}
     </tbody>
   );
@@ -356,7 +364,7 @@ function CustomTbody({ children, ...props }: React.HTMLAttributes<HTMLTableSecti
 
 function CustomTr({ children, ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
   return (
-    <tr {...props}>
+    <tr className="hover:bg-muted/30 transition-colors" {...props}>
       {children}
     </tr>
   );
@@ -364,7 +372,7 @@ function CustomTr({ children, ...props }: React.HTMLAttributes<HTMLTableRowEleme
 
 function CustomTh({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) {
   return (
-    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100" {...props}>
+    <th className="px-6 py-3 text-left text-sm font-semibold" {...props}>
       {children}
     </th>
   );
@@ -372,7 +380,7 @@ function CustomTh({ children, ...props }: React.HTMLAttributes<HTMLTableCellElem
 
 function CustomTd({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) {
   return (
-    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300" {...props}>
+    <td className="px-6 py-3 text-sm" {...props}>
       {children}
     </td>
   );
@@ -416,7 +424,11 @@ export function CustomReactMarkdown({
 }: CustomReactMarkdownProps) {
   return (
     <div className={className}>
-      <ReactMarkdown components={components} remarkPlugins={[remarkGfm]}>
+      <ReactMarkdown 
+        components={components} 
+        remarkPlugins={[remarkGfm, remarkMath]}
+        rehypePlugins={[rehypeKatex]}
+      >
         {children}
       </ReactMarkdown>
     </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type DocTocProps = {
   content: string;
@@ -106,10 +106,12 @@ export default function DocToc({ content, dict }: DocTocProps) {
 
   return (
     <aside className="hidden xl:block xl:w-64">
-      <div className="sticky top-24 space-y-4">
-        <Card className="p-4">
-          <h3 className="mb-4 text-sm font-semibold">{dict.toc}</h3>
-          <nav className="space-y-1">
+      <div className="sticky top-24">
+        <Card className="flex flex-col">
+          <CardHeader className="flex-none pb-3">
+            <CardTitle className="text-base">{dict.toc}</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-1 space-y-1 overflow-y-auto scrollbar-thin" style={{ maxHeight: '60vh' }}>
             {headings.map((heading) => (
               <button
                 key={heading.id}
@@ -126,7 +128,7 @@ export default function DocToc({ content, dict }: DocTocProps) {
                 {heading.text}
               </button>
             ))}
-          </nav>
+          </CardContent>
         </Card>
       </div>
     </aside>
