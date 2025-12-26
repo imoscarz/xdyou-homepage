@@ -177,7 +177,7 @@ function CustomParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagr
 // Code
 function CustomCode({ inline, className, children, ...props }: React.HTMLAttributes<HTMLElement> & { inline?: boolean }) {
 	const match = /language-(\w+)/.exec(className || "");
-	const language = match ? match[1] : "";
+	const language = match ? match[1] : "plaintext";
 	const codeString = String(children).replace(/\n$/, "");
 	const [copied, setCopied] = useState(false);
 
@@ -187,39 +187,39 @@ function CustomCode({ inline, className, children, ...props }: React.HTMLAttribu
 		setTimeout(() => setCopied(false), 1800);
 	};
 
-	if (!inline && language) {
+	if (inline) {
 		return (
-			<div className="my-6 overflow-hidden rounded-lg border bg-card shadow-sm">
-				<div className="flex items-center justify-between border-b bg-muted/50 px-4 py-2 text-xs">
-					<span className="font-mono uppercase tracking-wider text-muted-foreground">{language}</span>
-					<Button
-						variant="ghost"
-						size="sm"
-						className="h-7 px-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-						onClick={copyToClipboard}
-					>
-						{copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-					</Button>
-				</div>
-				<SyntaxHighlighter
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					style={oneDark as any}
-					language={language}
-					PreTag="div"
-					showLineNumbers
-					customStyle={{ margin: 0, borderRadius: 0, fontSize: "0.75rem", padding: "1rem" }}
-					{...props}
-				>
-					{codeString}
-				</SyntaxHighlighter>
-			</div>
+			<code className="rounded-md border bg-muted px-1.5 py-0.5 font-mono text-sm" {...props}>
+				{children}
+			</code>
 		);
 	}
 
 	return (
-		<code className="rounded-md border bg-muted px-1.5 py-0.5 font-mono text-sm" {...props}>
-			{children}
-		</code>
+		<div className="my-6 overflow-hidden rounded-lg border bg-card shadow-sm">
+			<div className="flex items-center justify-between border-b bg-muted/50 px-4 py-2 text-xs">
+				<span className="font-mono uppercase tracking-wider text-muted-foreground">{language}</span>
+				<Button
+					variant="ghost"
+					size="sm"
+					className="h-7 px-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+					onClick={copyToClipboard}
+				>
+					{copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+				</Button>
+			</div>
+			<SyntaxHighlighter
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				style={oneDark as any}
+				language={language}
+				PreTag="div"
+				showLineNumbers
+				customStyle={{ margin: 0, borderRadius: 0, fontSize: "0.75rem", padding: "1rem" }}
+				{...props}
+			>
+				{codeString}
+			</SyntaxHighlighter>
+		</div>
 	);
 }
 
