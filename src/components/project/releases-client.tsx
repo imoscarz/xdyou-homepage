@@ -1,6 +1,6 @@
 "use client";
 
-import { FileBox, FileCode, Tag } from "lucide-react";
+import { ChevronDown, FileBox, FileCode, Tag } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -14,6 +14,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { projectConfig } from "@/config/project";
 import {
   formatFileSize,
   formatReleaseDate,
@@ -39,20 +40,39 @@ export default function ReleasesClient({
   dict,
   delay = 0,
 }: ReleasesClientProps) {
-  const [releases] = useState<GitHubRelease[]>(initialReleases);
-  const [openReleases, setOpenReleases] = useState<Set<number>>(new Set());
+  const [releases, setReleases] = useState<GitHubRelease[]>(initialReleases);
+  const [displayCount, setDisplayCount] = useState(5);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const toggleRelease = (id: number) => {
-    setOpenReleases((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
+  const loadMore = async () => {
+    setIsLoading(true);
+    // 从已有的releases中显示更多
+    setDisplayCount((prev) => Math.min(prev + 5, releases.length));
+    
+    // 如果需要从API加载更多
+    if (displayCount >= releases.length && releases.length < 50) {
+      try {
+        const response = await fetch(
+          `https://api.github.com/repos/${projectConfig.repo.owner}/${projectConfig.repo.name}/releases?per_page=10&page=${Math.floor(releases.length / 10) + 1}`,
+          {
+            headers: {
+              Accept: "application/vnd.github+json",
+              "X-GitHub-Api-Version": "2022-11-28",
+            },
+          }
+        );
+        if (response.ok) {
+          const newReleases: GitHubRelease[] = await response.json();
+          setReleases((prev) => [...prev, ...newReleases]);
+        }
+      } catch (error) {
+        console.error("Failed to load more releases:", error);
       }
-      return newSet;
-    });
+    }
+    setIsLoading(false);
   };
+
+  const displayedReleases = releases.slice(0, displayCount);
 
   if (releases.length === 0) {
     return (
@@ -68,20 +88,21 @@ export default function ReleasesClient({
 
   return (
     <div className="space-y-6">
-      {releases.map((release, idx) => {
-        const isOpen = openReleases.has(release.id);
+      {displayedReleases.map((release, idx) => {
+        const [isNotesOpen, setIsNotesOpen] = useState(true); // 默认展开
+        const [areAssetsOpen, setAreAssetsOpen] = useState(false);
 
         return (
           <BlurFade key={release.id} delay={delay + idx * 0.05}>
-            <Card>
-              <CardHeader>
+            <Card className="overflow-hidden">
+              <CardHeader className="bg-muted/50">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 space-y-2">
                     <CardTitle className="flex items-center gap-2 text-2xl">
                       <Tag className="size-5" />
                       {release.name || release.tag_name}
                     </CardTitle>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                       <Badge variant="outline">{release.tag_name}</Badge>
                       <span>•</span>
                       <span>
@@ -89,63 +110,89 @@ export default function ReleasesClient({
                       </span>
                     </div>
                   </div>
-                  <Button asChild variant="default">
+                  <Button asChild variant="default" size="sm">
                     <Link href={release.html_url} target="_blank" rel="noopener noreferrer">
-                      View on GitHub
+                      GitHub
                     </Link>
                   </Button>
                 </div>
               </CardHeader>
 
-              <CardContent className="space-y-4">
-                {/* Release Notes */}
+              <CardContent className="space-y-6 pt-6">
+                {/* Release Notes - 默认展开 */}
                 {release.body && (
-                  <Collapsible open={isOpen} onOpenChange={() => toggleRelease(release.id)}>
-                    <CollapsibleTrigger asChild>
-                      <Button variant="ghost" className="w-full justify-start">
-                        Release Notes {isOpen ? "▼" : "▶"}
-                      </Button>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <div className="prose prose-sm dark:prose-invert mt-4 max-w-none">
-                        <CustomReactMarkdown>{release.body}</CustomReactMarkdown>
-                      </div>
-                    </CollapsibleContent>
-                  </Collapsible>
+                  <div className="space-y-3">
+                    <Collapsible open={isNotesOpen} onOpenChange={setIsNotesOpen}>
+                      <CollapsibleTrigger asChild>
+                        <Button variant="ghost" className="w-full justify-between px-0 hover:bg-transparent">
+                          <span className="text-sm font-semibold">Release Notes</span>
+                          <ChevronDown
+                            className={`size-4 transition-transform ${
+                              isNotesOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </Button>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <Card className="mt-2 border-muted">
+                          <CardContent className="prose prose-sm dark:prose-invert max-w-none p-4">
+                            <CustomReactMarkdown>{release.body}</CustomReactMarkdown>
+                          </CardContent>
+                        </Card>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </div>
                 )}
 
                 {/* Assets */}
                 {release.assets.length > 0 && (
                   <div className="space-y-3">
-                    <h4 className="flex items-center gap-2 text-sm font-semibold">
-                      <FileBox className="size-4" />
-                      {dict.assets}
-                    </h4>
-                    <div className="grid gap-2">
-                      {release.assets.map((asset) => (
-                        <div
-                          key={asset.id}
-                          className="flex items-center justify-between rounded-lg border p-3 text-sm hover:bg-accent"
-                        >
-                          <div className="flex-1">
-                            <p className="font-medium">{asset.name}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {formatFileSize(asset.size)} • {dict.downloadCount}:{" "}
-                              {asset.download_count.toLocaleString()}
-                            </p>
-                          </div>
-                          <Button asChild size="sm" variant="outline">
-                            <Link
-                              href={asset.browser_download_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Download
-                            </Link>
-                          </Button>
+                    <Collapsible open={areAssetsOpen} onOpenChange={setAreAssetsOpen}>
+                      <CollapsibleTrigger asChild>
+                        <Button variant="ghost" className="w-full justify-between px-0 hover:bg-transparent">
+                          <h4 className="flex items-center gap-2 text-sm font-semibold">
+                            <FileBox className="size-4" />
+                            {dict.assets} ({release.assets.length})
+                          </h4>
+                          <ChevronDown
+                            className={`size-4 transition-transform ${
+                              areAssetsOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </Button>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="mt-2 grid gap-2">
+                          {release.assets.map((asset) => (
+                            <Card key={asset.id} className="border-muted">
+                              <CardContent className="p-4">
+                                <div className="flex items-start justify-between gap-4">
+                                  <div className="flex-1 space-y-1">
+                                    <p className="font-medium">{asset.name}</p>
+                                    <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                                      <span>{formatFileSize(asset.size)}</span>
+                                      <span>•</span>
+                                      <span>{dict.downloadCount}: {asset.download_count.toLocaleString()}</span>
+                                      <span>•</span>
+                                      <span>{asset.content_type}</span>
+                                    </div>
+                                  </div>
+                                  <Button asChild size="sm">
+                                    <Link
+                                      href={asset.browser_download_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      Download
+                                    </Link>
+                                  </Button>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))}
                         </div>
-                      ))}
-                    </div>
+                      </CollapsibleContent>
+                    </Collapsible>
                   </div>
                 )}
 
@@ -173,6 +220,22 @@ export default function ReleasesClient({
           </BlurFade>
         );
       })}
+
+      {/* Load More Button */}
+      {displayCount < releases.length && (
+        <BlurFade delay={delay + displayedReleases.length * 0.05}>
+          <div className="flex justify-center pt-4">
+            <Button
+              onClick={loadMore}
+              disabled={isLoading}
+              variant="outline"
+              size="lg"
+            >
+              {isLoading ? "Loading..." : dict.loadMore}
+            </Button>
+          </div>
+        </BlurFade>
+      )}
     </div>
   );
 }
