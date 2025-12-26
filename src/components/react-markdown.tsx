@@ -257,8 +257,8 @@ function CustomCode({
   }
 
   return (
-    <div className="my-4 overflow-hidden rounded-lg">
-      <div className="bg-muted/60 flex items-center justify-between px-4 py-2 text-xs">
+    <div className="my-4 overflow-hidden rounded-lg border border-border">
+      <div className="bg-muted flex items-center justify-between border-b border-border px-4 py-2 text-xs">
         <span className="text-muted-foreground font-mono tracking-wider uppercase">
           {language}
         </span>
@@ -288,6 +288,7 @@ function CustomCode({
           padding: "1rem",
           border: "none",
           boxShadow: "none",
+          background: "#282c34",
         }}
         {...props}
       >
@@ -304,24 +305,24 @@ function CustomBlockquote({
 }: React.HTMLAttributes<HTMLQuoteElement>) {
   // Check if this is a GitHub-style alert
   const firstChild = React.Children.toArray(children)[0];
-  let alertType = null;
-  let alertContent = children;
+  let alertType: string | null = null;
+  let alertContent: React.ReactNode = children;
 
   if (React.isValidElement(firstChild)) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const props = firstChild.props as any;
-    if (props?.children) {
-      const firstText = React.Children.toArray(props.children)[0];
+    const childProps = firstChild.props as any;
+    if (childProps?.children) {
+      const firstText = React.Children.toArray(childProps.children)[0];
       if (typeof firstText === "string") {
         const match = firstText.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/);
         if (match) {
           alertType = match[1];
           // Remove the alert marker from content
           const newFirstText = firstText.replace(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/, "");
-          const newChildren = [newFirstText, ...React.Children.toArray(props.children).slice(1)];
+          const newChildren = [newFirstText, ...React.Children.toArray(childProps.children).slice(1)];
           alertContent = [
             React.cloneElement(firstChild, {
-              ...props,
+              ...childProps,
               children: newChildren,
             }),
             ...React.Children.toArray(children).slice(1),
@@ -459,7 +460,7 @@ function CustomTable({
   ...props
 }: React.HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="bg-card my-6 overflow-hidden rounded-lg border shadow-sm">
+    <div className="bg-card px-5 overflow-hidden rounded-lg border shadow-sm">
       <div className="overflow-x-auto">
         <table className="divide-border min-w-full divide-y" {...props}>
           {children}
