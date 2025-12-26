@@ -6,22 +6,22 @@ export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
       <div className="text-center">
-        <h1 className="text-6xl font-bold text-foreground mb-4">404</h1>
-        <h2 className="text-2xl font-semibold text-foreground mb-4">
-          Page Not Found
+        <h1 className="mb-4 text-6xl font-bold text-foreground">404</h1>
+        <h2 className="mb-4 text-2xl font-semibold text-foreground">
+          页面未找到
         </h2>
-        <p className="text-muted-foreground mb-8 max-w-md">
-          Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or you entered the wrong URL.
+        <p className="mb-8 max-w-md text-muted-foreground">
+          抱歉，您访问的页面不存在。可能已被移动、删除，或您输入了错误的地址。
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col justify-center gap-4 sm:flex-row">
           <Button asChild>
             <Link href="/">
-              Go Home
+              返回首页
             </Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/blog">
-              View Blog
+            <Link href="/news">
+              查看新闻
             </Link>
           </Button>
         </div>

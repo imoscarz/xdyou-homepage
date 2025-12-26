@@ -5,11 +5,7 @@ import { DATA } from "@/data";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = DATA.url;
 
-  // Note: External RSS blog posts are not included in sitemap
-  // as they have their own canonical URLs and should be indexed from their source.
-  // Only include local blog pages in sitemap.
-
-  // Static routes
+  // Static routes for XDYou project
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -18,13 +14,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/blog`,
+      url: `${baseUrl}/news`,
       lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "daily",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/anime`,
+      url: `${baseUrl}/releases`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/docs`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,

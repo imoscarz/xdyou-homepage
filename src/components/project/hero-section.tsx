@@ -32,9 +32,22 @@ export default function HeroSection({
         {/* Left: Project Info */}
         <div className="space-y-6">
           <BlurFade delay={delay}>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              {projectName}
-            </h1>
+            <div className="flex items-center gap-4">
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+                {projectName}
+              </h1>
+              {/* Logo on mobile - right side */}
+              <div className="md:hidden">
+                <Image
+                  src={logo}
+                  alt={`${projectName} Logo`}
+                  width={64}
+                  height={64}
+                  className="rounded-2xl object-contain"
+                  priority
+                />
+              </div>
+            </div>
           </BlurFade>
           
           <BlurFade delay={delay + 0.1}>
@@ -74,15 +87,15 @@ export default function HeroSection({
           </BlurFade>
         </div>
         
-        {/* Right: Logo */}
+        {/* Right: Logo - Desktop only */}
         <BlurFade delay={delay + 0.2}>
-          <div className="flex items-center justify-center">
+          <div className="hidden items-center justify-center md:flex">
             <div className="relative aspect-square w-full max-w-md">
               <Image
                 src={logo}
                 alt={`${projectName} Logo`}
                 fill
-                className="object-contain"
+                className="rounded-3xl object-contain"
                 priority
               />
             </div>
