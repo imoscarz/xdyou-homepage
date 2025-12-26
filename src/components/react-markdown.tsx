@@ -304,29 +304,62 @@ function CustomBlockquote({
   ...props
 }: React.HTMLAttributes<HTMLQuoteElement>) {
   // Check if this is a GitHub-style alert
-  const firstChild = React.Children.toArray(children)[0];
   let alertType: string | null = null;
   let alertContent: React.ReactNode = children;
 
-  if (React.isValidElement(firstChild)) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const childProps = firstChild.props as any;
-    if (childProps?.children) {
-      const firstText = React.Children.toArray(childProps.children)[0];
-      if (typeof firstText === "string") {
-        const match = firstText.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/);
-        if (match) {
-          alertType = match[1];
-          // Remove the alert marker from content
-          const newFirstText = firstText.replace(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/, "");
-          const newChildren = [newFirstText, ...React.Children.toArray(childProps.children).slice(1)];
-          alertContent = [
-            React.cloneElement(firstChild, {
-              ...childProps,
-              children: newChildren,
-            }),
-            ...React.Children.toArray(children).slice(1),
-          ];
+  // Try to find [!NOTE] pattern in the blockquote content
+  const childrenArray = React.Children.toArray(children);
+  
+  // Find the first non-whitespace React element
+  const firstElementIndex = childrenArray.findIndex(
+    child => React.isValidElement(child)
+  );
+  
+  if (firstElementIndex !== -1) {
+    const firstChild = childrenArray[firstElementIndex];
+    
+    if (React.isValidElement(firstChild)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const childProps = firstChild.props as any;
+      
+      if (childProps?.children) {
+        const childContent = React.Children.toArray(childProps.children);
+        const firstText = childContent[0];
+        
+        // Check if first text contains the alert marker
+        if (typeof firstText === "string") {
+          const match = firstText.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/);
+          
+          if (match) {
+            alertType = match[1];
+            
+            // Remove the alert marker from the first text
+            const newFirstText = firstText.replace(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/, "").trim();
+            
+            // Reconstruct the content without the marker
+            const newChildContent = newFirstText 
+              ? [newFirstText, ...childContent.slice(1)]
+              : childContent.slice(1);
+            
+            // Create new first child with updated content
+            const newFirstChild = newChildContent.length > 0
+              ? React.cloneElement(firstChild, {
+                  ...childProps,
+                  children: newChildContent,
+                })
+              : null;
+            
+            // Reconstruct all children, keeping whitespace structure
+            const newChildren = [...childrenArray];
+            if (newFirstChild) {
+              newChildren[firstElementIndex] = newFirstChild;
+            } else {
+              // Remove empty first child
+              newChildren.splice(firstElementIndex, 1);
+            }
+            
+            alertContent = newChildren;
+          }
         }
       }
     }
