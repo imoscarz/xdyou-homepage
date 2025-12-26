@@ -70,20 +70,20 @@ function CustomCode({
 
   if (!inline && language) {
     return (
-      <div className="my-6 overflow-hidden rounded-lg shadow-sm bg-card border">
+      <div className="my-6 overflow-hidden rounded-lg border bg-card shadow-sm">
         {/* Language label and copy button */}
         <div className="flex items-center justify-between bg-muted/50 px-4 py-2 text-xs border-b">
-          <span className="font-mono text-muted-foreground uppercase">{language}</span>
+          <span className="font-mono text-muted-foreground uppercase tracking-wider">{language}</span>
           <Button
             variant="ghost"
             size="sm"
-            className="h-6 px-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="h-7 px-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
             onClick={copyToClipboard}
           >
             {copied ? (
-              <Check className="size-3" />
+              <Check className="size-3.5" />
             ) : (
-              <Copy className="size-3" />
+              <Copy className="size-3.5" />
             )}
           </Button>
         </div>
@@ -98,7 +98,7 @@ function CustomCode({
             margin: 0,
             borderRadius: 0,
             fontSize: "0.75rem",
-            paddingTop: "0.75rem",
+            padding: "1rem",
           }}
           {...props}
         >
@@ -109,7 +109,7 @@ function CustomCode({
   }
 
   return (
-    <code className="rounded bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 text-sm font-mono" {...props}>
+    <code className="rounded-md bg-muted px-1.5 py-0.5 text-sm font-mono border" {...props}>
       {children}
     </code>
   );
@@ -223,7 +223,7 @@ function processText(text: string): React.ReactNode[] {
           href={item.match[0]}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 hover:underline dark:text-blue-400"
+          className="text-primary hover:underline font-medium transition-colors"
         >
           {from}...{to}
         </Link>
@@ -236,7 +236,7 @@ function processText(text: string): React.ReactNode[] {
           href={item.match[0]}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 hover:underline dark:text-blue-400"
+          className="text-primary hover:underline font-medium transition-colors"
         >
           PR#{prNumber}
         </Link>
@@ -249,7 +249,7 @@ function processText(text: string): React.ReactNode[] {
           href={`https://github.com/${username}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 hover:underline dark:text-blue-400"
+          className="text-primary hover:underline font-medium transition-colors"
         >
           @{username}
         </Link>
@@ -270,7 +270,7 @@ function processText(text: string): React.ReactNode[] {
 // Custom paragraph component
 function CustomParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className="my-4 leading-7" {...props}>
+    <p className="my-4 leading-7 text-foreground" {...props}>
       {React.Children.map(children, (child) => {
         if (typeof child === 'string') {
           return <>{processText(child)}</>;
@@ -284,8 +284,8 @@ function CustomParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagr
 // Custom blockquote component
 function CustomBlockquote({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) {
   return (
-    <blockquote className="my-6 rounded-lg border bg-card p-4 shadow-sm border-l-4 border-l-primary" {...props}>
-      <div className="italic text-muted-foreground">
+    <blockquote className="my-6 rounded-lg border bg-card p-5 shadow-sm border-l-4 border-l-primary/80" {...props}>
+      <div className="italic text-muted-foreground leading-relaxed">
         {children}
       </div>
     </blockquote>
@@ -298,7 +298,7 @@ function CustomLink({ href, children, ...props }: React.AnchorHTMLAttributes<HTM
   return (
     <Link
       href={href || '#'}
-      className="text-blue-600 hover:underline dark:text-blue-400 font-medium"
+      className="text-primary hover:underline font-medium transition-colors"
       target={isExternal ? '_blank' : undefined}
       rel={isExternal ? 'noopener noreferrer' : undefined}
       {...props}
@@ -311,7 +311,7 @@ function CustomLink({ href, children, ...props }: React.AnchorHTMLAttributes<HTM
 // Custom list components
 function CustomUl({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) {
   return (
-    <ul className="my-4 ml-6 list-disc space-y-2" {...props}>
+    <ul className="my-4 ml-6 list-disc space-y-2 marker:text-primary/70" {...props}>
       {children}
     </ul>
   );
@@ -319,7 +319,7 @@ function CustomUl({ children, ...props }: React.HTMLAttributes<HTMLUListElement>
 
 function CustomOl({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) {
   return (
-    <ol className="my-4 ml-6 list-decimal space-y-2" {...props}>
+    <ol className="my-4 ml-6 list-decimal space-y-2 marker:text-primary/70 marker:font-semibold" {...props}>
       {children}
     </ol>
   );
@@ -327,7 +327,7 @@ function CustomOl({ children, ...props }: React.HTMLAttributes<HTMLOListElement>
 
 function CustomLi({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
   return (
-    <li className="leading-7" {...props}>
+    <li className="leading-7 text-foreground" {...props}>
       {children}
     </li>
   );
@@ -348,7 +348,7 @@ function CustomTable({ children, ...props }: React.HTMLAttributes<HTMLTableEleme
 
 function CustomThead({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
   return (
-    <thead className="bg-muted/50" {...props}>
+    <thead className="bg-muted/60" {...props}>
       {children}
     </thead>
   );
@@ -364,7 +364,7 @@ function CustomTbody({ children, ...props }: React.HTMLAttributes<HTMLTableSecti
 
 function CustomTr({ children, ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
   return (
-    <tr className="hover:bg-muted/30 transition-colors" {...props}>
+    <tr className="hover:bg-muted/40 transition-colors duration-150" {...props}>
       {children}
     </tr>
   );
@@ -372,7 +372,7 @@ function CustomTr({ children, ...props }: React.HTMLAttributes<HTMLTableRowEleme
 
 function CustomTh({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) {
   return (
-    <th className="px-6 py-3 text-left text-sm font-semibold" {...props}>
+    <th className="px-6 py-3.5 text-left text-sm font-semibold text-foreground" {...props}>
       {children}
     </th>
   );
@@ -380,7 +380,7 @@ function CustomTh({ children, ...props }: React.HTMLAttributes<HTMLTableCellElem
 
 function CustomTd({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) {
   return (
-    <td className="px-6 py-3 text-sm" {...props}>
+    <td className="px-6 py-3.5 text-sm text-foreground" {...props}>
       {children}
     </td>
   );
@@ -389,7 +389,7 @@ function CustomTd({ children, ...props }: React.HTMLAttributes<HTMLTableCellElem
 // Custom horizontal rule
 function CustomHr(props: React.HTMLAttributes<HTMLHRElement>) {
   return (
-    <hr className="my-8 border-t border-gray-300 dark:border-gray-700" {...props} />
+    <hr className="my-8 border-t-2 border-border" {...props} />
   );
 }
 
