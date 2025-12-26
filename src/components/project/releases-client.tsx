@@ -33,17 +33,25 @@ export default function ReleasesClient({
   const [releases, setReleases] = useState<GitHubRelease[]>(initialReleases);
   const [displayCount, setDisplayCount] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
 
   const loadMore = async () => {
     setIsLoading(true);
-    // 从已有的releases中显示更多
-    setDisplayCount((prev) => Math.min(prev + 5, releases.length));
+    
+    // 如果还有未显示的已加载releases，先显示它们
+    if (displayCount < releases.length) {
+      setDisplayCount((prev) => Math.min(prev + 5, releases.length));
+      setIsLoading(false);
+      return;
+    }
     
     // 如果需要从API加载更多
-    if (displayCount >= releases.length && releases.length < 50) {
+    if (hasMore) {
       try {
+        const nextPage = page + 1;
         const response = await fetch(
-          `https://api.github.com/repos/${projectConfig.repo.owner}/${projectConfig.repo.name}/releases?per_page=10&page=${Math.floor(releases.length / 10) + 1}`,
+          `https://api.github.com/repos/${projectConfig.repo.owner}/${projectConfig.repo.name}/releases?per_page=10&page=${nextPage}`,
           {
             headers: {
               Accept: "application/vnd.github+json",
@@ -51,14 +59,26 @@ export default function ReleasesClient({
             },
           }
         );
+        
         if (response.ok) {
           const newReleases: GitHubRelease[] = await response.json();
-          setReleases((prev) => [...prev, ...newReleases]);
+          
+          if (newReleases.length === 0) {
+            setHasMore(false);
+          } else {
+            setReleases((prev) => [...prev, ...newReleases]);
+            setDisplayCount((prev) => prev + 5);
+            setPage(nextPage);
+          }
+        } else {
+          setHasMore(false);
         }
       } catch (error) {
         console.error("Failed to load more releases:", error);
+        setHasMore(false);
       }
     }
+    
     setIsLoading(false);
   };
 
@@ -95,7 +115,7 @@ export default function ReleasesClient({
         ))}
 
         {/* Load More Button - Always visible at bottom */}
-        {displayCount < releases.length && (
+        {(displayCount < releases.length || hasMore) && (
           <BlurFade delay={delay + displayedReleases.length * 0.05}>
             <div className="flex justify-center pt-4">
               <Button
