@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, FileBox, FileCode, Tag } from "lucide-react";
+import { ChevronDown, FileBox, FileCode, ScrollText, Tag } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -25,6 +25,7 @@ type ReleaseCardProps = {
   delay?: number;
   dict: {
     releasedOn: string;
+    releaseNotes: string;
     assets: string;
     sourceCode: string;
     downloadCount: string;
@@ -72,7 +73,10 @@ export default function ReleaseCard({
               <Collapsible open={isNotesOpen} onOpenChange={setIsNotesOpen}>
                 <CollapsibleTrigger asChild>
                   <Button variant="ghost" className="w-full justify-between px-0 hover:bg-transparent">
-                    <span className="text-sm font-semibold">Release Notes</span>
+                    <span className="flex items-center gap-2 text-sm font-semibold">
+                      <ScrollText className="size-4" />
+                      {dict.releaseNotes}
+                    </span>
                     <ChevronDown
                       className={`size-4 transition-transform ${
                         isNotesOpen ? "rotate-180" : ""

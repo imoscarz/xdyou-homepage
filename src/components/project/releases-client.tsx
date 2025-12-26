@@ -15,6 +15,7 @@ type ReleasesClientProps = {
   dict: {
     version: string;
     releasedOn: string;
+    releaseNotes: string;
     assets: string;
     sourceCode: string;
     downloadCount: string;
@@ -107,6 +108,7 @@ export default function ReleasesClient({
             delay={delay + idx * 0.05}
             dict={{
               releasedOn: dict.releasedOn,
+              releaseNotes: dict.releaseNotes,
               assets: dict.assets,
               sourceCode: dict.sourceCode,
               downloadCount: dict.downloadCount,

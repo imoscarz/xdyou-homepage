@@ -57,6 +57,7 @@ export default async function ReleasesPage({ searchParams }: PageProps) {
           dict={{
             version: dict.releases.version,
             releasedOn: dict.releases.releasedOn,
+            releaseNotes: dict.releases.releaseNotes,
             assets: dict.releases.assets,
             sourceCode: dict.releases.sourceCode,
             downloadCount: dict.releases.downloadCount,

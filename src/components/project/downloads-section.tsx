@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 import DownloadClient from "@/components/project/download-client";
+import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
@@ -102,9 +103,9 @@ export default function DownloadsSection({
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pt-4">
                     <div className="prose prose-sm dark:prose-invert max-w-none">
-                      <p className="whitespace-pre-wrap text-sm text-muted-foreground">
+                      <CustomReactMarkdown>
                         {latestRelease.notes}
-                      </p>
+                      </CustomReactMarkdown>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>

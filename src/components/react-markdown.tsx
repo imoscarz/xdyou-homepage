@@ -1,8 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import remarkGfm from "remark-gfm";
 
 interface CustomReactMarkdownProps {
   children: string;
@@ -113,6 +116,118 @@ function CustomH6({ children, ...props }: React.HTMLAttributes<HTMLHeadingElemen
   return <h6 id={id} className="scroll-mt-24" {...props}>{children}</h6>;
 }
 
+// Custom text processing for GitHub links and @mentions
+function processText(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let key = 0;
+
+  // Pattern for GitHub compare URLs
+  const compareRegex = /https:\/\/github\.com\/([^/]+)\/([^/]+)\/compare\/([^/\s]+)\.\.\.([^/\s]+)/g;
+  // Pattern for GitHub PR URLs  
+  const prRegex = /https:\/\/github\.com\/([^/]+)\/([^/]+)\/pull\/(\d+)/g;
+  // Pattern for @mentions
+  const mentionRegex = /@([a-zA-Z0-9_-]+)/g;
+
+  const patterns = [
+    { regex: compareRegex, type: 'compare' },
+    { regex: prRegex, type: 'pr' },
+    { regex: mentionRegex, type: 'mention' }
+  ];
+
+  const matches: Array<{ index: number; length: number; match: RegExpExecArray; type: string }> = [];
+
+  // Collect all matches
+  patterns.forEach(({ regex, type }) => {
+    regex.lastIndex = 0;
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      matches.push({
+        index: match.index,
+        length: match[0].length,
+        match,
+        type
+      });
+    }
+  });
+
+  // Sort matches by index
+  matches.sort((a, b) => a.index - b.index);
+
+  // Process matches
+  matches.forEach((item) => {
+    // Add text before match
+    if (item.index > lastIndex) {
+      parts.push(text.slice(lastIndex, item.index));
+    }
+
+    // Add matched link
+    if (item.type === 'compare') {
+      const [, , , from, to] = item.match;
+      parts.push(
+        <Link
+          key={`link-${key++}`}
+          href={item.match[0]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline dark:text-blue-400"
+        >
+          {from}...{to}
+        </Link>
+      );
+    } else if (item.type === 'pr') {
+      const [, , , prNumber] = item.match;
+      parts.push(
+        <Link
+          key={`link-${key++}`}
+          href={item.match[0]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline dark:text-blue-400"
+        >
+          PR#{prNumber}
+        </Link>
+      );
+    } else if (item.type === 'mention') {
+      const [, username] = item.match;
+      parts.push(
+        <Link
+          key={`link-${key++}`}
+          href={`https://github.com/${username}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline dark:text-blue-400"
+        >
+          @{username}
+        </Link>
+      );
+    }
+
+    lastIndex = item.index + item.length;
+  });
+
+  // Add remaining text
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : [text];
+}
+
+// Custom paragraph component
+function CustomParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
+  return (
+    <p {...props}>
+      {React.Children.map(children, (child) => {
+        if (typeof child === 'string') {
+          return <>{processText(child)}</>;
+        }
+        return child;
+      })}
+    </p>
+  );
+}
+
 // Custom components for react-markdown
 const components: Components = {
   img: CustomImage,
@@ -123,6 +238,7 @@ const components: Components = {
   h4: CustomH4 as Components["h4"],
   h5: CustomH5 as Components["h5"],
   h6: CustomH6 as Components["h6"],
+  p: CustomParagraph as Components["p"],
 };
 
 export function CustomReactMarkdown({
@@ -131,7 +247,9 @@ export function CustomReactMarkdown({
 }: CustomReactMarkdownProps) {
   return (
     <div className={className}>
-      <ReactMarkdown components={components}>{children}</ReactMarkdown>
+      <ReactMarkdown components={components} remarkPlugins={[remarkGfm]}>
+        {children}
+      </ReactMarkdown>
     </div>
   );
 }

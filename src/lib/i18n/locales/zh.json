@@ -45,6 +45,7 @@
     "description": "XDYou的版本发布历史",
     "version": "版本",
     "releasedOn": "发布于",
+    "releaseNotes": "更新说明",
     "assets": "资源文件",
     "sourceCode": "源代码",
     "downloadCount": "下载次数",
