@@ -9,15 +9,8 @@ import { DATA } from "@/data";
 import { useLocale } from "@/lib/i18n";
 
 type Dictionary = {
-  nav: {
-    about: string;
-    projects: string;
-    education: string;
-    skills: string;
-  };
   footer: {
     sections: {
-      quickNavigation: string;
       connect: string;
       resources: string;
       discover: string;
@@ -27,8 +20,6 @@ type Dictionary = {
     };
     legal: {
       allRightsReserved: string;
-      privacyPolicy: string;
-      termsDisclaimer: string;
     };
     bottom: {
       lastUpdated: string;
@@ -57,39 +48,13 @@ export default function Footer() {
 
   const t = dict;
 
-  // Create navigation sections with translations
-  const translatedNavigationSections = [
-    { name: t.nav.about, href: "#about" },
-    { name: t.nav.projects, href: "#projects" },
-    { name: t.nav.skills, href: "#skills" },
-    { name: t.nav.education, href: "#education" },
-  ];
-
   return (
-    <footer className="bg-background/95 supports-[backdrop-filter]:bg-background/60 border-t backdrop-blur">
+    <footer className="supports-[backdrop-filter]:bg-background/60 border-t bg-background/95 backdrop-blur">
       <div className="mx-auto max-w-7xl px-6 py-12 pb-20 sm:px-16 md:px-20 lg:px-24 xl:px-32">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {/* Quick Navigation */}
-          <div className="space-y-4">
-            <h3 className="text-foreground text-sm font-semibold tracking-wider">
-              {t.footer.sections.quickNavigation}
-            </h3>
-            <nav className="space-y-2">
-              {translatedNavigationSections.map((section) => (
-                <Link
-                  key={section.name}
-                  href={section.href}
-                  className="text-muted-foreground hover:text-foreground block text-sm transition-colors"
-                >
-                  {section.name}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {/* Social Links */}
           <div className="space-y-4">
-            <h3 className="text-foreground text-sm font-semibold tracking-wider">
+            <h3 className="text-sm font-semibold tracking-wider text-foreground">
               {t.footer.sections.connect}
             </h3>
             <div className="flex flex-wrap gap-3">
@@ -101,7 +66,7 @@ export default function Footer() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
                     aria-label={social.name}
                   >
                     <social.icon className="h-5 w-5" />
@@ -110,9 +75,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Blog */}
+          {/* Resources */}
           <div className="space-y-4">
-            <h3 className="text-foreground text-sm font-semibold tracking-wider">
+            <h3 className="text-sm font-semibold tracking-wider text-foreground">
               {t.footer.sections.resources}
             </h3>
             <nav className="space-y-2">
@@ -120,7 +85,7 @@ export default function Footer() {
                 <Link
                   key={resource.name}
                   href={resource.href}
-                  className="text-muted-foreground hover:text-foreground block text-sm transition-colors"
+                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {t.footer.resources[resource.name as keyof typeof t.footer.resources]}
                 </Link>
@@ -130,7 +95,7 @@ export default function Footer() {
 
           {/* Discover */}
           <div className="space-y-4">
-            <h3 className="text-foreground text-sm font-semibold tracking-wider">
+            <h3 className="text-sm font-semibold tracking-wider text-foreground">
               {t.footer.sections.discover}
             </h3>
             <nav className="space-y-2">
@@ -140,7 +105,7 @@ export default function Footer() {
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground block text-sm transition-colors"
+                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {item.name}
                 </Link>

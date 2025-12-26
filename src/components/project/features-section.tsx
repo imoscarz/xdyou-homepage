@@ -38,20 +38,24 @@ export default function FeaturesSection({
           </div>
         </BlurFade>
         
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, idx) => {
             const Icon = Icons[feature.icon];
             return (
               <BlurFade key={feature.title} delay={delay + 0.1 + idx * 0.05}>
-                <Card className="h-full">
-                  <CardHeader>
-                    <div className="mb-2 flex size-12 items-center justify-center rounded-lg bg-primary/10">
-                      <Icon className="size-6 text-primary" />
+                <Card className="h-full transition-shadow hover:shadow-lg">
+                  <CardHeader className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                        <Icon className="size-6 text-primary" />
+                      </div>
+                      <CardTitle className="text-center sm:text-left">
+                        {feature.title}
+                      </CardTitle>
                     </div>
-                    <CardTitle>{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-center text-sm leading-relaxed text-muted-foreground sm:text-left">
                       {feature.description}
                     </p>
                   </CardContent>
