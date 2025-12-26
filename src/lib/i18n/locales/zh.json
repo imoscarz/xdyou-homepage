@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "home": "首页",
+    "docs": "文档",
+    "news": "新闻",
+    "releases": "发行记录"
+  },
+  "home": {
+    "hero": {
+      "downloadButton": "立即下载",
+      "moreDownloads": "更多下载选项"
+    },
+    "features": {
+      "badge": "核心功能",
+      "title": "强大的功能，服务校园生活"
+    },
+    "screenshots": {
+      "badge": "应用截图",
+      "title": "直观的界面，流畅的体验"
+    },
+    "downloads": {
+      "badge": "下载",
+      "title": "选择您的平台",
+      "latestVersion": "最新版本",
+      "releaseNotes": "更新日志",
+      "downloadFor": "下载",
+      "comingSoon": "即将推出",
+      "unavailable": "暂不可用"
+    }
+  },
+  "news": {
+    "title": "新闻与公告",
+    "description": "XDYou项目的最新动态",
+    "search": "搜索新闻...",
+    "filter": "筛选",
+    "readMore": "阅读全文",
+    "noNews": "暂无新闻",
+    "loadMore": "加载更多",
+    "by": "作者：",
+    "publishedOn": "发布于"
+  },
+  "releases": {
+    "title": "发行记录",
+    "description": "XDYou的版本发布历史",
+    "version": "版本",
+    "releasedOn": "发布于",
+    "assets": "资源文件",
+    "sourceCode": "源代码",
+    "downloadCount": "下载次数",
+    "loadMore": "加载更多",
+    "noReleases": "暂无发行记录"
+  },
+  "docs": {
+    "title": "文档",
+    "description": "XDYou使用指南和开发文档",
+    "toc": "目录",
+    "menu": "菜单",
+    "search": "搜索文档...",
+    "noDocs": "暂无文档",
+    "editOnGitHub": "在GitHub上编辑"
+  },
+  "footer": {
+    "sections": {
+      "quickNavigation": "快速导航",
+      "connect": "联系",
+      "resources": "资源",
+      "discover": "发现"
+    },
+    "resources": {
+      "docs": "文档",
+      "news": "新闻",
+      "releases": "发行记录",
+      "github": "GitHub"
+    },
+    "legal": {
+      "allRightsReserved": "版权所有",
+      "privacyPolicy": "隐私政策",
+      "termsDisclaimer": "条款与免责声明"
+    },
+    "bottom": {
+      "lastUpdated": "最后更新",
+      "madeWith": "追随",
+      "buildWith": "构建自"
+    }
+  }
+}
