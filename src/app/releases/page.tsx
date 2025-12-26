@@ -62,6 +62,7 @@ export default async function ReleasesPage({ searchParams }: PageProps) {
             downloadCount: dict.releases.downloadCount,
             loadMore: dict.releases.loadMore,
             noReleases: dict.releases.noReleases,
+            toc: dict.releases.toc || "Table of Contents",
           }}
           delay={BLUR_FADE_DELAY * 2}
         />

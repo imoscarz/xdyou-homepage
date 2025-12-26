@@ -44,8 +44,8 @@ export default function FeaturesSection({
             return (
               <BlurFade key={feature.title} delay={delay + 0.1 + idx * 0.05}>
                 <Card className="h-full transition-shadow hover:shadow-lg">
-                  <CardHeader className="space-y-4">
-                    <div className="flex items-center gap-4">
+                  <CardHeader>
+                    <div className="flex flex-col items-center gap-4 sm:flex-row">
                       <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
                         <Icon className="size-6 text-primary" />
                       </div>
@@ -55,7 +55,7 @@ export default function FeaturesSection({
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-center text-sm leading-relaxed text-muted-foreground sm:text-left">
+                    <p className="text-center leading-relaxed sm:text-left">
                       {feature.description}
                     </p>
                   </CardContent>

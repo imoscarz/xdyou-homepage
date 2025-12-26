@@ -78,6 +78,11 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
+
+  /* 平滑滚动 */
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer base {

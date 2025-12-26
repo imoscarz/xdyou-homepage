@@ -48,7 +48,8 @@
     "sourceCode": "Source Code",
     "downloadCount": "Downloads",
     "loadMore": "Load More",
-    "noReleases": "No releases available"
+    "noReleases": "No releases available",
+    "toc": "Table of Contents"
   },
   "docs": {
     "title": "Documentation",

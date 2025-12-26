@@ -48,7 +48,8 @@
     "sourceCode": "源代码",
     "downloadCount": "下载次数",
     "loadMore": "加载更多",
-    "noReleases": "暂无发行记录"
+    "noReleases": "暂无发行记录",
+    "toc": "目录"
   },
   "docs": {
     "title": "文档",

@@ -14,9 +14,14 @@
 
   - 功能简述（#functions）
 
+    - 每个卡片：icon+标题+描述
+
   - 屏幕截图（#screenshots）
 
+    - 翻页展示图片
+
   - 下载（#downloads）
+
     - 最新版本更新信息（可折叠卡片）
     - 下载（按平台分组，PC端水平排列，移动端竖直排列）
 
@@ -25,8 +30,10 @@
   - 发布通知和公告，通过`Markdown`编译，支持搜索和筛选
   - 提供RSS，API
   - markdown源文件位于目录树的`contents/news`中
+
 - `/releases`：Release Note，发行记录，同步Github-Releases
-  - https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#list-releases
+
+  - 参考：https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#list-releases
   - 通过Github Rest API抓取
   - 默认一次只抓取5条，下方显示`加载更多`按钮
   
