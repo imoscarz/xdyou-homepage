@@ -1,17 +1,13 @@
 import { contact, navbar } from "@/config/contact";
-import { education } from "@/config/education";
 import { discover, footerResources } from "@/config/footer";
-import { news } from "@/config/news";
 import { personalInfo } from "@/config/personal";
-import { projects } from "@/config/projects";
+import { projectConfig } from "@/config/project";
 import { siteConfig } from "@/config/site";
-import { skills } from "@/config/skills";
 
 export const BLUR_FADE_DELAY = 0.05;
 
 /**
  * 全局数据配置
- * 为了保持向后兼容，保留了 chinese 嵌套结构
  */
 export const DATA = {
   ...siteConfig,
@@ -28,10 +24,7 @@ export const DATA = {
   // 其他配置
   navbar,
   contact,
-  news,
-  projects,
-  skills,
-  education,
+  projectConfig,
   discover,
   footerResources,
   // 中文信息（向后兼容）
