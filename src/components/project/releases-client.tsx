@@ -137,7 +137,7 @@ export default function ReleasesClient({
       <ReleaseToc
         releases={releases}
         displayCount={displayCount}
-        hasMore={displayCount < releases.length}
+        hasMore={displayCount < releases.length || hasMore}
         onLoadMore={loadMore}
         isLoading={isLoading}
         dict={{

@@ -1,11 +1,16 @@
+"use client";
+
+import { Check, Copy } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
+
+import { Button } from "@/components/ui/button";
 
 interface CustomReactMarkdownProps {
   children: string;
@@ -51,68 +56,112 @@ function CustomCode({
   const match = /language-(\w+)/.exec(className || "");
   const language = match ? match[1] : "";
   const codeString = String(children).replace(/\n$/, "");
+  const [copied, setCopied] = useState(false);
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(codeString);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   if (!inline && language) {
     return (
-      <SyntaxHighlighter
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        style={oneDark as any}
-        language={language}
-        PreTag="div"
-        showLineNumbers={true}
-        customStyle={{
-          margin: 0,
-          borderRadius: "0.5rem",
-          fontSize: "0.875rem",
-        }}
-        {...props}
-      >
-        {codeString}
-      </SyntaxHighlighter>
+      <div className="my-6 overflow-hidden rounded-lg border border-gray-700">
+        {/* Language label and copy button */}
+        <div className="flex items-center justify-between bg-gray-800 px-4 py-2 text-xs border-b border-gray-700">
+          <span className="font-mono text-gray-400 uppercase">{language}</span>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-6 px-2 text-gray-400 hover:bg-gray-700 hover:text-gray-200"
+            onClick={copyToClipboard}
+          >
+            {copied ? (
+              <Check className="size-3" />
+            ) : (
+              <Copy className="size-3" />
+            )}
+          </Button>
+        </div>
+        {/* Code block */}
+        <SyntaxHighlighter
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          style={oneDark as any}
+          language={language}
+          PreTag="div"
+          showLineNumbers={true}
+          customStyle={{
+            margin: 0,
+            borderRadius: 0,
+            fontSize: "0.75rem",
+            paddingTop: "0.75rem",
+          }}
+          {...props}
+        >
+          {codeString}
+        </SyntaxHighlighter>
+      </div>
     );
   }
 
   return (
-    <code className={className} {...props}>
+    <code className="rounded bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 text-sm font-mono" {...props}>
       {children}
     </code>
   );
 }
 
+// Helper function to generate heading ID
+// Note: This should match the logic in doc-toc.tsx
+function generateHeadingId(text: string): string {
+  let id = String(text)
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
+  
+  // If ID is empty, use a hash of the original text
+  if (!id) {
+    // Simple hash function for fallback
+    let hash = 0;
+    for (let i = 0; i < text.length; i++) {
+      hash = ((hash << 5) - hash) + text.charCodeAt(i);
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    id = `heading-${Math.abs(hash).toString(36)}`;
+  }
+  
+  return id;
+}
+
 // Custom Heading components with auto-generated IDs
 function CustomH1({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const text = String(children);
-  const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  const id = generateHeadingId(String(children));
   return <h1 id={id} className="scroll-mt-24" {...props}>{children}</h1>;
 }
 
 function CustomH2({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const text = String(children);
-  const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  const id = generateHeadingId(String(children));
   return <h2 id={id} className="scroll-mt-24" {...props}>{children}</h2>;
 }
 
 function CustomH3({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const text = String(children);
-  const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  const id = generateHeadingId(String(children));
   return <h3 id={id} className="scroll-mt-24" {...props}>{children}</h3>;
 }
 
 function CustomH4({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const text = String(children);
-  const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  const id = generateHeadingId(String(children));
   return <h4 id={id} className="scroll-mt-24" {...props}>{children}</h4>;
 }
 
 function CustomH5({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const text = String(children);
-  const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  const id = generateHeadingId(String(children));
   return <h5 id={id} className="scroll-mt-24" {...props}>{children}</h5>;
 }
 
 function CustomH6({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const text = String(children);
-  const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+  const id = generateHeadingId(String(children));
   return <h6 id={id} className="scroll-mt-24" {...props}>{children}</h6>;
 }
 
@@ -217,7 +266,7 @@ function processText(text: string): React.ReactNode[] {
 // Custom paragraph component
 function CustomParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p {...props}>
+    <p className="my-4 leading-7" {...props}>
       {React.Children.map(children, (child) => {
         if (typeof child === 'string') {
           return <>{processText(child)}</>;
@@ -225,6 +274,114 @@ function CustomParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagr
         return child;
       })}
     </p>
+  );
+}
+
+// Custom blockquote component
+function CustomBlockquote({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) {
+  return (
+    <blockquote className="my-6 border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-700 dark:text-gray-300" {...props}>
+      {children}
+    </blockquote>
+  );
+}
+
+// Custom link component
+function CustomLink({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+  const isExternal = href?.startsWith('http');
+  return (
+    <Link
+      href={href || '#'}
+      className="text-blue-600 hover:underline dark:text-blue-400 font-medium"
+      target={isExternal ? '_blank' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
+      {...props}
+    >
+      {children}
+    </Link>
+  );
+}
+
+// Custom list components
+function CustomUl({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) {
+  return (
+    <ul className="my-4 ml-6 list-disc space-y-2" {...props}>
+      {children}
+    </ul>
+  );
+}
+
+function CustomOl({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) {
+  return (
+    <ol className="my-4 ml-6 list-decimal space-y-2" {...props}>
+      {children}
+    </ol>
+  );
+}
+
+function CustomLi({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
+  return (
+    <li className="leading-7" {...props}>
+      {children}
+    </li>
+  );
+}
+
+// Custom table components
+function CustomTable({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) {
+  return (
+    <div className="my-6 overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700 border border-gray-300 dark:border-gray-700" {...props}>
+        {children}
+      </table>
+    </div>
+  );
+}
+
+function CustomThead({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
+  return (
+    <thead className="bg-gray-50 dark:bg-gray-800" {...props}>
+      {children}
+    </thead>
+  );
+}
+
+function CustomTbody({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
+  return (
+    <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900" {...props}>
+      {children}
+    </tbody>
+  );
+}
+
+function CustomTr({ children, ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
+  return (
+    <tr {...props}>
+      {children}
+    </tr>
+  );
+}
+
+function CustomTh({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) {
+  return (
+    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100" {...props}>
+      {children}
+    </th>
+  );
+}
+
+function CustomTd({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) {
+  return (
+    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300" {...props}>
+      {children}
+    </td>
+  );
+}
+
+// Custom horizontal rule
+function CustomHr(props: React.HTMLAttributes<HTMLHRElement>) {
+  return (
+    <hr className="my-8 border-t border-gray-300 dark:border-gray-700" {...props} />
   );
 }
 
@@ -239,6 +396,18 @@ const components: Components = {
   h5: CustomH5 as Components["h5"],
   h6: CustomH6 as Components["h6"],
   p: CustomParagraph as Components["p"],
+  blockquote: CustomBlockquote as Components["blockquote"],
+  a: CustomLink as Components["a"],
+  ul: CustomUl as Components["ul"],
+  ol: CustomOl as Components["ol"],
+  li: CustomLi as Components["li"],
+  table: CustomTable as Components["table"],
+  thead: CustomThead as Components["thead"],
+  tbody: CustomTbody as Components["tbody"],
+  tr: CustomTr as Components["tr"],
+  th: CustomTh as Components["th"],
+  td: CustomTd as Components["td"],
+  hr: CustomHr as Components["hr"],
 };
 
 export function CustomReactMarkdown({

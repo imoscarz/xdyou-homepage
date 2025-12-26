@@ -62,11 +62,11 @@ export default function ReleaseToc({
 
   return (
     <div className="sticky top-24 hidden h-fit max-h-[calc(100vh-8rem)] xl:block">
-      <Card className="w-64">
-        <CardHeader className="pb-3">
+      <Card className="flex w-64 flex-col">
+        <CardHeader className="flex-none pb-3">
           <CardTitle className="text-base">{dict.toc}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-1 overflow-y-auto scrollbar-thin">
+        <CardContent className="flex-1 space-y-1 overflow-y-auto scrollbar-thin" style={{ maxHeight: '60vh' }}>
           {displayedReleases.map((release) => (
             <button
               key={release.id}

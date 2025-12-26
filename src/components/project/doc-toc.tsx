@@ -30,11 +30,32 @@ export default function DocToc({ content, dict }: DocTocProps) {
     while ((match = headingRegex.exec(content)) !== null) {
       const level = match[1].length;
       const text = match[2].trim();
-      const id = text
+      let id = text
         .toLowerCase()
         .replace(/[^\w\s-]/g, "")
-        .replace(/\s+/g, "-");
-      extracted.push({ id, text, level });
+        .replace(/\s+/g, "-")
+        .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
+      
+      // If ID is empty, use a hash of the original text (matching react-markdown logic)
+      if (!id) {
+        let hash = 0;
+        for (let i = 0; i < text.length; i++) {
+          hash = ((hash << 5) - hash) + text.charCodeAt(i);
+          hash = hash & hash; // Convert to 32bit integer
+        }
+        id = `heading-${Math.abs(hash).toString(36)}`;
+      }
+      
+      // Ensure unique IDs by checking for duplicates
+      const existingIds = extracted.map(h => h.id);
+      let uniqueId = id;
+      let counter = 1;
+      while (existingIds.includes(uniqueId)) {
+        uniqueId = `${id}-${counter}`;
+        counter++;
+      }
+      
+      extracted.push({ id: uniqueId, text, level });
     }
 
     setHeadings(extracted);
