@@ -5,9 +5,8 @@ import "katex/dist/katex.min.css";
 import { Check, Copy } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
-import type { Components } from "react-markdown";
-import ReactMarkdown from "react-markdown";
+import React, { useMemo, useState } from "react";
+import ReactMarkdown, { type Components } from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import rehypeKatex from "rehype-katex";
@@ -17,420 +16,356 @@ import remarkMath from "remark-math";
 import { Button } from "@/components/ui/button";
 
 interface CustomReactMarkdownProps {
-  children: string;
-  className?: string;
+	children: string;
+	className?: string;
 }
 
-// Custom Image component that uses Next.js Image or native img for shields.io
-function CustomImage({ src, alt }: React.ImgHTMLAttributes<HTMLImageElement>) {
-  if (!src) return null;
-
-  // Use native img tag for shields.io URLs
-  if (typeof src === 'string' && src.includes('img.shields.io')) {
-    return (
-      <img
-        src={src as string}
-        alt={alt || ""}
-        className="object-contain"
-      />
-    );
-  }
-
-  return (
-    <Image
-      src={src as string}
-      alt={alt || ""}
-      width={800}
-      height={600}
-      sizes="(max-width: 768px) 100vw, 768px"
-      className="object-contain"
-    />
-  );
-}
-
-// Custom Code component with syntax highlighting
-function CustomCode({
-  inline,
-  className,
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLElement> & {
-  inline?: boolean;
-}) {
-  const match = /language-(\w+)/.exec(className || "");
-  const language = match ? match[1] : "";
-  const codeString = String(children).replace(/\n$/, "");
-  const [copied, setCopied] = useState(false);
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(codeString);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  if (!inline && language) {
-    return (
-      <div className="my-6 overflow-hidden rounded-lg border bg-card shadow-sm">
-        {/* Language label and copy button */}
-        <div className="flex items-center justify-between bg-muted/50 px-4 py-2 text-xs border-b">
-          <span className="font-mono text-muted-foreground uppercase tracking-wider">{language}</span>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 px-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-            onClick={copyToClipboard}
-          >
-            {copied ? (
-              <Check className="size-3.5" />
-            ) : (
-              <Copy className="size-3.5" />
-            )}
-          </Button>
-        </div>
-        {/* Code block */}
-        <SyntaxHighlighter
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          style={oneDark as any}
-          language={language}
-          PreTag="div"
-          showLineNumbers={true}
-          customStyle={{
-            margin: 0,
-            borderRadius: 0,
-            fontSize: "0.75rem",
-            padding: "1rem",
-          }}
-          {...props}
-        >
-          {codeString}
-        </SyntaxHighlighter>
-      </div>
-    );
-  }
-
-  return (
-    <code className="rounded-md bg-muted px-1.5 py-0.5 text-sm font-mono border" {...props}>
-      {children}
-    </code>
-  );
-}
-
-// Helper function to generate heading ID
-// Note: This should match the logic in doc-toc.tsx
+// Generate stable heading IDs (matches doc-toc logic)
 function generateHeadingId(text: string): string {
-  let id = String(text)
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
-  
-  // If ID is empty, use a hash of the original text
-  if (!id) {
-    // Simple hash function for fallback
-    let hash = 0;
-    for (let i = 0; i < text.length; i++) {
-      hash = ((hash << 5) - hash) + text.charCodeAt(i);
-      hash = hash & hash; // Convert to 32bit integer
-    }
-    id = `heading-${Math.abs(hash).toString(36)}`;
-  }
-  
-  return id;
+	let id = text
+		.toLowerCase()
+		.replace(/[^\w\s-]/g, "")
+		.replace(/\s+/g, "-")
+		.replace(/^-+|-+$/g, "");
+
+	if (!id) {
+		let hash = 0;
+		for (let i = 0; i < text.length; i++) {
+			hash = ((hash << 5) - hash) + text.charCodeAt(i);
+			hash = hash & hash;
+		}
+		id = `heading-${Math.abs(hash).toString(36)}`;
+	}
+
+	return id;
 }
 
-// Custom Heading components with auto-generated IDs
-function CustomH1({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const id = generateHeadingId(String(children));
-  return <h1 id={id} className="scroll-mt-24" {...props}>{children}</h1>;
+// Image: use native img for shields.io, otherwise Next/Image
+function CustomImage({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) {
+	if (!src) return null;
+
+	if (typeof src === "string" && src.includes("img.shields.io")) {
+		return <img src={src} alt={alt || ""} className="object-contain" {...props} />;
+	}
+
+	return (
+		<Image
+			src={src as string}
+			alt={alt || ""}
+			width={800}
+			height={600}
+			sizes="(max-width: 768px) 100vw, 768px"
+			className="object-contain"
+		/>
+	);
 }
 
-function CustomH2({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const id = generateHeadingId(String(children));
-  return <h2 id={id} className="scroll-mt-24" {...props}>{children}</h2>;
-}
-
-function CustomH3({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const id = generateHeadingId(String(children));
-  return <h3 id={id} className="scroll-mt-24" {...props}>{children}</h3>;
-}
-
-function CustomH4({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const id = generateHeadingId(String(children));
-  return <h4 id={id} className="scroll-mt-24" {...props}>{children}</h4>;
-}
-
-function CustomH5({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const id = generateHeadingId(String(children));
-  return <h5 id={id} className="scroll-mt-24" {...props}>{children}</h5>;
-}
-
-function CustomH6({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  const id = generateHeadingId(String(children));
-  return <h6 id={id} className="scroll-mt-24" {...props}>{children}</h6>;
-}
-
-// Custom text processing for GitHub links and @mentions
+// GitHub text processing: compare links, PR links, mentions
 function processText(text: string): React.ReactNode[] {
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-  let key = 0;
+	const parts: React.ReactNode[] = [];
+	let lastIndex = 0;
+	let key = 0;
 
-  // Pattern for GitHub compare URLs
-  const compareRegex = /https:\/\/github\.com\/([^/]+)\/([^/]+)\/compare\/([^/\s]+)\.\.\.([^/\s]+)/g;
-  // Pattern for GitHub PR URLs  
-  const prRegex = /https:\/\/github\.com\/([^/]+)\/([^/]+)\/pull\/(\d+)/g;
-  // Pattern for @mentions
-  const mentionRegex = /@([a-zA-Z0-9_-]+)/g;
+	const compareRegex = /https:\/\/github\.com\/([^/]+)\/([^/]+)\/compare\/([^/\s]+)\.\.\.([^/\s]+)/g;
+	const prRegex = /https:\/\/github\.com\/([^/]+)\/([^/]+)\/pull\/(\d+)/g;
+	const mentionRegex = /@([a-zA-Z0-9_-]+)/g;
 
-  const patterns = [
-    { regex: compareRegex, type: 'compare' },
-    { regex: prRegex, type: 'pr' },
-    { regex: mentionRegex, type: 'mention' }
-  ];
+	const patterns = [
+		{ regex: compareRegex, type: "compare" },
+		{ regex: prRegex, type: "pr" },
+		{ regex: mentionRegex, type: "mention" },
+	];
 
-  const matches: Array<{ index: number; length: number; match: RegExpExecArray; type: string }> = [];
+	const matches: Array<{ index: number; length: number; match: RegExpExecArray; type: string }> = [];
 
-  // Collect all matches
-  patterns.forEach(({ regex, type }) => {
-    regex.lastIndex = 0;
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-      matches.push({
-        index: match.index,
-        length: match[0].length,
-        match,
-        type
-      });
-    }
-  });
+	patterns.forEach(({ regex, type }) => {
+		regex.lastIndex = 0;
+		let match;
+		while ((match = regex.exec(text)) !== null) {
+			matches.push({ index: match.index, length: match[0].length, match, type });
+		}
+	});
 
-  // Sort matches by index
-  matches.sort((a, b) => a.index - b.index);
+	matches.sort((a, b) => a.index - b.index);
 
-  // Process matches
-  matches.forEach((item) => {
-    // Add text before match
-    if (item.index > lastIndex) {
-      parts.push(text.slice(lastIndex, item.index));
-    }
+	matches.forEach((item) => {
+		if (item.index > lastIndex) {
+			parts.push(text.slice(lastIndex, item.index));
+		}
 
-    // Add matched link
-    if (item.type === 'compare') {
-      const [, , , from, to] = item.match;
-      parts.push(
-        <Link
-          key={`link-${key++}`}
-          href={item.match[0]}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary hover:underline font-medium transition-colors"
-        >
-          {from}...{to}
-        </Link>
-      );
-    } else if (item.type === 'pr') {
-      const [, , , prNumber] = item.match;
-      parts.push(
-        <Link
-          key={`link-${key++}`}
-          href={item.match[0]}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary hover:underline font-medium transition-colors"
-        >
-          PR#{prNumber}
-        </Link>
-      );
-    } else if (item.type === 'mention') {
-      const [, username] = item.match;
-      parts.push(
-        <Link
-          key={`link-${key++}`}
-          href={`https://github.com/${username}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary hover:underline font-medium transition-colors"
-        >
-          @{username}
-        </Link>
-      );
-    }
+		if (item.type === "compare") {
+			const [, , , from, to] = item.match;
+			parts.push(
+				<Link
+					key={`link-${key++}`}
+					href={item.match[0]}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="text-primary hover:underline font-medium transition-colors"
+				>
+					{from}...{to}
+				</Link>
+			);
+		} else if (item.type === "pr") {
+			const [, , , prNumber] = item.match;
+			parts.push(
+				<Link
+					key={`link-${key++}`}
+					href={item.match[0]}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="text-primary hover:underline font-medium transition-colors"
+				>
+					PR#{prNumber}
+				</Link>
+			);
+		} else if (item.type === "mention") {
+			const [, username] = item.match;
+			parts.push(
+				<Link
+					key={`link-${key++}`}
+					href={`https://github.com/${username}`}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="text-primary hover:underline font-medium transition-colors"
+				>
+					@{username}
+				</Link>
+			);
+		}
 
-    lastIndex = item.index + item.length;
-  });
+		lastIndex = item.index + item.length;
+	});
 
-  // Add remaining text
-  if (lastIndex < text.length) {
-    parts.push(text.slice(lastIndex));
-  }
+	if (lastIndex < text.length) {
+		parts.push(text.slice(lastIndex));
+	}
 
-  return parts.length > 0 ? parts : [text];
+	return parts.length > 0 ? parts : [text];
 }
 
-// Custom paragraph component
+// Headings
+const headingFactory = (Tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") =>
+	function Heading({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+		const id = useMemo(() => generateHeadingId(String(children)), [children]);
+		return (
+			<Tag id={id} className="scroll-mt-24 font-semibold text-foreground" {...props}>
+				{children}
+			</Tag>
+		);
+	};
+
+const CustomH1 = headingFactory("h1");
+const CustomH2 = headingFactory("h2");
+const CustomH3 = headingFactory("h3");
+const CustomH4 = headingFactory("h4");
+const CustomH5 = headingFactory("h5");
+const CustomH6 = headingFactory("h6");
+
+// Paragraph
 function CustomParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return (
-    <p className="my-4 leading-7 text-foreground" {...props}>
-      {React.Children.map(children, (child) => {
-        if (typeof child === 'string') {
-          return <>{processText(child)}</>;
-        }
-        return child;
-      })}
-    </p>
-  );
+	return (
+		<p className="my-4 leading-7 text-foreground" {...props}>
+			{React.Children.map(children, (child) => {
+				if (typeof child === "string") return <>{processText(child)}</>;
+				return child;
+			})}
+		</p>
+	);
 }
 
-// Custom blockquote component
+// Code
+function CustomCode({ inline, className, children, ...props }: React.HTMLAttributes<HTMLElement> & { inline?: boolean }) {
+	const match = /language-(\w+)/.exec(className || "");
+	const language = match ? match[1] : "";
+	const codeString = String(children).replace(/\n$/, "");
+	const [copied, setCopied] = useState(false);
+
+	const copyToClipboard = () => {
+		navigator.clipboard.writeText(codeString);
+		setCopied(true);
+		setTimeout(() => setCopied(false), 1800);
+	};
+
+	if (!inline && language) {
+		return (
+			<div className="my-6 overflow-hidden rounded-lg border bg-card shadow-sm">
+				<div className="flex items-center justify-between border-b bg-muted/50 px-4 py-2 text-xs">
+					<span className="font-mono uppercase tracking-wider text-muted-foreground">{language}</span>
+					<Button
+						variant="ghost"
+						size="sm"
+						className="h-7 px-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+						onClick={copyToClipboard}
+					>
+						{copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+					</Button>
+				</div>
+				<SyntaxHighlighter
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					style={oneDark as any}
+					language={language}
+					PreTag="div"
+					showLineNumbers
+					customStyle={{ margin: 0, borderRadius: 0, fontSize: "0.75rem", padding: "1rem" }}
+					{...props}
+				>
+					{codeString}
+				</SyntaxHighlighter>
+			</div>
+		);
+	}
+
+	return (
+		<code className="rounded-md border bg-muted px-1.5 py-0.5 font-mono text-sm" {...props}>
+			{children}
+		</code>
+	);
+}
+
+// Blockquote
 function CustomBlockquote({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) {
-  return (
-    <blockquote className="my-6 rounded-lg border bg-card p-5 shadow-sm border-l-4 border-l-primary/80" {...props}>
-      <div className="italic text-muted-foreground leading-relaxed">
-        {children}
-      </div>
-    </blockquote>
-  );
+	return (
+		<blockquote className="my-6 rounded-lg border border-l-4 border-l-primary/80 bg-card p-5 shadow-sm" {...props}>
+			<div className="italic leading-relaxed text-muted-foreground">{children}</div>
+		</blockquote>
+	);
 }
 
-// Custom link component
+// Link
 function CustomLink({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
-  const isExternal = href?.startsWith('http');
-  return (
-    <Link
-      href={href || '#'}
-      className="text-primary hover:underline font-medium transition-colors"
-      target={isExternal ? '_blank' : undefined}
-      rel={isExternal ? 'noopener noreferrer' : undefined}
-      {...props}
-    >
-      {children}
-    </Link>
-  );
+	const isExternal = href?.startsWith("http");
+	return (
+		<Link
+			href={href || "#"}
+			className="font-medium text-primary transition-colors hover:underline"
+			target={isExternal ? "_blank" : undefined}
+			rel={isExternal ? "noopener noreferrer" : undefined}
+			{...props}
+		>
+			{children}
+		</Link>
+	);
 }
 
-// Custom list components
+// Lists
 function CustomUl({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) {
-  return (
-    <ul className="my-4 ml-6 list-disc space-y-2 marker:text-primary/70" {...props}>
-      {children}
-    </ul>
-  );
+	return (
+		<ul className="my-4 ml-6 list-disc space-y-2 marker:text-primary/70" {...props}>
+			{children}
+		</ul>
+	);
 }
 
 function CustomOl({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) {
-  return (
-    <ol className="my-4 ml-6 list-decimal space-y-2 marker:text-primary/70 marker:font-semibold" {...props}>
-      {children}
-    </ol>
-  );
+	return (
+		<ol className="my-4 ml-6 list-decimal space-y-2 marker:text-primary/70 marker:font-semibold" {...props}>
+			{children}
+		</ol>
+	);
 }
 
 function CustomLi({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
-  return (
-    <li className="leading-7 text-foreground" {...props}>
-      {children}
-    </li>
-  );
+	return (
+		<li className="leading-7 text-foreground" {...props}>
+			{children}
+		</li>
+	);
 }
 
-// Custom table components
+// Tables
 function CustomTable({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) {
-  return (
-    <div className="my-6 overflow-hidden rounded-lg border shadow-sm bg-card">
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-border" {...props}>
-          {children}
-        </table>
-      </div>
-    </div>
-  );
+	return (
+		<div className="my-6 overflow-hidden rounded-lg border bg-card shadow-sm">
+			<div className="overflow-x-auto">
+				<table className="min-w-full divide-y divide-border" {...props}>
+					{children}
+				</table>
+			</div>
+		</div>
+	);
 }
 
 function CustomThead({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
-  return (
-    <thead className="bg-muted/60" {...props}>
-      {children}
-    </thead>
-  );
+	return (
+		<thead className="bg-muted/60" {...props}>
+			{children}
+		</thead>
+	);
 }
 
 function CustomTbody({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
-  return (
-    <tbody className="divide-y divide-border bg-card" {...props}>
-      {children}
-    </tbody>
-  );
+	return (
+		<tbody className="divide-y divide-border bg-card" {...props}>
+			{children}
+		</tbody>
+	);
 }
 
 function CustomTr({ children, ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
-  return (
-    <tr className="hover:bg-muted/40 transition-colors duration-150" {...props}>
-      {children}
-    </tr>
-  );
+	return (
+		<tr className="transition-colors duration-150 hover:bg-muted/40" {...props}>
+			{children}
+		</tr>
+	);
 }
 
 function CustomTh({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) {
-  return (
-    <th className="px-6 py-3.5 text-left text-sm font-semibold text-foreground" {...props}>
-      {children}
-    </th>
-  );
+	return (
+		<th className="px-6 py-3.5 text-left text-sm font-semibold text-foreground" {...props}>
+			{children}
+		</th>
+	);
 }
 
 function CustomTd({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) {
-  return (
-    <td className="px-6 py-3.5 text-sm text-foreground" {...props}>
-      {children}
-    </td>
-  );
+	return (
+		<td className="px-6 py-3.5 text-sm text-foreground" {...props}>
+			{children}
+		</td>
+	);
 }
 
-// Custom horizontal rule
+// Horizontal rule
 function CustomHr(props: React.HTMLAttributes<HTMLHRElement>) {
-  return (
-    <hr className="my-8 border-t-2 border-border" {...props} />
-  );
+	return <hr className="my-8 border-t-2 border-border" {...props} />;
 }
 
-// Custom components for react-markdown
 const components: Components = {
-  img: CustomImage,
-  code: CustomCode as Components["code"],
-  h1: CustomH1 as Components["h1"],
-  h2: CustomH2 as Components["h2"],
-  h3: CustomH3 as Components["h3"],
-  h4: CustomH4 as Components["h4"],
-  h5: CustomH5 as Components["h5"],
-  h6: CustomH6 as Components["h6"],
-  p: CustomParagraph as Components["p"],
-  blockquote: CustomBlockquote as Components["blockquote"],
-  a: CustomLink as Components["a"],
-  ul: CustomUl as Components["ul"],
-  ol: CustomOl as Components["ol"],
-  li: CustomLi as Components["li"],
-  table: CustomTable as Components["table"],
-  thead: CustomThead as Components["thead"],
-  tbody: CustomTbody as Components["tbody"],
-  tr: CustomTr as Components["tr"],
-  th: CustomTh as Components["th"],
-  td: CustomTd as Components["td"],
-  hr: CustomHr as Components["hr"],
+	img: CustomImage,
+	code: CustomCode as Components["code"],
+	h1: CustomH1 as Components["h1"],
+	h2: CustomH2 as Components["h2"],
+	h3: CustomH3 as Components["h3"],
+	h4: CustomH4 as Components["h4"],
+	h5: CustomH5 as Components["h5"],
+	h6: CustomH6 as Components["h6"],
+	p: CustomParagraph as Components["p"],
+	blockquote: CustomBlockquote as Components["blockquote"],
+	a: CustomLink as Components["a"],
+	ul: CustomUl as Components["ul"],
+	ol: CustomOl as Components["ol"],
+	li: CustomLi as Components["li"],
+	table: CustomTable as Components["table"],
+	thead: CustomThead as Components["thead"],
+	tbody: CustomTbody as Components["tbody"],
+	tr: CustomTr as Components["tr"],
+	th: CustomTh as Components["th"],
+	td: CustomTd as Components["td"],
+	hr: CustomHr as Components["hr"],
 };
 
-export function CustomReactMarkdown({
-  children,
-  className,
-}: CustomReactMarkdownProps) {
-  return (
-    <div className={className}>
-      <ReactMarkdown 
-        components={components} 
-        remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex]}
-      >
-        {children}
-      </ReactMarkdown>
-    </div>
-  );
+export function CustomReactMarkdown({ children, className }: CustomReactMarkdownProps) {
+	return (
+		<div className={className}>
+			<ReactMarkdown
+				components={components}
+				remarkPlugins={[remarkGfm, remarkMath]}
+				rehypePlugins={[rehypeKatex]}
+			>
+				{children}
+			</ReactMarkdown>
+		</div>
+	);
 }
+

@@ -5,53 +5,111 @@ category: "入门指南"
 order: 1
 ---
 
-# 欢迎使用XDYou
+This is a test post to show how the theme works.
 
-XDYou（西电You）是专为西安电子科技大学学生打造的综合性校园应用。
+## Basic Markdown Syntax
 
-## 快速开始
+### Styling text
 
-### 下载安装
+**Test**
 
-访问[下载页面](/#downloads)获取适合您设备的版本。
+*Test*
 
-### 首次使用
+~~Test~~
 
-1. 打开XDYou应用
-2. 使用校园账号登录
-3. 允许必要的权限（通知、位置等）
-4. 开始使用各项功能
+**This text is _extremely_ important**
 
-## 主要功能
+This is a <sub>subscript</sub> text
 
-### 📅 课程表
+This is a <sup>superscript</sup> text
 
-自动同步您的课程安排，支持：
-- 周视图和日视图切换
-- 课程提醒
-- 教室查询
+This is an <ins>underlined</ins> text
 
-### 📝 考试查询
+### Quoting text
 
-- 查看考试时间和地点
-- 考前提醒
-- 成绩查询
+> Text that is a quote
 
-### 💳 校园卡
+> [!NOTE]
+> 1233321
 
-- 实时余额查询
-- 消费记录
-- 充值记录
+```
+git status
+git add
+git commit
+```
 
-### 📚 图书馆
+```python
+import os
+os.system("pause")
+```
+### Tex
 
-- 图书搜索
-- 借阅记录
-- 在线续借
+$$
+\frac{2}{3} \frac{1}{3}
+$$
 
-## 帮助与支持
+123`1321321`3213`2312`
 
-如需帮助，请：
-- 查看[常见问题](/docs/faq)
-- 提交[GitHub Issue](https://github.com/BenderBlog/traintime_pda/issues)
-- 发送邮件至 support@xdyou.example.com
+### Links ans images
+
+
+[link](https://www.imoscarz.me)
+
+### Lists
+
+- George Washington
+
+* John Adams
+
++ Thomas Jefferson
+
+---
+
+1. Apple
+2. Banana
+3. Orange
+
+---
+
+1. First list item
+   - First nested list item
+     - Second nested list item
+
+---
+
+- [x] #739
+- [ ] https://github.com/octo-org/octo-repo/issues/740
+- [ ] Add delight to the experience when all tasks are complete
+
+### Footnotes
+
+Here is a simple footnote[^1].
+
+A footnote can also have multiple lines[^2].
+
+[^1]: My reference.
+[^2]: To add line breaks within a footnote, prefix new lines with 2 spaces.
+
+  This is a second line.
+
+### Tables
+
+| Column1 | Cloumn2 |
+| ------- | ------- |
+| This    | is      |
+| A       | test.   |
+
+### Fold
+
+<details open><summary>This is a detail section.</summary>
+
+
+> 123321\
+> 啊啊
+
+```python
+import sys
+sys.exit()
+```
+
+</details>
