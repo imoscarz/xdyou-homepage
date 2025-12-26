@@ -8,7 +8,8 @@
   "home": {
     "hero": {
       "downloadButton": "Download Now",
-      "moreDownloads": "More Download Options"
+      "moreDownloads": "More Download Options",
+      "viewOnGithub": "View on GitHub"
     },
     "features": {
       "badge": "Core Features",

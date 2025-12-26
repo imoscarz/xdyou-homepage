@@ -90,10 +90,12 @@ export default async function Page({ searchParams }: PageProps) {
           linuxAsset?.browser_download_url ||
           projectConfig.repo.url + "/releases/latest"
         }
+        githubUrl={projectConfig.repo.url}
         delay={BLUR_FADE_DELAY}
         dict={{
           downloadButton: dict.home.hero.downloadButton,
           moreDownloads: dict.home.hero.moreDownloads,
+          viewOnGithub: dict.home.hero.viewOnGithub,
         }}
       />
 

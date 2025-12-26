@@ -8,7 +8,8 @@
   "home": {
     "hero": {
       "downloadButton": "立即下载",
-      "moreDownloads": "更多下载选项"
+      "moreDownloads": "更多下载选项",
+      "viewOnGithub": "在GitHub上查看"
     },
     "features": {
       "badge": "核心功能",

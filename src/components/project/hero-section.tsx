@@ -1,7 +1,10 @@
+import { Github } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import PlatformDownloadButton from "@/components/project/platform-download-button";
 import { BlurFade } from "@/components/ui/blur-fade";
+import { Button } from "@/components/ui/button";
 
 type HeroSectionProps = {
   projectName: string;
@@ -12,10 +15,12 @@ type HeroSectionProps = {
   iosUrl: string;
   windowsUrl: string;
   linuxUrl: string;
+  githubUrl?: string;
   delay?: number;
   dict: {
     downloadButton: string;
     moreDownloads: string;
+    viewOnGithub?: string;
   };
 };
 
@@ -28,6 +33,7 @@ export default function HeroSection({
   iosUrl,
   windowsUrl,
   linuxUrl,
+  githubUrl,
   delay = 0,
   dict,
 }: HeroSectionProps) {
@@ -68,13 +74,24 @@ export default function HeroSection({
           </BlurFade>
           
           <BlurFade delay={delay + 0.3}>
-            <PlatformDownloadButton
-              dict={dict}
-              androidUrl={androidUrl}
-              iosUrl={iosUrl}
-              windowsUrl={windowsUrl}
-              linuxUrl={linuxUrl}
-            />
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <PlatformDownloadButton
+                dict={dict}
+                androidUrl={androidUrl}
+                iosUrl={iosUrl}
+                windowsUrl={windowsUrl}
+                linuxUrl={linuxUrl}
+              />
+              
+              {githubUrl && (
+                <Button asChild variant="outline" size="lg">
+                  <Link href={githubUrl} target="_blank" rel="noopener noreferrer">
+                    <Github className="mr-2 size-5" />
+                    {dict.viewOnGithub || "GitHub"}
+                  </Link>
+                </Button>
+              )}
+            </div>
           </BlurFade>
         </div>
         
