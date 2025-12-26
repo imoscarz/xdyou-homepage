@@ -566,9 +566,17 @@ function CustomHr(props: React.HTMLAttributes<HTMLHRElement>) {
   return <hr className="border-border my-8 border-t-2" {...props} />;
 }
 
+// Pre: Just pass through children to avoid prose styles
+function CustomPre({
+  children,
+}: React.HTMLAttributes<HTMLPreElement>) {
+  return <>{children}</>;
+}
+
 const components: Components = {
   img: CustomImage,
   code: CustomCode as Components["code"],
+  pre: CustomPre as Components["pre"],
   h1: CustomH1 as Components["h1"],
   h2: CustomH2 as Components["h2"],
   h3: CustomH3 as Components["h3"],
