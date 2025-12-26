@@ -228,28 +228,36 @@ function CustomParagraph({
 }
 
 // Code
-function CustomCode({
+type CustomCodeProps = React.HTMLAttributes<HTMLElement> & {
+  inline?: boolean;
+};
+
+const mergeClassNames = (...classes: Array<string | undefined>) =>
+  classes.filter(Boolean).join(" ");
+
+export function CustomCode({
   inline,
   className,
   children,
   ...props
-}: React.HTMLAttributes<HTMLElement> & { inline?: boolean }) {
-  const match = /language-(\w+)/.exec(className || "");
-  const language = match ? match[1] : "plaintext";
-  const codeString = String(children).replace(/\n$/, "");
+}: CustomCodeProps) {
+  const match = /language-(\w+)/.exec(className ?? "");
+  const language = match?.[1] ?? "plaintext";
+  const codeString = Array.isArray(children)
+    ? children.join("").replace(/\n$/, "")
+    : String(children ?? "").replace(/\n$/, "");
   const [copied, setCopied] = useState(false);
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(codeString);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
-  };
+  const isInline =
+    inline ?? (!match && !/\r|\n/.test(codeString));
 
-  if (inline) {
+  if (isInline) {
     return (
       <code
-        className="bg-muted/50 rounded px-1.5 py-0.5 font-mono text-sm not-italic"
-        style={{ quotes: 'none' }}
+        className={mergeClassNames(
+          "not-prose bg-muted/50 rounded px-1.5 py-0.5 font-mono text-sm not-italic",
+          className
+        )}
         {...props}
       >
         {children}
@@ -257,8 +265,19 @@ function CustomCode({
     );
   }
 
+  const copyToClipboard = async () => {
+    try {
+      if (typeof navigator === "undefined" || !navigator.clipboard) return;
+      await navigator.clipboard.writeText(codeString);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch (error) {
+      console.error("Failed to copy code:", error);
+    }
+  };
+
   return (
-    <div className="my-4 overflow-hidden rounded-lg border border-border">
+    <div className="not-prose my-4 overflow-hidden rounded-lg border border-border">
       <div className="bg-muted flex items-center justify-between border-b border-border px-4 py-2 text-xs">
         <span className="text-muted-foreground font-mono tracking-wider uppercase">
           {language}
@@ -277,11 +296,11 @@ function CustomCode({
         </Button>
       </div>
       <SyntaxHighlighter
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        style={oneDark as any}
+        style={oneDark as never}
         language={language}
         PreTag="div"
         showLineNumbers
+        className={mergeClassNames("not-prose", className)}
         customStyle={{
           margin: 0,
           borderRadius: 0,
@@ -496,13 +515,11 @@ function CustomTable({
   ...props
 }: React.HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="bg-card px-5 overflow-hidden rounded-lg border shadow-sm">
-      <div className="overflow-x-auto">
-        <table className="divide-border min-w-full divide-y" {...props}>
+      <div className="overflow-x-auto px-2">
+        <table className="divide-border min-w-full divide-y" style={{ borderSpacing: "16px 8px" }} {...props}>
           {children}
         </table>
       </div>
-    </div>
   );
 }
 
@@ -511,7 +528,7 @@ function CustomThead({
   ...props
 }: React.HTMLAttributes<HTMLTableSectionElement>) {
   return (
-    <thead className="bg-muted/60" {...props}>
+    <thead className="bg-muted/80" {...props}>
       {children}
     </thead>
   );
@@ -541,11 +558,12 @@ function CustomTr({
 
 function CustomTh({
   children,
+  className = "",
   ...props
 }: React.HTMLAttributes<HTMLTableCellElement>) {
   return (
     <th
-      className="text-foreground px-8 py-2 text-left text-sm font-semibold"
+      className={`text-foreground text-left text-sm font-semibold px-6 py-3 first:pl-8 last:pr-8 ${className}`}
       {...props}
     >
       {children}
@@ -555,14 +573,19 @@ function CustomTh({
 
 function CustomTd({
   children,
+  className = "",
   ...props
 }: React.HTMLAttributes<HTMLTableCellElement>) {
   return (
-    <td className="text-foreground px-8 py-2 text-sm" {...props}>
+    <td
+      className={`text-foreground text-sm px-6 py-3 first:pl-8 last:pr-8 ${className}`}
+      {...props}
+    >
       {children}
     </td>
   );
 }
+
 
 // Horizontal rule
 function CustomHr(props: React.HTMLAttributes<HTMLHRElement>) {
