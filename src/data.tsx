@@ -1,6 +1,5 @@
 import { contact, navbar } from "@/config/contact";
 import { discover, footerResources } from "@/config/footer";
-import { personalInfo } from "@/config/personal";
 import { projectConfig } from "@/config/project";
 import { siteConfig } from "@/config/site";
 
@@ -11,28 +10,27 @@ export const BLUR_FADE_DELAY = 0.05;
  */
 export const DATA = {
   ...siteConfig,
-  // 英文信息（默认）
-  name: personalInfo.name.en,
-  subtitle: personalInfo.subtitle.en,
-  description: personalInfo.description.en,
-  summary: personalInfo.summary.en,
-  location: personalInfo.location,
-  locationLink: personalInfo.locationLink,
-  surname: personalInfo.surname,
-  firstName: personalInfo.firstName,
-  initials: personalInfo.initials,
+  // 项目信息（英文）
+  name: projectConfig.fullName,
+  subtitle: projectConfig.slogan.en,
+  description: projectConfig.description.en,
+  summary: projectConfig.description.en,
+  location: "Xi'an, Shaanxi, China",
+  locationLink: "https://www.xidian.edu.cn",
+  surname: "XDYou",
+  firstName: "Team",
+  initials: "XD",
   // 其他配置
   navbar,
   contact,
   projectConfig,
   discover,
   footerResources,
-  // 中文信息（向后兼容）
+  // 中文信息
   chinese: {
-    name: personalInfo.name.zh,
-    subtitle: personalInfo.subtitle.zh,
-    description: personalInfo.description.zh,
-    summary: personalInfo.summary.zh,
+    name: projectConfig.fullName,
+    subtitle: projectConfig.slogan.zh,
+    description: projectConfig.description.zh,
     blogDescription: siteConfig.chinese.blogDescription,
   },
 } as const;
