@@ -248,7 +248,8 @@ function CustomCode({
   if (inline) {
     return (
       <code
-        className="bg-muted rounded-md border px-1.5 py-0.5 font-mono text-sm"
+        className="bg-muted/50 rounded px-1.5 py-0.5 font-mono text-sm not-italic"
+        style={{ quotes: 'none' }}
         {...props}
       >
         {children}
@@ -402,7 +403,8 @@ function CustomBlockquote({
     const style = alertStyles[alertType as keyof typeof alertStyles];
     return (
       <blockquote
-        className={`my-6 rounded-lg border border-l-4 p-5 ${style.border} ${style.bg}`}
+        className={`my-6 rounded-lg border border-l-4 p-5 ${style.border} ${style.bg} not-italic`}
+        style={{ quotes: 'none' }}
         {...props}
       >
         <div className="flex items-start gap-3">
@@ -420,10 +422,11 @@ function CustomBlockquote({
 
   return (
     <blockquote
-      className="border-l-primary/80 bg-card my-6 rounded-lg border border-l-4 p-5 shadow-sm"
+      className="border-l-blue-600 bg-card my-6 rounded-lg border border-l-4 p-5 shadow-sm not-italic"
+      style={{ quotes: 'none' }}
       {...props}
     >
-      <div className="text-muted-foreground leading-relaxed italic">
+      <div className="text-muted-foreground leading-relaxed">
         {children}
       </div>
     </blockquote>
