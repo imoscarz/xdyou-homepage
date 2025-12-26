@@ -9,7 +9,8 @@ import { Suspense } from "react";
 
 import {
   generateBreadcrumbListJsonLd,
-  generatePersonJsonLd,
+  generateOrganizationJsonLd,
+  generateSoftwareApplicationJsonLd,
   generateWebsiteJsonLd,
 } from "@/app/jsonld";
 import Footer from "@/components/blocks/footer";
@@ -93,7 +94,8 @@ export default function ChineseLayout({
         {/* JSON-LD Schemas */}
         {jsonldScript(generateWebsiteJsonLd())}
         {jsonldScript(generateBreadcrumbListJsonLd())}
-        {jsonldScript(generatePersonJsonLd())}
+        {jsonldScript(generateSoftwareApplicationJsonLd())}
+        {jsonldScript(generateOrganizationJsonLd())}
       </head>
       <body
         className={cn(

@@ -1,17 +1,12 @@
 import type {
-  BlogPosting,
-  BreadcrumbList,
-  Country,
-  EducationalOrganization,
-  Occupation,
   Organization,
-  Person,
-  PostalAddress,
+  SoftwareApplication,
   WebSite,
   WithContext,
 } from "schema-dts";
 
-import { DATA, getEmail } from "@/data";
+import { projectConfig } from "@/config/project";
+import { DATA } from "@/data";
 
 /*
  * Generate BreadcrumbList JSON-LD
@@ -20,7 +15,7 @@ import { DATA, getEmail } from "@/data";
 export function generateBreadcrumbListJsonLd(
   locale: "en" | "zh" = "en",
 ): string {
-  const breadcrumbList: WithContext<BreadcrumbList> = {
+  const breadcrumbList = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: DATA.navbar.map((item, index) => ({
@@ -29,7 +24,7 @@ export function generateBreadcrumbListJsonLd(
       name: item.label,
       item:
         locale === "zh"
-          ? `${DATA.url}/zh${item.href}`
+          ? `${DATA.url}${item.href}?lang=zh`
           : `${DATA.url}${item.href}`,
     })),
   };
@@ -42,182 +37,72 @@ export function generateBreadcrumbListJsonLd(
  */
 
 export function generateWebsiteJsonLd(locale: "en" | "zh" = "en"): string {
-  const author: Person = {
-    "@type": "Person",
-    name: locale === "zh" ? DATA.chinese.name : DATA.name,
-    url: locale === "zh" ? `${DATA.url}/zh` : DATA.url,
-  };
-
-  const websiteJsonLd: WithContext<WebSite> = {
+  const website: WithContext<WebSite> = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name:
+    name: projectConfig.name,
+    alternateName: projectConfig.fullName,
+    description:
       locale === "zh"
-        ? `${DATA.chinese.name} - 主页`
-        : `${DATA.name} - Portfolio`,
-    description: locale === "zh" ? DATA.chinese.description : DATA.description,
-    url: locale === "zh" ? `${DATA.url}/zh` : DATA.url,
-    author,
+        ? projectConfig.description.zh
+        : projectConfig.description.en,
+    url: locale === "zh" ? `${DATA.url}?lang=zh` : DATA.url,
+    inLanguage: locale === "zh" ? "zh-CN" : "en",
   };
 
-  return JSON.stringify(websiteJsonLd);
+  return JSON.stringify(website);
 }
 
 /*
- * Generate Person JSON-LD
+ * Generate SoftwareApplication JSON-LD for XDYou
  */
 
-function getSocialMediaUrls(): string[] {
-  return Object.values(DATA.contact.social)
-    .filter((social) => social.url && social.name !== "Email")
-    .map((social) => social.url);
-}
-
-function getAddress(): PostalAddress {
-  const addressCountry: Country = { "@type": "Country", name: "Singapore" };
-  const address: PostalAddress = {
-    "@type": "PostalAddress",
-    addressLocality: DATA.location,
-    addressCountry,
-  };
-  return address;
-}
-
-function getOrganization(): Organization {
-  const organization: Organization = {
-    "@type": "Organization",
-    name: "HPC-AI Tech",
-    url: "https://www.hpcaitech.com/",
-  };
-  return organization;
-}
-
-function getOccupation(): Occupation {
-  return {
-    "@type": "Occupation",
-    name: "Tech Lead",
-    description: "Full Stack Developer & AI Researcher",
-  };
-}
-
-function getEducation(): EducationalOrganization[] {
-  return DATA.education.map((edu) => ({
-    "@type": "EducationalOrganization",
-    name: edu.school,
-    url: edu.href,
-  }));
-}
-
-export function generatePersonJsonLd(locale: "en" | "zh" = "en"): string {
-  return JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: locale === "zh" ? DATA.chinese.name : DATA.name,
-    givenName: DATA.firstName,
-    familyName: DATA.surname,
-    alternateName: locale === "zh" ? DATA.chinese.name : DATA.name,
-    description: locale === "zh" ? DATA.chinese.description : DATA.description,
-    url: locale === "zh" ? `${DATA.url}/zh` : DATA.url,
-    image: `${DATA.url}${DATA.avatarUrl}`,
-    /* Contact Info */
-    email: getEmail(),
-    sameAs: getSocialMediaUrls(),
-    address: getAddress(),
-    /* Work Info */
-    jobTitle: "Tech Lead",
-    worksFor: getOrganization(),
-    hasOccupation: getOccupation(),
-    knowsAbout: DATA.skills,
-    /* Education Info */
-    alumniOf: getEducation(),
-  });
-}
-
-/*
- * Generate Blog JSON-LD
- */
-export function generateBlogJsonLd(
-  posts: {
-    metadata: Record<string, unknown> & {
-      title: string;
-      date: string;
-      summary: string;
-    };
-    slug: string;
-    locale?: string;
-  }[],
+export function generateSoftwareApplicationJsonLd(
+  locale: "en" | "zh" = "en",
 ): string {
-  const itemListElements = posts
-    .filter((post) => post.locale !== "zh")
-    .map((post, index) => {
-      const postUrl = `${DATA.url}/blog/${post.slug}`;
-
-      return {
-        "@type": "ListItem",
-        position: index + 1,
-        url: postUrl,
-      };
-    });
-
-  return JSON.stringify({
+  const application: WithContext<SoftwareApplication> = {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    itemListElement: itemListElements,
-  });
-}
-
-/*
- * Generate BlogPosting JSON-LD
- */
-
-export function generateBlogPostingJsonLd(post: {
-  metadata: Record<string, unknown> & {
-    title: string;
-    date: string;
-    summary: string;
-    image?: string;
-  };
-  slug: string;
-  locale?: string;
-}): string {
-  const socialMediaUrls = getSocialMediaUrls();
-
-  const author: Person = {
-    "@type": "Person",
-    name: DATA.name,
-    url: DATA.url,
-    sameAs: socialMediaUrls,
-  };
-
-  const publisher: Person = {
-    "@type": "Person",
-    name: DATA.name,
-    url: DATA.url,
-  };
-
-  const baseUrl = `${DATA.url}/blog`;
-  const postUrl = post.locale === "en" 
-    ? `${baseUrl}/${post.slug}?lang=en` 
-    : `${baseUrl}/${post.slug}`;
-
-  const blogPosting: WithContext<BlogPosting> = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.metadata.title,
-    datePublished: post.metadata.date,
-    dateModified: post.metadata.date,
-    description: post.metadata.summary,
-    image: post.metadata.image
-      ? `${DATA.url}${post.metadata.image}`
-      : `${postUrl}/opengraph-image`,
-    url: postUrl,
-    author,
-    publisher,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": postUrl,
+    "@type": "SoftwareApplication",
+    name: projectConfig.name,
+    alternateName: projectConfig.fullName,
+    description:
+      locale === "zh"
+        ? projectConfig.description.zh
+        : projectConfig.description.en,
+    url: projectConfig.repo.url,
+    applicationCategory: "EducationalApplication",
+    operatingSystem: projectConfig.platforms
+      .filter((p) => p.available)
+      .map((p) => p.name)
+      .join(", "),
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    author: {
+      "@type": "Organization",
+      name: "XDYou Team",
+      url: projectConfig.repo.url,
     },
   };
 
-  return JSON.stringify(blogPosting);
+  return JSON.stringify(application);
+}
+
+/*
+ * Generate Organization JSON-LD
+ */
+
+export function generateOrganizationJsonLd(): string {
+  const organization: WithContext<Organization> = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "XDYou Team",
+    url: projectConfig.repo.url,
+    logo: `${DATA.url}${projectConfig.logo}`,
+    sameAs: [projectConfig.repo.url],
+  };
+
+  return JSON.stringify(organization);
 }

@@ -1,4 +1,4 @@
-import { Metadata } from "next/import";
+import { Metadata } from "next";
 
 import NewsListClient from "@/components/project/news-list-client";
 import { BlurFade } from "@/components/ui/blur-fade";

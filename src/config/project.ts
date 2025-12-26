@@ -80,7 +80,7 @@ export const projectConfig = {
       },
     },
     {
-      icon: "clipboard-list",
+      icon: "clipboardlist",
       title: {
         en: "Exam Queries",
         zh: "考试查询",
@@ -91,7 +91,7 @@ export const projectConfig = {
       },
     },
     {
-      icon: "credit-card",
+      icon: "creditcard",
       title: {
         en: "Campus Card",
         zh: "校园卡",
@@ -102,7 +102,7 @@ export const projectConfig = {
       },
     },
     {
-      icon: "book-open",
+      icon: "bookopen",
       title: {
         en: "Library Services",
         zh: "图书馆服务",
@@ -113,7 +113,7 @@ export const projectConfig = {
       },
     },
     {
-      icon: "map-pin",
+      icon: "mappin",
       title: {
         en: "Campus Navigation",
         zh: "校园导航",

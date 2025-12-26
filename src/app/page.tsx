@@ -38,7 +38,7 @@ export default async function Page({ searchParams }: PageProps) {
   }));
 
   // Prepare platforms
-  const platforms = projectConfig.platforms;
+  const platforms = [...projectConfig.platforms];
 
   // Mock latest release data (will be replaced with real GitHub API data later)
   const latestRelease = {
