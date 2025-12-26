@@ -8,6 +8,7 @@ import {
   ChevronRightIcon,
   ClipboardListIcon,
   CodeIcon,
+  ComputerIcon,
   CreditCardIcon,
   DatabaseIcon,
   ExternalLinkIcon,
@@ -67,26 +68,6 @@ export const Icons = {
       <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
     </svg>
   ),
-  penguin: (props: IconProps) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M12 3c-1.66 0-3 1.34-3 3v2c0 1.66 1.34 3 3 3s3-1.34 3-3V6c0-1.66-1.34-3-3-3z" />
-      <ellipse cx="12" cy="14" rx="6" ry="7" />
-      <circle cx="9.5" cy="12" r="0.5" fill="currentColor" />
-      <circle cx="14.5" cy="12" r="0.5" fill="currentColor" />
-      <path d="M8 14c0 1.5 1.79 3 4 3s4-1.5 4-3" />
-      <path d="M6 11c-1.66 0-3 1.34-3 3v4l3-2" />
-      <path d="M18 11c1.66 0 3 1.34 3 3v4l-3-2" />
-    </svg>
-  ),
   // Existing Icons
   book: (props: IconProps) => <BookIcon {...props} />,
   brain: (props: IconProps) => <BrainCircuitIcon {...props} />,
@@ -109,6 +90,7 @@ export const Icons = {
   warning: (props: IconProps) => <FileWarningIcon {...props} />,
   spin: (props: IconProps) => <Loader2Icon {...props} />,
   trend: (props: IconProps) => <TrendingUpIcon {...props} />,
+  computer: (props: IconProps) => <ComputerIcon {...props} />,
   // Social Icons
   linkedin: (props: IconProps) => (
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>

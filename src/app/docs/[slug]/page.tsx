@@ -1,14 +1,15 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { CustomReactMarkdown } from "@/components/react-markdown";
+import DocContent from "@/components/project/doc-content";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { Card, CardContent } from "@/components/ui/card";
 import { BLUR_FADE_DELAY } from "@/data";
 import { getAllDocSlugs, getDocBySlug } from "@/lib/docs";
+import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateStaticParams() {
@@ -34,8 +35,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function DocPage({ params }: PageProps) {
+export default async function DocPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const locale = await getLocaleFromSearchParams(searchParams);
+  const dict = await getDictionary(locale);
   const doc = getDocBySlug(slug);
 
   if (!doc) {
@@ -43,7 +46,7 @@ export default async function DocPage({ params }: PageProps) {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-4xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20">
+    <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20">
       <BlurFade delay={BLUR_FADE_DELAY}>
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -58,11 +61,12 @@ export default async function DocPage({ params }: PageProps) {
       </BlurFade>
 
       <BlurFade delay={BLUR_FADE_DELAY * 2}>
-        <Card>
-          <CardContent className="prose prose-sm dark:prose-invert max-w-none pt-6">
-            <CustomReactMarkdown>{doc.content}</CustomReactMarkdown>
-          </CardContent>
-        </Card>
+        <DocContent
+          content={doc.content}
+          dict={{
+            toc: dict.releases.toc,
+          }}
+        />
       </BlurFade>
     </main>
   );

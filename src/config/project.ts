@@ -53,7 +53,7 @@ export const projectConfig = {
     {
       id: "linux",
       name: "Linux",
-      icon: "laptop",
+      icon: "computer",
       downloadUrl: "https://github.com/BenderBlog/traintime_pda/releases/latest",
       available: true,
     },

@@ -1,26 +1,14 @@
 "use client";
 
-import { ChevronDown, FileBox, FileCode, Tag } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
+import ReleaseCard from "@/components/project/release-card";
 import ReleaseToc from "@/components/project/release-toc";
-import { CustomReactMarkdown } from "@/components/react-markdown";
-import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Card, CardContent } from "@/components/ui/card";
 import { projectConfig } from "@/config/project";
-import {
-  formatFileSize,
-  formatReleaseDate,
-  GitHubRelease,
-} from "@/lib/github";
+import { GitHubRelease } from "@/lib/github";
 
 type ReleasesClientProps = {
   initialReleases: GitHubRelease[];
@@ -92,154 +80,35 @@ export default function ReleasesClient({
     <div className="flex gap-8">
       {/* Main Content */}
       <div className="flex-1 space-y-6">
-        {displayedReleases.map((release, idx) => {
-        const [isNotesOpen, setIsNotesOpen] = useState(true); // 默认展开
-        const [areAssetsOpen, setAreAssetsOpen] = useState(false);
+        {displayedReleases.map((release, idx) => (
+          <ReleaseCard
+            key={release.id}
+            release={release}
+            delay={delay + idx * 0.05}
+            dict={{
+              releasedOn: dict.releasedOn,
+              assets: dict.assets,
+              sourceCode: dict.sourceCode,
+              downloadCount: dict.downloadCount,
+            }}
+          />
+        ))}
 
-        return (
-          <BlurFade key={release.id} delay={delay + idx * 0.05}>
-            <Card className="scroll-mt-24" data-release-id={release.id}>
-              <CardHeader className="bg-muted/50">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 space-y-2">
-                    <CardTitle className="flex items-center gap-2 text-2xl">
-                      <Tag className="size-5" />
-                      {release.name || release.tag_name}
-                    </CardTitle>
-                    <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-                      <Badge variant="outline">{release.tag_name}</Badge>
-                      <span>•</span>
-                      <span>
-                        {dict.releasedOn} {formatReleaseDate(release.published_at)}
-                      </span>
-                    </div>
-                  </div>
-                  <Button asChild variant="default" size="sm">
-                    <Link href={release.html_url} target="_blank" rel="noopener noreferrer">
-                      GitHub
-                    </Link>
-                  </Button>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-6 pt-6">
-                {/* Release Notes - 默认展开 */}
-                {release.body && (
-                  <div className="space-y-3">
-                    <Collapsible open={isNotesOpen} onOpenChange={setIsNotesOpen}>
-                      <CollapsibleTrigger asChild>
-                        <Button variant="ghost" className="w-full justify-between px-0 hover:bg-transparent">
-                          <span className="text-sm font-semibold">Release Notes</span>
-                          <ChevronDown
-                            className={`size-4 transition-transform ${
-                              isNotesOpen ? "rotate-180" : ""
-                            }`}
-                          />
-                        </Button>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent>
-                        <Card className="mt-2 border-muted">
-                          <CardContent className="prose prose-sm dark:prose-invert max-w-none p-4">
-                            <CustomReactMarkdown>{release.body}</CustomReactMarkdown>
-                          </CardContent>
-                        </Card>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </div>
-                )}
-
-                {/* Assets */}
-                {release.assets.length > 0 && (
-                  <div className="space-y-3">
-                    <Collapsible open={areAssetsOpen} onOpenChange={setAreAssetsOpen}>
-                      <CollapsibleTrigger asChild>
-                        <Button variant="ghost" className="w-full justify-between px-0 hover:bg-transparent">
-                          <h4 className="flex items-center gap-2 text-sm font-semibold">
-                            <FileBox className="size-4" />
-                            {dict.assets} ({release.assets.length})
-                          </h4>
-                          <ChevronDown
-                            className={`size-4 transition-transform ${
-                              areAssetsOpen ? "rotate-180" : ""
-                            }`}
-                          />
-                        </Button>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent>
-                        <div className="mt-2 grid gap-2">
-                          {release.assets.map((asset) => (
-                            <Card key={asset.id} className="border-muted">
-                              <CardContent className="p-4">
-                                <div className="flex items-start justify-between gap-4">
-                                  <div className="flex-1 space-y-1">
-                                    <p className="font-medium">{asset.name}</p>
-                                    <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                                      <span>{formatFileSize(asset.size)}</span>
-                                      <span>•</span>
-                                      <span>{dict.downloadCount}: {asset.download_count.toLocaleString()}</span>
-                                      <span>•</span>
-                                      <span>{asset.content_type}</span>
-                                    </div>
-                                  </div>
-                                  <Button asChild size="sm">
-                                    <Link
-                                      href={asset.browser_download_url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      Download
-                                    </Link>
-                                  </Button>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </div>
-                )}
-
-                {/* Source Code */}
-                <div className="space-y-3">
-                  <h4 className="flex items-center gap-2 text-sm font-semibold">
-                    <FileCode className="size-4" />
-                    {dict.sourceCode}
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    <Button asChild size="sm" variant="outline">
-                      <Link href={release.zipball_url} target="_blank" rel="noopener noreferrer">
-                        ZIP
-                      </Link>
-                    </Button>
-                    <Button asChild size="sm" variant="outline">
-                      <Link href={release.tarball_url} target="_blank" rel="noopener noreferrer">
-                        TAR.GZ
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        {/* Load More Button - Always visible at bottom */}
+        {displayCount < releases.length && (
+          <BlurFade delay={delay + displayedReleases.length * 0.05}>
+            <div className="flex justify-center pt-4">
+              <Button
+                onClick={loadMore}
+                disabled={isLoading}
+                variant="outline"
+                size="lg"
+              >
+                {isLoading ? "Loading..." : dict.loadMore}
+              </Button>
+            </div>
           </BlurFade>
-        );
-      })}
-
-      {/* Load More Button - Hidden on desktop when TOC is visible */}
-      {displayCount < releases.length && (
-        <BlurFade delay={delay + displayedReleases.length * 0.05}>
-          <div className="flex justify-center pt-4 xl:hidden">
-            <Button
-              onClick={loadMore}
-              disabled={isLoading}
-              variant="outline"
-              size="lg"
-            >
-              {isLoading ? "Loading..." : dict.loadMore}
-            </Button>
-          </div>
-        </BlurFade>
-      )}
+        )}
       </div>
 
       {/* TOC Sidebar */}
