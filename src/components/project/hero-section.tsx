@@ -1,15 +1,17 @@
 import Image from "next/image";
-import Link from "next/link";
 
+import PlatformDownloadButton from "@/components/project/platform-download-button";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { Button } from "@/components/ui/button";
 
 type HeroSectionProps = {
   projectName: string;
   slogan: string;
   description: string;
   logo: string;
-  primaryDownloadUrl: string;
+  androidUrl: string;
+  iosUrl: string;
+  windowsUrl: string;
+  linuxUrl: string;
   delay?: number;
   dict: {
     downloadButton: string;
@@ -22,7 +24,10 @@ export default function HeroSection({
   slogan,
   description,
   logo,
-  primaryDownloadUrl,
+  androidUrl,
+  iosUrl,
+  windowsUrl,
+  linuxUrl,
   delay = 0,
   dict,
 }: HeroSectionProps) {
@@ -63,27 +68,13 @@ export default function HeroSection({
           </BlurFade>
           
           <BlurFade delay={delay + 0.3}>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button
-                asChild
-                size="lg"
-                className="text-base font-semibold"
-              >
-                <Link href={primaryDownloadUrl}>
-                  {dict.downloadButton}
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="text-base font-semibold"
-              >
-                <Link href="#downloads">
-                  {dict.moreDownloads}
-                </Link>
-              </Button>
-            </div>
+            <PlatformDownloadButton
+              dict={dict}
+              androidUrl={androidUrl}
+              iosUrl={iosUrl}
+              windowsUrl={windowsUrl}
+              linuxUrl={linuxUrl}
+            />
           </BlurFade>
         </div>
         

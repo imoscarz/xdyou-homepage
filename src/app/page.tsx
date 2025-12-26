@@ -4,6 +4,7 @@ import HeroSection from "@/components/project/hero-section";
 import ScreenshotsSection from "@/components/project/screenshots-section";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
+import { fetchLatestRelease } from "@/lib/github";
 import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
 
 type PageProps = {
@@ -40,14 +41,33 @@ export default async function Page({ searchParams }: PageProps) {
   // Prepare platforms
   const platforms = [...projectConfig.platforms];
 
-  // Mock latest release data (will be replaced with real GitHub API data later)
-  const latestRelease = {
-    version: "v1.0.0",
-    date: "2025-12-26",
-    notes:
-      "首次发布！\n\n新功能：\n- 课程表查询\n- 考试安排查询\n- 校园卡余额查询\n- 图书馆服务\n- 校园导航\n- 通知提醒",
-    downloadUrl: projectConfig.repo.url + "/releases/latest",
-  };
+  // Fetch latest release from GitHub
+  const release = await fetchLatestRelease(
+    projectConfig.repo.owner,
+    projectConfig.repo.name
+  );
+
+  const latestRelease = release
+    ? {
+        version: release.tag_name,
+        date: new Date(release.published_at).toLocaleDateString(locale),
+        notes: release.body || "No release notes available.",
+        downloadUrl: release.html_url,
+        assets: release.assets,
+      }
+    : undefined;
+
+  // Find platform-specific download URLs
+  const androidAsset = release?.assets.find((a) =>
+    a.name.includes("arm64-v8a-release.apk")
+  );
+  const iosUrl = platforms.find((p) => p.id === "ios")?.downloadUrl || "#";
+  const windowsAsset = release?.assets.find((a) =>
+    a.name.includes("windows-release-amd64.zip")
+  );
+  const linuxAsset = release?.assets.find((a) =>
+    a.name.includes("linux-release-amd64.zip")
+  );
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-16 px-6 py-8 pb-24 sm:space-y-20 sm:px-16 md:px-20 md:py-16 md:pt-14 lg:px-24 lg:py-20 xl:px-32 xl:py-24">
@@ -57,7 +77,19 @@ export default async function Page({ searchParams }: PageProps) {
         slogan={slogan}
         description={description}
         logo={projectConfig.logo}
-        primaryDownloadUrl={projectConfig.repo.url + "/releases/latest"}
+        androidUrl={
+          androidAsset?.browser_download_url ||
+          projectConfig.repo.url + "/releases/latest"
+        }
+        iosUrl={iosUrl}
+        windowsUrl={
+          windowsAsset?.browser_download_url ||
+          projectConfig.repo.url + "/releases/latest"
+        }
+        linuxUrl={
+          linuxAsset?.browser_download_url ||
+          projectConfig.repo.url + "/releases/latest"
+        }
         delay={BLUR_FADE_DELAY}
         dict={{
           downloadButton: dict.home.hero.downloadButton,

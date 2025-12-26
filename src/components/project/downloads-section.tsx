@@ -1,10 +1,9 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
-import { Icons } from "@/components/icons";
+import DownloadClient from "@/components/project/download-client";
 import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
@@ -14,12 +13,15 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import type { GitHubAsset } from "@/lib/github";
 
 type Platform = {
   id: string;
   name: string;
-  icon: keyof typeof Icons;
+  icon: keyof typeof import("@/components/icons").Icons;
   downloadUrl: string;
+  alternativeUrl?: string;
+  alternativeName?: string;
   available: boolean;
   comingSoon?: boolean;
 };
@@ -29,6 +31,7 @@ type LatestRelease = {
   date: string;
   notes: string;
   downloadUrl: string;
+  assets?: GitHubAsset[];
 };
 
 type DownloadsSectionProps = {
@@ -112,33 +115,16 @@ export default function DownloadsSection({
 
         {/* Download Buttons */}
         <BlurFade delay={delay + 0.2}>
-          <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {platforms.map((platform) => {
-              const Icon = Icons[platform.icon];
-              return (
-                <Card
-                  key={platform.id}
-                  className={`${!platform.available ? "opacity-60" : ""}`}
-                >
-                  <CardContent className="flex flex-col items-center justify-center space-y-3 p-6">
-                    <Icon className="size-12 text-primary" />
-                    <h3 className="text-lg font-semibold">{platform.name}</h3>
-                    {platform.available ? (
-                      <Button asChild size="sm" className="w-full">
-                        <Link href={platform.downloadUrl}>
-                          {dict.downloadFor}
-                        </Link>
-                      </Button>
-                    ) : (
-                      <Badge variant="secondary" className="w-full justify-center">
-                        {platform.comingSoon ? dict.comingSoon : dict.unavailable}
-                      </Badge>
-                    )}
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+          <DownloadClient
+            platforms={platforms}
+            assets={latestRelease?.assets}
+            delay={delay + 0.2}
+            dict={{
+              downloadFor: dict.downloadFor,
+              comingSoon: dict.comingSoon,
+              unavailable: dict.unavailable,
+            }}
+          />
         </BlurFade>
       </div>
     </section>
