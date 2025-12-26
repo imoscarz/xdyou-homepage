@@ -1,24 +1,33 @@
 export const footerResources = [
   {
-    name: "blog",
-    href: "/blog",
-    translationKey: "footer.resources.blog",
+    name: "docs",
+    href: "/docs",
+    translationKey: "footer.resources.docs",
   },
-  // 可以添加更多资源链接
-  // {
-  //   name: "docs",
-  //   href: "/docs",
-  //   translationKey: "footer.resources.docs",
-  // },
+  {
+    name: "news",
+    href: "/news",
+    translationKey: "footer.resources.news",
+  },
+  {
+    name: "releases",
+    href: "/releases",
+    translationKey: "footer.resources.releases",
+  },
+  {
+    name: "github",
+    href: "https://github.com/BenderBlog/traintime_pda",
+    translationKey: "footer.resources.github",
+  },
 ] as const;
 
 export const discover = [
   {
-    name: "Xidian University",
-    url: "https://www.xidian.edu.cn/",
+    name: "XDYou GitHub",
+    url: "https://github.com/BenderBlog/traintime_pda",
   },
   {
-    name: "66619 Blog",
-    url: "https://66619.eu.org/",
+    name: "Xidian University",
+    url: "https://www.xidian.edu.cn/",
   },
 ] as const;

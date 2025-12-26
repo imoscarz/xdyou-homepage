@@ -3,21 +3,21 @@
 
 export const env = {
   // Site configuration
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://www.imoscarz.me",
-  siteName: process.env.NEXT_PUBLIC_SITE_NAME || "imoscarz 的个人主页",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://xdyou.example.com",
+  siteName: process.env.NEXT_PUBLIC_SITE_NAME || "XDYou - 西电You",
   siteDescription:
     process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-    "A personal homepage of imoscarz.",
+    "Your Essential Campus Companion for Xidian University",
   lastUpdated: process.env.NEXT_PUBLIC_LAST_UPDATED || "Dec 2025",
   avatarUrl:
-    process.env.NEXT_PUBLIC_AVATAR_URL || "https://cdn.imoscarz.me/avatar.png",
-  faviconUrl: process.env.NEXT_PUBLIC_FAVICON_URL || "https://cdn.imoscarz.me/favicon.ico",
+    process.env.NEXT_PUBLIC_AVATAR_URL || "/icon/logo.png",
+  faviconUrl: process.env.NEXT_PUBLIC_FAVICON_URL || "/icon/logo.png",
 
   // Personal info
-  displayName: process.env.NEXT_PUBLIC_DISPLAY_NAME || "imoscarz",
-  subtitle: process.env.NEXT_PUBLIC_SUBTITLE || "Oscar Zeng",
+  displayName: process.env.NEXT_PUBLIC_DISPLAY_NAME || "XDYou",
+  subtitle: process.env.NEXT_PUBLIC_SUBTITLE || "西电You",
   description:
-    process.env.NEXT_PUBLIC_DESCRIPTION || "A passionate developer and college student majoring in Electronic Engineering.",
+    process.env.NEXT_PUBLIC_DESCRIPTION || "Your Essential Campus Companion",
   location: process.env.NEXT_PUBLIC_LOCATION || "Xi'an, Shaanxi, China",
   locationLink:
     process.env.NEXT_PUBLIC_LOCATION_LINK ||
