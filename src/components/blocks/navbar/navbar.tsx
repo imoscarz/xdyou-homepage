@@ -62,7 +62,7 @@ export default function Navbar() {
         )}
       ></div>
       <Dock
-        className="bg-background/80 dark:bg-background/60 pointer-events-auto relative z-50 mx-auto flex h-full min-h-full transform-gpu items-center gap-2 px-2 md:mt-1 md:gap-3 md:px-4 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] dark:[border:1px_solid_rgba(255,255,255,.1)]"
+        className="bg-background/80 dark:bg-background/60 pointer-events-auto relative z-50 mx-auto flex h-full min-h-full transform-gpu items-center gap-3 px-2 md:mt-1 md:gap-4 md:px-4 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] dark:[border:1px_solid_rgba(255,255,255,.1)]"
       >
         {DATA.navbar.map((item) => {
           const href = buildHref(item.href);
