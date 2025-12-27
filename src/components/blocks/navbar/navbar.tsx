@@ -58,11 +58,11 @@ export default function Navbar() {
     >
       <div
         className={cn(
-          "bg-background dark:bg-background fixed inset-x-0 bottom-0 h-16 w-full to-transparent backdrop-blur-lg [-webkit-mask-image:linear-gradient(to_top,black,transparent)] md:top-0 md:[-webkit-mask-image:linear-gradient(to_bottom,black,transparent)]",
+          "bg-background/60 dark:bg-background/40 fixed inset-x-0 bottom-0 h-16 w-full to-transparent backdrop-blur-xl [-webkit-mask-image:linear-gradient(to_top,black,transparent)] md:top-0 md:[-webkit-mask-image:linear-gradient(to_bottom,black,transparent)]",
         )}
       ></div>
       <Dock
-        className="bg-background pointer-events-auto relative z-50 mx-auto flex h-full min-h-full transform-gpu items-center gap-2 px-2 md:mt-1 md:gap-3 md:px-4 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] dark:[border:1px_solid_rgba(255,255,255,.1)]"
+        className="bg-background/80 dark:bg-background/60 pointer-events-auto relative z-50 mx-auto flex h-full min-h-full transform-gpu items-center gap-2 px-2 md:mt-1 md:gap-3 md:px-4 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] dark:[border:1px_solid_rgba(255,255,255,.1)]"
       >
         {DATA.navbar.map((item) => {
           const href = buildHref(item.href);
