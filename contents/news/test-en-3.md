@@ -1,5 +1,5 @@
 ---
-title: "Test Announcement 1"
+title: "Test Announcement 3"
 date: "2025-12-25"
 author: "imoscarz"
 tags: ["announcement", "test"]

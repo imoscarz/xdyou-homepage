@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { env } from "@/lib/env";
+import { siteConfig } from "@/config/site";
 import { getAllNewsPosts } from "@/lib/news";
 
 export async function GET() {
@@ -17,7 +17,7 @@ export async function GET() {
           tags: post.tags,
           lang: post.lang,
           excerpt: post.excerpt,
-          url: `${env.siteUrl}/news/${post.slug}`,
+          url: `${siteConfig.url}/news/${post.slug}`,
         })),
         total: posts.length,
       },

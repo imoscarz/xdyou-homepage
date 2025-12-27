@@ -16,8 +16,8 @@ import {
 import Footer from "@/components/blocks/footer";
 import Navbar from "@/components/blocks/navbar/navbar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { siteConfig } from "@/config/site";
 import { DATA } from "@/data";
-import { env } from "@/lib/env";
 import { cn, jsonldScript } from "@/lib/utils";
 
 /* Fonts */
@@ -36,9 +36,9 @@ export const metadata: Metadata = {
   description: DATA.description,
   // Favicon configuration
   icons: {
-    icon: env.faviconUrl,
-    shortcut: env.faviconUrl,
-    apple: env.faviconUrl,
+    icon: siteConfig.faviconUrl,
+    shortcut: siteConfig.faviconUrl,
+    apple: siteConfig.faviconUrl,
   },
   // Also: robots.ts
   robots: {

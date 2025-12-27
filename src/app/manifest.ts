@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
+import { siteConfig } from "@/config/site";
 import { DATA } from "@/data";
-import { env } from "@/lib/env";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -17,7 +17,7 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "en",
     icons: [
       {
-        src: env.faviconUrl,
+        src: siteConfig.faviconUrl,
         sizes: "any",
         type: "image/x-icon",
       },

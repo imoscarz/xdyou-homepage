@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { env } from "@/lib/env";
+import { siteConfig } from "@/config/site";
 import { getAllNewsPosts } from "@/lib/news";
 
 export async function GET() {
   try {
     const posts = await getAllNewsPosts();
-    const siteUrl = env.siteUrl;
+    const siteUrl = siteConfig.url;
     const latestDate = posts.length > 0 ? new Date(posts[0].date).toISOString() : new Date().toISOString();
 
     // 生成Atom feed

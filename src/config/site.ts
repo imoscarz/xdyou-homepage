@@ -1,11 +1,13 @@
-import { env } from "@/lib/env";
-
+// Site configuration (static, not from environment)
 export const siteConfig = {
-  url: env.siteUrl,
-  lastUpdated: env.lastUpdated,
-  avatarUrl: env.avatarUrl,
-  blogDescription: env.blogDescription,
+  url: "https://xdyou.example.com",
+  faviconUrl: "/icon/logo.png",
+  lastUpdated: "Dec 2025",
+  avatarUrl: "/icon/logo.png",
+  blogDescription: "News from XDYou Team.",
   chinese: {
-    blogDescription: env.blogDescriptionZh,
+    blogDescription: "来自XDYou团队的新闻。",
   },
 } as const;
+
+export type SiteConfig = typeof siteConfig;

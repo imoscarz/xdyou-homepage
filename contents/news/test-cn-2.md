@@ -1,5 +1,5 @@
 ---
-title: "测试通知1"
+title: "测试通知2"
 date: "2025-12-26"
 author: "imoscarz"
 tags: ["debug", "announcement"]
