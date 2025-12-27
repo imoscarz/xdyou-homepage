@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -45,18 +44,16 @@ export default function Navbar() {
     return path;
   };
 
-  // Check if a path is active
-  const isActive = (href: string) => {
-    if (href === "/") {
-      return pathname === "/";
-    }
-    return pathname?.startsWith(href);
+  const isActivePath = (href: string) => {
+    if (!pathname) return false;
+    if (href === "/") return pathname === "/";
+    return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   return (
     <div
       className={cn(
-        "pointer-events-none fixed inset-x-0 bottom-0 z-40 mx-auto mb-9 flex h-full max-h-14 origin-bottom md:top-0 md:mb-0",
+        "pointer-events-none fixed inset-x-0 bottom-0 z-40 mx-auto mb-9 flex h-full max-h-16 origin-bottom md:top-0 md:mb-0",
       )}
     >
       <div
@@ -64,10 +61,13 @@ export default function Navbar() {
           "bg-background dark:bg-background fixed inset-x-0 bottom-0 h-16 w-full to-transparent backdrop-blur-lg [-webkit-mask-image:linear-gradient(to_top,black,transparent)] md:top-0 md:[-webkit-mask-image:linear-gradient(to_bottom,black,transparent)]",
         )}
       ></div>
-      <Dock className="bg-background pointer-events-auto relative z-50 mx-auto flex h-full min-h-full transform-gpu items-center px-1 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] md:mt-1 dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] dark:[border:1px_solid_rgba(255,255,255,.1)]">
+      <Dock
+        disableMagnification
+        className="bg-background pointer-events-auto relative z-50 mx-auto flex h-full min-h-full min-w-fit transform-gpu items-center gap-2 px-2 md:mt-1 md:min-w-[640px] md:gap-3 md:px-4 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] dark:[border:1px_solid_rgba(255,255,255,.1)]"
+      >
         {DATA.navbar.map((item) => {
           const href = buildHref(item.href);
-          const active = isActive(item.href);
+          const isActive = isActivePath(item.href);
 
           return (
             <DockIcon key={item.href}>
@@ -76,31 +76,24 @@ export default function Navbar() {
                   <Link
                     href={href}
                     className={cn(
-                      buttonVariants({ 
-                        variant: active ? "default" : "ghost", 
-                        size: "icon" 
+                      buttonVariants({
+                        variant: "ghost",
+                        size: isDesktop ? "lg" : "icon",
                       }),
-                      "size-12 md:w-auto md:px-4",
+                      isDesktop
+                        ? "h-11 min-w-[120px] justify-start gap-2 px-4"
+                        : "size-12",
+                      isActive &&
+                        "bg-accent text-accent-foreground shadow-inner hover:bg-accent/90",
                     )}
                     aria-label={item.label}
+                    aria-pressed={isActive}
                     {...(item.href.endsWith(".pdf") ? { prefetch: false } : {})}
                   >
-                    {/* Mobile: Icon only */}
-                    <item.icon className="size-4 md:hidden" />
-                    
-                    {/* Desktop: Logo + Text */}
-                    <div className="hidden items-center gap-2 md:flex">
-                      {item.href === "/" && (
-                        <Image
-                          src="/icon/logo.png"
-                          alt="XDYou Logo"
-                          width={20}
-                          height={20}
-                          className="rounded-sm"
-                        />
-                      )}
+                    <item.icon className="size-4" />
+                    {isDesktop && (
                       <span className="text-sm font-medium">{item.label}</span>
-                    </div>
+                    )}
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent
