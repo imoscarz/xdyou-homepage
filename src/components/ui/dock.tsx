@@ -6,6 +6,7 @@ import {
   motion,
   MotionValue,
   useMotionValue,
+  useSpring,
   useTransform,
 } from "motion/react";
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
@@ -145,7 +146,10 @@ const DockIcon = ({
     [size, targetSize, size],
   );
 
-  const scale = useTransform(sizeTransform, (val) => val / size);
+  const scale = useSpring(useTransform(sizeTransform, (val) => val / size), {
+    stiffness: 300,
+    damping: 30,
+  });
 
   return (
     <motion.div
