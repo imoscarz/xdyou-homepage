@@ -70,7 +70,7 @@ export default function Navbar() {
           const isActive = isActivePath(item.href);
 
           return (
-            <DockIcon key={item.href}>
+            <DockIcon key={item.href} fluid={isDesktop}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link

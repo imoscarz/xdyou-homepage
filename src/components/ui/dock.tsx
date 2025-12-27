@@ -109,6 +109,7 @@ export interface DockIconProps
   className?: string;
   children?: React.ReactNode;
   props?: PropsWithChildren;
+  fluid?: boolean;
 }
 
 const DockIcon = ({
@@ -119,6 +120,7 @@ const DockIcon = ({
   mouseX,
   className,
   children,
+  fluid,
   ...props
 }: DockIconProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -154,12 +156,13 @@ const DockIcon = ({
     <motion.div
       ref={ref}
       style={{
-        width: shouldAnimate ? scaleSize : size,
-        height: shouldAnimate ? scaleSize : size,
-        padding,
+        width: fluid && disableMagnification ? "auto" : shouldAnimate ? scaleSize : size,
+        height: fluid && disableMagnification ? "auto" : shouldAnimate ? scaleSize : size,
+        padding: fluid && disableMagnification ? 0 : padding,
       }}
       className={cn(
-        "flex aspect-square cursor-pointer items-center justify-center rounded-full",
+        "flex cursor-pointer items-center justify-center rounded-full",
+        !fluid && "aspect-square",
         disableMagnification && "hover:bg-muted-foreground transition-colors",
         className,
       )}
