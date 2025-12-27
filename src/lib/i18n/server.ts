@@ -13,7 +13,7 @@ import { i18n } from "./config";
  * }
  */
 export async function getLocaleFromSearchParams(
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  searchParams: { [key: string]: string | string[] | undefined } | Promise<{ [key: string]: string | string[] | undefined }>
 ): Promise<Locale> {
   const params = await searchParams;
   const lang = params.lang;

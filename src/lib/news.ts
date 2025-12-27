@@ -50,8 +50,12 @@ export async function getAllNewsPosts(): Promise<NewsPost[]> {
       };
     });
 
-  // Sort by date (newest first)
-  return allPosts.sort((a, b) => (a.date > b.date ? -1 : 1));
+  // Sort by date (newest first) using actual date values
+  return allPosts.sort((a, b) => {
+    const aTime = a.date ? new Date(a.date).getTime() : 0;
+    const bTime = b.date ? new Date(b.date).getTime() : 0;
+    return bTime - aTime;
+  });
 }
 
 export async function getNewsPost(slug: string): Promise<NewsPost | null> {

@@ -9,14 +9,10 @@ const nextConfig: NextConfig = {
         hostname: "lain.bgm.tv",
         pathname: "/pic/**",
       },
+      // Common platforms and CDNs (explicit hostnames)
       {
         protocol: "https",
-        hostname: "*.imoscarz.me",
-      },
-      // Allow images from common blog platforms and CDNs
-      {
-        protocol: "https",
-        hostname: "*.medium.com",
+        hostname: "miro.medium.com",
       },
       {
         protocol: "https",
@@ -24,13 +20,22 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "*.wp.com",
+        hostname: "i0.wp.com",
       },
       {
         protocol: "https",
-        hostname: "*.githubusercontent.com",
+        hostname: "i1.wp.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i2.wp.com",
+      },
+      {
+        protocol: "https",
+        hostname: "user-images.githubusercontent.com",
       },
     ],
+    domains: ["imoscarz.me"],
   },
 };
 

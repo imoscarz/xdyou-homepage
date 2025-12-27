@@ -38,7 +38,8 @@
     "noNews": "No news available",
     "loadMore": "Load More",
     "by": "By ",
-    "publishedOn": "Published on"
+    "publishedOn": "Published on",
+    "backToNews": "Back to News"
   },
   "releases": {
     "title": "Release Notes",

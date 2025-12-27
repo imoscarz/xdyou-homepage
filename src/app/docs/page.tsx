@@ -60,7 +60,7 @@ export default async function DocsPage({ searchParams }: PageProps) {
                     key={doc.slug}
                     delay={BLUR_FADE_DELAY * 2 + catIdx * 0.1 + idx * 0.05}
                   >
-                    <Link href={`/docs/${doc.slug}`}>
+                    <Link href={`/docs/${doc.slug}?lang=zh`}>
                       <Card className="h-full transition-shadow hover:shadow-lg">
                         <CardHeader>
                           <CardTitle>{doc.metadata.title}</CardTitle>

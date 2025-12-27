@@ -75,7 +75,9 @@ export const metadata: Metadata = {
       "zh-CN": DATA.url,
     },
     types: {
-      "application/atom+xml": "/api/feed/atom.xml",
+      // Correct feed endpoints
+      "application/rss+xml": "/api/news/rss",
+      "application/atom+xml": "/api/news/atom",
     },
   },
 };

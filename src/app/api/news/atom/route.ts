@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 
+import { env } from "@/lib/env";
 import { getAllNewsPosts } from "@/lib/news";
 
 export async function GET() {
   try {
     const posts = await getAllNewsPosts();
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const siteUrl = env.siteUrl;
     const latestDate = posts.length > 0 ? new Date(posts[0].date).toISOString() : new Date().toISOString();
 
     // 生成Atom feed
@@ -17,6 +18,7 @@ export async function GET() {
   <id>${siteUrl}/news</id>
   <updated>${latestDate}</updated>
   <subtitle>Latest news and updates from XDYou</subtitle>
+  <generator>XDYou Homepage</generator>
   ${posts
     .map(
       (post) => `

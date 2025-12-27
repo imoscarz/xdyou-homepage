@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { env } from "@/lib/env";
 import { getAllNewsPosts } from "@/lib/news";
 
 export async function GET() {
@@ -7,23 +8,27 @@ export async function GET() {
     const posts = await getAllNewsPosts();
 
     // 生成RSS feed
+    const siteUrl = env.siteUrl;
+    const lastBuildDate = new Date().toUTCString();
     const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>XDYou News</title>
-    <link>${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/news</link>
+    <link>${siteUrl}/news</link>
     <description>Latest news and updates from XDYou</description>
     <language>zh-cn</language>
-    <atom:link href="${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/news/rss" rel="self" type="application/rss+xml" />
+    <atom:link href="${siteUrl}/api/news/rss" rel="self" type="application/rss+xml" />
+    <lastBuildDate>${lastBuildDate}</lastBuildDate>
+    <generator>XDYou Homepage</generator>
     ${posts
       .map(
         (post) => `
     <item>
       <title><![CDATA[${post.title}]]></title>
-      <link>${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/news/${post.slug}</link>
+      <link>${siteUrl}/news/${post.slug}</link>
       <description><![CDATA[${post.excerpt}]]></description>
       <pubDate>${new Date(post.date).toUTCString()}</pubDate>
-      <guid>${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/news/${post.slug}</guid>
+      <guid>${siteUrl}/news/${post.slug}</guid>
       <author>${post.author}</author>
     </item>`
       )

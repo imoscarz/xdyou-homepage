@@ -20,6 +20,11 @@ interface CustomReactMarkdownProps {
   className?: string;
 }
 
+// Ensure theme type satisfies react-syntax-highlighter props
+const prismTheme: { [key: string]: React.CSSProperties } = oneDark as unknown as {
+  [key: string]: React.CSSProperties;
+};
+
 // Generate stable heading IDs (matches doc-toc logic)
 function generateHeadingId(text: string): string {
   let id = text
@@ -296,7 +301,8 @@ export function CustomCode({
         </Button>
       </div>
       <SyntaxHighlighter
-        style={oneDark as never}
+        // @ts-expect-error react-syntax-highlighter theme type mismatch
+        style={prismTheme}
         language={language}
         PreTag="div"
         showLineNumbers

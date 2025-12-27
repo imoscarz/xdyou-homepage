@@ -12,6 +12,11 @@ export function LanguageToggle() {
   const currentLocale = useLocale();
   const isEnglish = currentLocale === "en";
 
+  // Disable language toggle on news detail pages to avoid 404
+  const isNewsDetail = pathname?.startsWith("/news/") && pathname !== "/news";
+  // Disable language toggle on docs detail pages to lock content to Chinese
+  const isDocsDetail = pathname?.startsWith("/docs/") && pathname !== "/docs";
+
   const handleLanguageToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     
@@ -39,8 +44,10 @@ export function LanguageToggle() {
       type="button"
       size="icon"
       className="px-2"
-      onClick={handleLanguageToggle}
+      onClick={isNewsDetail || isDocsDetail ? undefined : handleLanguageToggle}
       aria-label="Toggle language"
+      aria-disabled={isNewsDetail || isDocsDetail}
+      disabled={isNewsDetail || isDocsDetail}
     >
       <span className="text-sm font-medium">{isEnglish ? "EN" : "中"}</span>
     </Button>

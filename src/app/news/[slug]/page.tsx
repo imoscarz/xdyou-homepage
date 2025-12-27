@@ -1,7 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Badge } from "@/components/ui/badge";
@@ -27,7 +27,17 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getNewsPost(slug);
+  // Try exact slug first
+  let post = await getNewsPost(slug);
+
+  // If not found and slug ends with '404', try trimming it and redirect
+  if (!post && slug.endsWith("404")) {
+    const fixedSlug = slug.replace(/404$/, "");
+    const fixedPost = await getNewsPost(fixedSlug);
+    if (fixedPost) {
+      post = fixedPost;
+    }
+  }
 
   if (!post) {
     return {
@@ -49,7 +59,17 @@ export default async function NewsPostPage({
   const locale = await getLocaleFromSearchParams(searchParams);
   const dict = await getDictionary(locale);
 
+  // Try exact slug first
   const post = await getNewsPost(slug);
+
+  // If not found and slug ends with '404', try trimming it and redirect to correct URL
+  if (!post && slug.endsWith("404")) {
+    const fixedSlug = slug.replace(/404$/, "");
+    const fixedPost = await getNewsPost(fixedSlug);
+    if (fixedPost) {
+      redirect(`/news/${fixedSlug}?lang=${locale}`);
+    }
+  }
 
   if (!post || post.lang !== locale) {
     notFound();
@@ -62,7 +82,7 @@ export default async function NewsPostPage({
         <Button asChild variant="ghost" size="sm" className="w-fit">
           <Link href={`/news?lang=${locale}`}>
             <ArrowLeft className="mr-2 size-4" />
-            {locale === "en" ? "Back to News" : "返回新闻列表"}
+            {dict.news.backToNews}
           </Link>
         </Button>
       </BlurFade>

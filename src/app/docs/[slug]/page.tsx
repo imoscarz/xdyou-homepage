@@ -5,11 +5,10 @@ import DocContent from "@/components/project/doc-content";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { BLUR_FADE_DELAY } from "@/data";
 import { getAllDocSlugs, getDocBySlug } from "@/lib/docs";
-import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
+import { getDictionary } from "@/lib/i18n";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateStaticParams() {
@@ -35,10 +34,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function DocPage({ params, searchParams }: PageProps) {
+export default async function DocPage({ params }: PageProps) {
   const { slug } = await params;
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
+  // Force documentation content pages to use Chinese locale
+  const dict = await getDictionary("zh");
   const doc = getDocBySlug(slug);
 
   if (!doc) {

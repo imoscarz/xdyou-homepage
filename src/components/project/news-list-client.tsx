@@ -10,6 +10,7 @@ import { NewsPost } from "@/lib/news";
 
 type NewsListClientProps = {
   posts: NewsPost[];
+  locale: string;
   dict: {
     search: string;
     readMore: string;
@@ -22,6 +23,7 @@ type NewsListClientProps = {
 
 export default function NewsListClient({
   posts,
+  locale,
   dict,
   delay = 0,
 }: NewsListClientProps) {
@@ -56,7 +58,7 @@ export default function NewsListClient({
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredPosts.map((post, idx) => (
             <BlurFade key={post.slug} delay={delay + 0.1 + idx * 0.05}>
-              <Link href={`/news/${post.slug}`}>
+              <Link href={`/news/${post.slug}?lang=${locale}`}>
                 <Card className="flex h-full flex-col transition-shadow hover:shadow-lg">
                   <CardHeader>
                     <div className="mb-2 flex flex-wrap gap-2">

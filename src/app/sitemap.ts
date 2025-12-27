@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 
 import { DATA } from "@/data";
+import { getAllDocSlugs } from "@/lib/docs";
+import { getAllNewsPosts } from "@/lib/news";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = DATA.url;
@@ -33,5 +35,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  return staticRoutes;
+  // Dynamic routes: news posts
+  const news = await getAllNewsPosts();
+  const newsRoutes: MetadataRoute.Sitemap = news.map((post) => ({
+    url: `${baseUrl}/news/${post.slug}`,
+    lastModified: post.date ? new Date(post.date) : new Date(),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  // Dynamic routes: docs
+  const docs = getAllDocSlugs();
+  const docRoutes: MetadataRoute.Sitemap = docs.map((slug) => ({
+    url: `${baseUrl}/docs/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.5,
+  }));
+
+  return [...staticRoutes, ...newsRoutes, ...docRoutes];
 }

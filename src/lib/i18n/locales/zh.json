@@ -38,7 +38,8 @@
     "noNews": "暂无新闻",
     "loadMore": "加载更多",
     "by": "作者：",
-    "publishedOn": "发布于"
+    "publishedOn": "发布于",
+    "backToNews": "返回新闻列表"
   },
   "releases": {
     "title": "发行记录",

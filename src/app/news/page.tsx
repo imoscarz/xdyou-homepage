@@ -52,6 +52,7 @@ export default async function NewsPage({ searchParams }: PageProps) {
       <section>
         <NewsListClient
           posts={posts}
+          locale={locale}
           dict={{
             search: dict.news.search,
             readMore: dict.news.readMore,
