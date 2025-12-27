@@ -396,31 +396,31 @@ function CustomBlockquote({
       border: "border-l-blue-500",
       bg: "bg-blue-50 dark:bg-blue-950/30",
       icon: "ℹ️",
-      title: "Note",
+      title: "Note/笔记",
     },
     TIP: {
       border: "border-l-green-500",
       bg: "bg-green-50 dark:bg-green-950/30",
       icon: "💡",
-      title: "Tip",
+      title: "Tip/提示",
     },
     IMPORTANT: {
       border: "border-l-purple-500",
       bg: "bg-purple-50 dark:bg-purple-950/30",
       icon: "❗",
-      title: "Important",
+      title: "Important/重要",
     },
     WARNING: {
       border: "border-l-yellow-500",
       bg: "bg-yellow-50 dark:bg-yellow-950/30",
       icon: "⚠️",
-      title: "Warning",
+      title: "Warning/警告",
     },
     CAUTION: {
       border: "border-l-red-500",
       bg: "bg-red-50 dark:bg-red-950/30",
       icon: "🚨",
-      title: "Caution",
+      title: "Caution/注意",
     },
   };
 

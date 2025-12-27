@@ -1,6 +1,7 @@
 import {
   AppleIcon,
   ArrowRightIcon,
+  ArrowUpDownIcon,
   BookIcon,
   BookMarkedIcon,
   BrainCircuitIcon,
@@ -53,6 +54,7 @@ export const Icons = {
   creditcard: (props: IconProps) => <CreditCardIcon {...props} />,
   bookopen: (props: IconProps) => <BookIcon {...props} />,
   mappin: (props: IconProps) => <MapPinIcon {...props} />,
+  network: (props: IconProps) => <ArrowUpDownIcon {...props} />,
   bell: (props: IconProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -39,11 +39,11 @@ export default function HeroSection({
 }: HeroSectionProps) {
   return (
     <section id="hero" className="mt-16 sm:mt-28">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12 relative">
         {/* Left: Project Info */}
-        <div className="space-y-6">
+        <div className="space-y-6 relative z-10">
           <BlurFade delay={delay}>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mb-2">
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
                 {projectName}
               </h1>
@@ -74,7 +74,7 @@ export default function HeroSection({
           </BlurFade>
           
           <BlurFade delay={delay + 0.3}>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:flex-wrap">
               <PlatformDownloadButton
                 dict={dict}
                 androidUrl={androidUrl}
@@ -97,7 +97,7 @@ export default function HeroSection({
         
         {/* Right: Logo - Desktop only */}
         <BlurFade delay={delay + 0.2}>
-          <div className="hidden items-center justify-center md:flex">
+          <div className="hidden items-center justify-center md:flex relative z-0">
             <div className="relative aspect-square w-full max-w-md">
               <Image
                 src={logo}

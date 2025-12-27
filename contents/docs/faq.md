@@ -2,53 +2,105 @@
 title: "常见问题"
 description: "常见问题解答和故障排除"
 category: "帮助"
-order: 2
+order: 1
 ---
 
-# 常见问题
+This is a test post to show how the theme works.
 
-## 登录相关
+## Basic Markdown Syntax
 
-### 无法登录怎么办？
+### Styling text
 
-1. 检查网络连接
-2. 确认账号密码正确
-3. 尝试重新登录
+**Test**
 
-### 忘记密码怎么办？
+*Test*
 
-请联系学校教务处重置密码。
+~~Test~~
 
-## 功能使用
+**This text is _extremely_ important**
 
-### 课程表不显示？
+This is a <sub>subscript</sub> text
 
-1. 检查是否已登录
-2. 尝试手动刷新
-3. 确认本学期已选课
+This is a <sup>superscript</sup> text
 
-### 考试信息不准确？
+This is an <ins>underlined</ins> text
 
-考试信息从教务系统同步，如有疑问请以教务系统为准。
+### Quoting text
 
-## 其他问题
+> Text that is a quote
 
-### 如何反馈问题？
 
-- 在GitHub上提交Issue
-- 发送邮件至support@xdyou.example.com
+> [!NOTE]
+>
+> 1233321
 
-### 支持哪些平台？
+> [!WARNING]
+>
+> 1233321
 
-目前支持：
-- Android
-- Windows
-- Linux
+```
+git status
+git add
+git commit
+```
 
-iOS和macOS版本正在开发中。
+```python
+import os
+os.system("pause")
+```
+### Tex
 
-> Hello WOrld!
+$$
+\frac{2}{3} \frac{1}{3}
+$$
 
-|123|231|121|
-|---|---|---|
-|12|12|12|
+123`1321321`3213`2312`
+
+### Links ans images
+
+
+[link](https://www.imoscarz.me)
+
+### Lists
+
+- George Washington
+
+* John Adams
+
++ Thomas Jefferson
+
+---
+
+1. Apple
+2. Banana
+3. Orange
+
+---
+
+1. First list item
+   - First nested list item
+     - Second nested list item
+
+---
+
+- [x] #739
+- [ ] https://github.com/octo-org/octo-repo/issues/740
+- [ ] Add delight to the experience when all tasks are complete
+
+### Footnotes
+
+Here is a simple footnote[^1].
+
+A footnote can also have multiple lines[^2].
+
+[^1]: My reference.
+[^2]: To add line breaks within a footnote, prefix new lines with 2 spaces.
+
+  This is a second line.
+
+### Tables
+
+| Column1 | Cloumn2 |
+| ------- | ------- |
+| This    | is      |
+| A       | test.   |

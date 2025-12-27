@@ -6,12 +6,6 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "lain.bgm.tv",
-        pathname: "/pic/**",
-      },
-      // Common platforms and CDNs (explicit hostnames)
-      {
-        protocol: "https",
         hostname: "miro.medium.com",
       },
       {

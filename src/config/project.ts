@@ -5,7 +5,7 @@
 export const projectConfig = {
   // 项目基本信息
   name: "XDYou",
-  fullName: "西电You / XDYou",
+  fullName: "XDYou / Traintime PDA",
   slogan: {
     en: "Your Essential Campus Companion",
     zh: "你的校园生活助手",
@@ -101,19 +101,19 @@ export const projectConfig = {
         zh: "图书馆服务",
       },
       description: {
-        en: "Search books, check borrowing status, and renew loans online.",
-        zh: "搜索图书、查看借阅状态、在线续借。",
+        en: "Search books, check borrowing status.",
+        zh: "搜索图书、查看借阅状态。",
       },
     },
     {
-      icon: "mappin",
+      icon: "network",
       title: {
-        en: "Campus Navigation",
-        zh: "校园导航",
+        en: "Network Services",
+        zh: "校园网服务",
       },
       description: {
-        en: "Navigate through campus with interactive maps and location services.",
-        zh: "使用交互式地图和位置服务在校园中导航。",
+        en: "Check campus network plans and usage.",
+        zh: "查询校园网套餐及用量。",
       },
     },
     {

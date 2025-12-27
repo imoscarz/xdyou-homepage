@@ -104,18 +104,3 @@ A footnote can also have multiple lines[^2].
 | ------- | ------- |
 | This    | is      |
 | A       | test.   |
-
-### Fold
-
-<details open><summary>This is a detail section.</summary>
-
-
-> 123321\
-> 啊啊
-
-```python
-import sys
-sys.exit()
-```
-
-</details>

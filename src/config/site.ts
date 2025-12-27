@@ -5,7 +5,6 @@ export const siteConfig = {
   lastUpdated: env.lastUpdated,
   avatarUrl: env.avatarUrl,
   blogDescription: env.blogDescription,
-  blogCharacter: env.blogCharacter,
   chinese: {
     blogDescription: env.blogDescriptionZh,
   },

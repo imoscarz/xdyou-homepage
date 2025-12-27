@@ -1,10 +1,9 @@
 ---
-title: "开发指引"
-description: "XDYou项目的贡献指南"
+title: "协议与授权"
+description: "项目开源协议与授权信息"
 category: "开发者"
-order: 2
+order: 1
 ---
-
 This is a test post to show how the theme works.
 
 ## Basic Markdown Syntax

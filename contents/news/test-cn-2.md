@@ -1,9 +1,12 @@
 ---
-title: "开发指引"
-description: "XDYou项目的贡献指南"
-category: "开发者"
-order: 2
+title: "测试通知1"
+date: "2025-12-26"
+author: "imoscarz"
+tags: ["debug", "announcement"]
+lang: "zh"
 ---
+
+这是一则用于测试的通知
 
 This is a test post to show how the theme works.
 

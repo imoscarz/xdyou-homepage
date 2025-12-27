@@ -1,7 +1,7 @@
 ---
-title: "开发指引"
-description: "XDYou项目的贡献指南"
-category: "开发者"
+title: "联系我们"
+description: "当遇到问题，可以联系我们以获得技术支持"
+category: "帮助"
 order: 2
 ---
 

@@ -18,32 +18,16 @@ export const env = {
   subtitle: process.env.NEXT_PUBLIC_SUBTITLE || "西电You",
   description:
     process.env.NEXT_PUBLIC_DESCRIPTION || "Your Essential Campus Companion",
-  location: process.env.NEXT_PUBLIC_LOCATION || "Xi'an, Shaanxi, China",
-  locationLink:
-    process.env.NEXT_PUBLIC_LOCATION_LINK ||
-    "https://www.google.com/maps/place/Xi'an,+Shaanxi,+China",
   // Blog configuration
-  rssFeedUrl: process.env.NEXT_PUBLIC_RSS_FEED_URL || "",
-  feedMode: (process.env.NEXT_PUBLIC_FEED_MODE || "rss") as "news" | "rss" | "both",
-  blogHomeUrl: process.env.NEXT_PUBLIC_BLOG_HOME_URL || "",
   blogDescription:
     process.env.NEXT_PUBLIC_BLOG_DESCRIPTION ||
     "Thoughts on technology and life.",
   blogDescriptionZh:
     process.env.NEXT_PUBLIC_BLOG_DESCRIPTION_ZH || "关于技术和生活的思考。",
-  blogCharacter: process.env.NEXT_PUBLIC_BLOG_CHARACTER || "I",
-
-  // Analytics
-  gaTrackingId: process.env.NEXT_PUBLIC_GA_TRACKING_ID || "",
 
   // Feature flags
   enableBlog: process.env.NEXT_PUBLIC_ENABLE_BLOG === "true",
-  enableAnalytics: process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true",
   enableAnime: process.env.NEXT_PUBLIC_ENABLE_ANIME === "true",
-
-  // Bangumi API
-  bangumiUsername: process.env.BANGUMI_USERNAME || "",
-  bangumiMaxTags: parseInt(process.env.NEXT_PUBLIC_BANGUMI_MAX_TAGS || "3", 10),
 } as const;
 
 export type Env = typeof env;
