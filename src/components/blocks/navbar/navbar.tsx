@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { LanguageToggle } from "@/components/blocks/navbar/language-toggle";
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 
 export default function Navbar() {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
@@ -43,6 +45,14 @@ export default function Navbar() {
     return path;
   };
 
+  // Check if a path is active
+  const isActive = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname?.startsWith(href);
+  };
+
   return (
     <div
       className={cn(
@@ -57,6 +67,7 @@ export default function Navbar() {
       <Dock className="bg-background pointer-events-auto relative z-50 mx-auto flex h-full min-h-full transform-gpu items-center px-1 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] md:mt-1 dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] dark:[border:1px_solid_rgba(255,255,255,.1)]">
         {DATA.navbar.map((item) => {
           const href = buildHref(item.href);
+          const active = isActive(item.href);
 
           return (
             <DockIcon key={item.href}>
@@ -65,13 +76,31 @@ export default function Navbar() {
                   <Link
                     href={href}
                     className={cn(
-                      buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-12",
+                      buttonVariants({ 
+                        variant: active ? "default" : "ghost", 
+                        size: "icon" 
+                      }),
+                      "size-12 md:w-auto md:px-4",
                     )}
                     aria-label={item.label}
                     {...(item.href.endsWith(".pdf") ? { prefetch: false } : {})}
                   >
-                    <item.icon className="size-4" />
+                    {/* Mobile: Icon only */}
+                    <item.icon className="size-4 md:hidden" />
+                    
+                    {/* Desktop: Logo + Text */}
+                    <div className="hidden items-center gap-2 md:flex">
+                      {item.href === "/" && (
+                        <Image
+                          src="/icon/logo.png"
+                          alt="XDYou Logo"
+                          width={20}
+                          height={20}
+                          className="rounded-sm"
+                        />
+                      )}
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </div>
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent

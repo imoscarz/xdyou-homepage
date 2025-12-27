@@ -40,24 +40,27 @@ export default function HeroSection({
   return (
     <section id="hero" className="mt-16 sm:mt-28">
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12">
+        {/* Logo on mobile - top left */}
+        <div className="flex md:hidden">
+          <BlurFade delay={delay}>
+            <Image
+              src={logo}
+              alt={`${projectName} Logo`}
+              width={120}
+              height={120}
+              className="rounded-2xl object-contain"
+              priority
+            />
+          </BlurFade>
+        </div>
+
         {/* Left: Project Info */}
         <div className="relative z-10 space-y-6">
           <BlurFade delay={delay}>
-            <div className="mb-2 flex items-center gap-4">
+            <div className="mb-2">
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
                 {projectName}
               </h1>
-              {/* Logo on mobile - right side */}
-              <div className="md:hidden">
-                <Image
-                  src={logo}
-                  alt={`${projectName} Logo`}
-                  width={64}
-                  height={64}
-                  className="rounded-2xl object-contain"
-                  priority
-                />
-              </div>
             </div>
           </BlurFade>
 
