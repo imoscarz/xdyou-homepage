@@ -130,7 +130,7 @@ export default function Navbar() {
             </DockIcon>
           ))}
         <Separator orientation="vertical" className="h-full py-2" /> */}
-        <DockIcon>
+        <DockIcon className="hover:bg-transparent transition-none md:hover:bg-muted-foreground md:transition-colors">
           <Tooltip>
             <TooltipTrigger asChild>
               <ModeToggle />
@@ -140,7 +140,7 @@ export default function Navbar() {
             </TooltipContent>
           </Tooltip>
         </DockIcon>
-        <DockIcon>
+        <DockIcon className="hover:bg-transparent transition-none md:hover:bg-muted-foreground md:transition-colors">
           <Tooltip>
             <TooltipTrigger asChild>
               <LanguageToggle />
