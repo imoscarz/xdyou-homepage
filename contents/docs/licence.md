@@ -2,7 +2,7 @@
 title: "协议与授权"
 description: "项目开源协议与授权信息"
 category: "开发者"
-order: 1
+order: 5
 ---
 This is a test post to show how the theme works.
 

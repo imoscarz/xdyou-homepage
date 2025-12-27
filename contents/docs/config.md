@@ -5,6 +5,8 @@ category: "入门指南"
 order: 2
 ---
 
+*Begin Of Markdown Test File*
+
 # Markdown 语法测试文档
 
 这是一个用于测试Markdown渲染的完整示例文档，包含了基本的Markdown语法和GFM扩展功能。
@@ -105,7 +107,7 @@ def hello_world():
 
 ***
 
-## 数学公式（如果支持）
+## 数学公式
 
 行内公式：$E = mc^2$
 
@@ -122,4 +124,4 @@ $$
 
 ---
 
-*文档结束*
+*EOF*

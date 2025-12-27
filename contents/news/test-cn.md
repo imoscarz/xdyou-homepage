@@ -8,102 +8,123 @@ lang: "zh"
 
 这是一则用于测试的通知
 
-This is a test post to show how the theme works.
+*Begin Of Markdown Test File*
 
-## Basic Markdown Syntax
+# Markdown 语法测试文档
 
-### Styling text
+这是一个用于测试Markdown渲染的完整示例文档，包含了基本的Markdown语法和GFM扩展功能。
 
-**Test**
+## 标题级别
 
-*Test*
+# H1 标题
+## H2 标题
+### H3 标题
+#### H4 标题
+##### H5 标题
+###### H6 标题
 
-~~Test~~
+## 文本样式
 
-**This text is _extremely_ important**
+**粗体文本**
+*斜体文本*
+***粗斜体文本***
+~~删除线文本~~
 
-This is a <sub>subscript</sub> text
+## 列表
 
-This is a <sup>superscript</sup> text
+### 无序列表
+- 项目一
+- 项目二
+  - 嵌套项目一
+  - 嵌套项目二
+- 项目三
 
-This is an <ins>underlined</ins> text
+### 有序列表
+1. 第一项
+2. 第二项
+   1. 嵌套第一项
+   2. 嵌套第二项
+3. 第三项
 
-### Quoting text
+## 链接和图片
 
-> Text that is a quote
+[链接到百度](https://www.baidu.com)
 
+![图片描述](/img/placeholder2.png)
+
+## 代码
+
+### 行内代码
+使用 `printf()` 函数打印输出。
+
+### 代码块
+```python
+def hello_world():
+    print("Hello, World!")
+    return True
+```
+
+## 表格
+
+| 姓名 | 年龄 | 城市 |
+|------|------|------|
+| 张三 | 25   | 北京 |
+| 李四 | 30   | 上海 |
+| 王五 | 28   | 广州 |
+
+## 引用块
+
+> 这是一个标准的引用块
+> 可以包含多行内容
+> 
+> > 这是嵌套的引用块
+> > 显示层级关系
+
+## GFM 特殊功能
+
+### 任务列表
+- [x] 已完成的任务
+- [ ] 未完成的任务
+- [ ] 另一个任务
+
+### GFM 引用框
 
 > [!NOTE]
->
-> 1233321
+> 这是一个信息说明框，用于提供额外的信息。
+
+> [!TIP]
+> 这是一个提示框，提供有用的建议。
+
+> [!IMPORTANT]
+> 这是一个重要提示框，包含关键信息。
 
 > [!WARNING]
->
-> 1233321
+> 这是一个警告框，表示需要注意的问题。
 
-```
-git status
-git add
-git commit
-```
+> [!CAUTION]
+> 这是一个谨慎框，表示需要小心的操作。
 
-```python
-import os
-os.system("pause")
-```
-### Tex
+## 水平分割线
 
+---
+
+***
+
+## 数学公式
+
+行内公式：$E = mc^2$
+
+块级公式：
 $$
-\frac{2}{3} \frac{1}{3}
+\sum_{i=1}^n i = \frac{n(n+1)}{2}
 $$
 
-123`1321321`3213`2312`
+## 脚注
 
-### Links ans images
+这是一个带脚注的文本[^1]。
 
-
-[link](https://www.imoscarz.me)
-
-### Lists
-
-- George Washington
-
-* John Adams
-
-+ Thomas Jefferson
+[^1]: 这是脚注的内容。
 
 ---
 
-1. Apple
-2. Banana
-3. Orange
-
----
-
-1. First list item
-   - First nested list item
-     - Second nested list item
-
----
-
-- [x] #739
-- [ ] https://github.com/octo-org/octo-repo/issues/740
-- [ ] Add delight to the experience when all tasks are complete
-
-### Footnotes
-
-Here is a simple footnote[^1].
-
-A footnote can also have multiple lines[^2].
-
-[^1]: My reference.
-[^2]: To add line breaks within a footnote, prefix new lines with 2 spaces.
-
-  This is a second line.
-
-### Tables
-
-| Column1 | Cloumn2 |
-| ------- | ------- |
-| This    | is      |
-| A       | test.   |
+*EOF*
