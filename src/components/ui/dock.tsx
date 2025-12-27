@@ -23,7 +23,7 @@ export interface DockProps extends VariantProps<typeof dockVariants> {
 }
 
 const DEFAULT_SIZE = 40;
-const DEFAULT_MAGNIFICATION = 60;
+const DEFAULT_MAGNIFICATION = 50;
 const DEFAULT_DISTANCE = 140;
 const DEFAULT_DISABLEMAGNIFICATION = false;
 
