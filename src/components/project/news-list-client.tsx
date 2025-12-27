@@ -48,7 +48,7 @@ export default function NewsListClient({
             placeholder={dict.search}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring w-full rounded-lg border px-4 py-3 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           />
         </div>
       </BlurFade>
@@ -69,14 +69,12 @@ export default function NewsListClient({
                       ))}
                     </div>
                     <CardTitle className="line-clamp-2">{post.title}</CardTitle>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-muted-foreground text-xs">
                       {dict.by} {post.author} • {dict.publishedOn} {post.date}
                     </div>
                   </CardHeader>
                   <CardContent className="flex flex-grow flex-col">
-                    <p className="line-clamp-3 flex-grow">
-                      {post.excerpt}
-                    </p>
+                    <p className="line-clamp-3 flex-grow">{post.excerpt}</p>
                   </CardContent>
                 </Card>
               </Link>

@@ -52,7 +52,7 @@ export default async function DocPage({ params }: PageProps) {
             {doc.metadata.title}
           </h1>
           {doc.metadata.description && (
-            <p className="text-lg text-muted-foreground">
+            <p className="text-muted-foreground text-lg">
               {doc.metadata.description}
             </p>
           )}

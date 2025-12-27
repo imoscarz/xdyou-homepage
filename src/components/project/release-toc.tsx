@@ -40,7 +40,7 @@ export default function ReleaseToc({
           }
         });
       },
-      { rootMargin: "-20% 0px -70% 0px" }
+      { rootMargin: "-20% 0px -70% 0px" },
     );
 
     const releaseCards = document.querySelectorAll("[data-release-id]");
@@ -66,7 +66,10 @@ export default function ReleaseToc({
         <CardHeader className="flex-none pb-3">
           <CardTitle className="text-base">{dict.toc}</CardTitle>
         </CardHeader>
-        <CardContent className="flex-1 space-y-1 overflow-y-auto scrollbar-thin" style={{ maxHeight: '60vh' }}>
+        <CardContent
+          className="scrollbar-thin flex-1 space-y-1 overflow-y-auto"
+          style={{ maxHeight: "60vh" }}
+        >
           {displayedReleases.map((release) => (
             <button
               key={release.id}

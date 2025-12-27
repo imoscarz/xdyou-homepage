@@ -37,7 +37,7 @@ export default function FeaturesSection({
             </div>
           </div>
         </BlurFade>
-        
+
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, idx) => {
             const Icon = Icons[feature.icon];
@@ -46,8 +46,8 @@ export default function FeaturesSection({
                 <Card className="h-full transition-shadow hover:shadow-lg">
                   <CardHeader>
                     <div className="flex flex-col items-center gap-4 sm:flex-row">
-                      <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                        <Icon className="size-6 text-primary" />
+                      <div className="bg-primary/10 flex size-12 shrink-0 items-center justify-center rounded-lg">
+                        <Icon className="text-primary size-6" />
                       </div>
                       <CardTitle className="text-center sm:text-left">
                         {feature.title}

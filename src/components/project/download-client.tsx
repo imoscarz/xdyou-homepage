@@ -69,9 +69,7 @@ export default function DownloadClient({
     return patterns
       .map((p) => {
         const asset = assets.find((a) => p.pattern.test(a.name));
-        return asset
-          ? { ...asset, displayName: p.displayName }
-          : null;
+        return asset ? { ...asset, displayName: p.displayName } : null;
       })
       .filter(Boolean) as (GitHubAsset & { displayName: string })[];
   };
@@ -85,11 +83,9 @@ export default function DownloadClient({
 
         return (
           <BlurFade key={platform.id} delay={delay + idx * 0.05}>
-            <Card
-              className={`${!platform.available ? "opacity-60" : ""}`}
-            >
+            <Card className={`${!platform.available ? "opacity-60" : ""}`}>
               <CardContent className="flex flex-col items-center justify-center space-y-3 p-6">
-                <Icon className="size-12 text-primary" />
+                <Icon className="text-primary size-12" />
                 <h3 className="text-lg font-semibold">{platform.name}</h3>
 
                 {platform.available ? (
@@ -131,7 +127,12 @@ export default function DownloadClient({
 
                     {/* 显示备用下载链接 */}
                     {platform.alternativeUrl && (
-                      <Button asChild variant="outline" size="sm" className="w-full">
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                      >
                         <Link
                           href={platform.alternativeUrl}
                           target="_blank"

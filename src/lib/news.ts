@@ -31,12 +31,13 @@ export async function getAllNewsPosts(): Promise<NewsPost[]> {
       const { data, content } = matter(fileContents);
 
       // Create excerpt from content (first 200 chars)
-      const excerpt = content
-        .replace(/^#.*$/gm, "") // Remove headers
-        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Remove links
-        .replace(/[#*_`]/g, "") // Remove markdown symbols
-        .trim()
-        .slice(0, 200) + "...";
+      const excerpt =
+        content
+          .replace(/^#.*$/gm, "") // Remove headers
+          .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Remove links
+          .replace(/[#*_`]/g, "") // Remove markdown symbols
+          .trim()
+          .slice(0, 200) + "...";
 
       return {
         slug,
@@ -68,12 +69,13 @@ export async function getNewsPost(slug: string): Promise<NewsPost | null> {
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
 
-  const excerpt = content
-    .replace(/^#.*$/gm, "")
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .replace(/[#*_`]/g, "")
-    .trim()
-    .slice(0, 200) + "...";
+  const excerpt =
+    content
+      .replace(/^#.*$/gm, "")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .replace(/[#*_`]/g, "")
+      .trim()
+      .slice(0, 200) + "...";
 
   return {
     slug,

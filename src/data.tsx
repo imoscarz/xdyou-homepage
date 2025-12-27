@@ -1,3 +1,6 @@
+// Deprecated: Use siteConfig and projectConfig directly from their modules instead.
+// This stub remains temporarily to prevent import errors if any legacy code references it.
+
 import { contact, navbar } from "@/config/contact";
 import { discover, footerResources } from "@/config/footer";
 import { projectConfig } from "@/config/project";
@@ -31,7 +34,6 @@ export const DATA = {
     name: projectConfig.fullName,
     subtitle: projectConfig.slogan.zh,
     description: projectConfig.description.zh,
-    blogDescription: siteConfig.chinese.blogDescription,
   },
 } as const;
 

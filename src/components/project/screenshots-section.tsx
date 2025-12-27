@@ -31,15 +31,11 @@ export default function ScreenshotsSection({
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToPrevious = () => {
-    setCurrentIndex((prev) =>
-      prev === 0 ? screenshots.length - 1 : prev - 1
-    );
+    setCurrentIndex((prev) => (prev === 0 ? screenshots.length - 1 : prev - 1));
   };
 
   const goToNext = () => {
-    setCurrentIndex((prev) =>
-      prev === screenshots.length - 1 ? 0 : prev + 1
-    );
+    setCurrentIndex((prev) => (prev === screenshots.length - 1 ? 0 : prev + 1));
   };
 
   return (
@@ -85,7 +81,7 @@ export default function ScreenshotsSection({
                 <p className="text-sm font-medium">
                   {screenshots[currentIndex].caption}
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   {currentIndex + 1} / {screenshots.length}
                 </p>
               </div>

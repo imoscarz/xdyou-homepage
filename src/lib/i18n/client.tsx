@@ -9,7 +9,7 @@ import { i18n } from "./config";
 /**
  * Get current locale from URL search params (Client Component hook)
  * @returns Locale
- * 
+ *
  * @example
  * "use client";
  * function MyComponent() {
@@ -54,7 +54,7 @@ type Dictionary = {
 /**
  * Get dictionary for current locale (Client Component hook)
  * @returns Dictionary object
- * 
+ *
  * @example
  * "use client";
  * function MyComponent() {

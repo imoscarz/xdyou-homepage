@@ -14,25 +14,27 @@ export const projectConfig = {
     en: "A comprehensive mobile application designed for Xidian University students, providing course schedules, exam queries, campus services, and more.",
     zh: "专为西安电子科技大学学生打造的综合性移动应用，提供课程表查询、考试安排、校园服务等功能。",
   },
-  
+
   // 项目仓库信息
   repo: {
     owner: "BenderBlog",
     name: "traintime_pda",
     url: "https://github.com/BenderBlog/traintime_pda",
   },
-  
+
   // 项目Logo
   logo: "/icon/logo.png",
-  
+
   // 下载平台配置
   platforms: [
     {
       id: "android",
       name: "Android",
       icon: "smartphone",
-      downloadUrl: "https://github.com/BenderBlog/traintime_pda/releases/latest",
-      alternativeUrl: "https://f-droid.org/zh_Hans/packages/io.github.benderblog.traintime_pda/",
+      downloadUrl:
+        "https://github.com/BenderBlog/traintime_pda/releases/latest",
+      alternativeUrl:
+        "https://f-droid.org/zh_Hans/packages/io.github.benderblog.traintime_pda/",
       alternativeName: "F-Droid",
       available: true,
     },
@@ -40,25 +42,28 @@ export const projectConfig = {
       id: "ios",
       name: "iOS",
       icon: "apple",
-      downloadUrl: "https://apps.apple.com/us/app/xdyou/id6461723688?l=zh-Hans-CN",
+      downloadUrl:
+        "https://apps.apple.com/us/app/xdyou/id6461723688?l=zh-Hans-CN",
       available: true,
     },
     {
       id: "windows",
       name: "Windows",
       icon: "laptop",
-      downloadUrl: "https://github.com/BenderBlog/traintime_pda/releases/latest",
+      downloadUrl:
+        "https://github.com/BenderBlog/traintime_pda/releases/latest",
       available: true,
     },
     {
       id: "linux",
       name: "Linux",
       icon: "computer",
-      downloadUrl: "https://github.com/BenderBlog/traintime_pda/releases/latest",
+      downloadUrl:
+        "https://github.com/BenderBlog/traintime_pda/releases/latest",
       available: true,
     },
   ],
-  
+
   // 功能特性
   features: [
     {
@@ -128,7 +133,7 @@ export const projectConfig = {
       },
     },
   ],
-  
+
   // 截图配置
   screenshots: [
     {

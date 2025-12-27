@@ -30,7 +30,7 @@ export type GitHubAsset = {
 export async function fetchGitHubReleases(
   owner: string,
   repo: string,
-  perPage: number = 5
+  perPage: number = 5,
 ): Promise<GitHubRelease[]> {
   const url = `https://api.github.com/repos/${owner}/${repo}/releases?per_page=${perPage}`;
 
@@ -63,7 +63,7 @@ export async function fetchGitHubReleases(
  */
 export async function fetchLatestRelease(
   owner: string,
-  repo: string
+  repo: string,
 ): Promise<GitHubRelease | null> {
   const url = `https://api.github.com/repos/${owner}/${repo}/releases/latest`;
 

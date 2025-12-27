@@ -51,13 +51,13 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
 
     useEffect(() => {
       const checkIsMobile = () => {
-        setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+        setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
       };
-      
+
       checkIsMobile();
-      window.addEventListener('resize', checkIsMobile);
-      
-      return () => window.removeEventListener('resize', checkIsMobile);
+      window.addEventListener("resize", checkIsMobile);
+
+      return () => window.removeEventListener("resize", checkIsMobile);
     }, []);
 
     const renderChildren = () => {
@@ -127,13 +127,13 @@ const DockIcon = ({
 
   // 如果没有 mouseX 或禁用了放大，使用固定尺寸
   const shouldAnimate = mouseX && !disableMagnification;
-  
+
   const distanceCalc = useTransform(
-    shouldAnimate ? mouseX : defaultMouseX, 
+    shouldAnimate ? mouseX : defaultMouseX,
     (val: number) => {
       const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
       return val - bounds.x - bounds.width / 2;
-    }
+    },
   );
 
   const targetSize = disableMagnification ? size : magnification;
@@ -153,10 +153,10 @@ const DockIcon = ({
   return (
     <motion.div
       ref={ref}
-      style={{ 
-        width: shouldAnimate ? scaleSize : size, 
-        height: shouldAnimate ? scaleSize : size, 
-        padding 
+      style={{
+        width: shouldAnimate ? scaleSize : size,
+        height: shouldAnimate ? scaleSize : size,
+        padding,
       }}
       className={cn(
         "flex aspect-square cursor-pointer items-center justify-center rounded-full",

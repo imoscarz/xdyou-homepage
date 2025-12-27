@@ -39,14 +39,14 @@ export default function ReleasesClient({
 
   const loadMore = async () => {
     setIsLoading(true);
-    
+
     // 如果还有未显示的已加载releases，先显示它们
     if (displayCount < releases.length) {
       setDisplayCount((prev) => Math.min(prev + 5, releases.length));
       setIsLoading(false);
       return;
     }
-    
+
     // 如果需要从API加载更多
     if (hasMore) {
       try {
@@ -58,12 +58,12 @@ export default function ReleasesClient({
               Accept: "application/vnd.github+json",
               "X-GitHub-Api-Version": "2022-11-28",
             },
-          }
+          },
         );
-        
+
         if (response.ok) {
           const newReleases: GitHubRelease[] = await response.json();
-          
+
           if (newReleases.length === 0) {
             setHasMore(false);
           } else {
@@ -79,7 +79,7 @@ export default function ReleasesClient({
         setHasMore(false);
       }
     }
-    
+
     setIsLoading(false);
   };
 

@@ -39,7 +39,7 @@ export default async function DocsPage({ searchParams }: PageProps) {
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
               {dict.docs.title}
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-muted-foreground text-lg">
               {dict.docs.description}
             </p>
           </div>
