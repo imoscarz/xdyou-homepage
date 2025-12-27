@@ -43,7 +43,7 @@ export function LanguageToggle() {
       variant="ghost" 
       type="button"
       size="icon"
-      className="px-2"
+      className="px-2 focus-visible:ring-0 focus-visible:ring-offset-0 active:scale-100"
       onClick={isNewsDetail || isDocsDetail ? undefined : handleLanguageToggle}
       aria-label="Toggle language"
       aria-disabled={isNewsDetail || isDocsDetail}
