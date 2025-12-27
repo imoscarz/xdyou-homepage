@@ -95,7 +95,7 @@ export default function ReleaseCard({
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <Card className="border-muted mt-2">
+                  <Card className="border-0 sm:border border-muted mt-2">
                     <CardContent className="prose prose-sm dark:prose-invert max-w-none p-4">
                       <CustomReactMarkdown>{release.body}</CustomReactMarkdown>
                     </CardContent>

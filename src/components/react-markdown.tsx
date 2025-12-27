@@ -468,7 +468,7 @@ function CustomLink({
   return (
     <Link
       href={href || "#"}
-      className="text-primary font-medium transition-colors hover:underline"
+      className="text-primary font-medium transition-colors hover:underline break-all"
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       {...props}
