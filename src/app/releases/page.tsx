@@ -61,6 +61,7 @@ export default async function ReleasesPage({ searchParams }: PageProps) {
             assets: dict.releases.assets,
             sourceCode: dict.releases.sourceCode,
             downloadCount: dict.releases.downloadCount,
+            checksum: dict.releases.checksum,
             loadMore: dict.releases.loadMore,
             noReleases: dict.releases.noReleases,
             toc: dict.releases.toc || "Table of Contents",

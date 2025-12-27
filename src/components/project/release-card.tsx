@@ -25,6 +25,7 @@ type ReleaseCardProps = {
     assets: string;
     sourceCode: string;
     downloadCount: string;
+    checksum: string;
   };
 };
 
@@ -35,6 +36,21 @@ export default function ReleaseCard({
 }: ReleaseCardProps) {
   const [isNotesOpen, setIsNotesOpen] = useState(true); // 默认展开
   const [areAssetsOpen, setAreAssetsOpen] = useState(false);
+  const [copiedChecksum, setCopiedChecksum] = useState<string | null>(null);
+
+  const copyChecksum = async (checksum: string, assetName: string) => {
+    try {
+      await navigator.clipboard.writeText(checksum);
+      setCopiedChecksum(assetName);
+      setTimeout(() => setCopiedChecksum(null), 2000);
+    } catch (err) {
+      console.error("Failed to copy checksum:", err);
+    }
+  };
+
+  const truncateChecksum = (checksum: string) => {
+    return checksum.length > 8 ? `${checksum.slice(0, 8)}...` : checksum;
+  };
 
   return (
     <BlurFade delay={delay}>
@@ -130,38 +146,56 @@ export default function ReleaseCard({
                     {release.assets.map((asset) => (
                       <Card key={asset.id} className="border-muted">
                         <CardContent className="p-3 sm:p-4">
-                          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                            <div className="flex-1 space-y-1">
-                              <p className="text-sm font-medium break-all sm:text-base">
-                                {asset.name}
-                              </p>
-                              <div className="text-muted-foreground flex flex-wrap gap-1.5 text-xs">
-                                <span>{formatFileSize(asset.size)}</span>
-                                <span>•</span>
-                                <span>
-                                  {dict.downloadCount}:{" "}
-                                  {asset.download_count.toLocaleString()}
-                                </span>
-                                <span className="hidden sm:inline">•</span>
-                                <span className="hidden sm:inline">
-                                  {asset.content_type}
-                                </span>
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                              <div className="flex-1 space-y-1">
+                                <p className="text-sm font-medium break-all sm:text-base">
+                                  {asset.name}
+                                </p>
+                                <div className="text-muted-foreground flex flex-wrap gap-1.5 text-xs">
+                                  <span>{formatFileSize(asset.size)}</span>
+                                  <span>•</span>
+                                  <span>
+                                    {dict.downloadCount}:{" "}
+                                    {asset.download_count.toLocaleString()}
+                                  </span>
+                                  <span className="hidden lg:inline">•</span>
+                                  <span className="hidden lg:inline">
+                                    {asset.content_type.split('/')[1] || asset.content_type}
+                                  </span>
+                                </div>
                               </div>
-                            </div>
-                            <Button
-                              asChild
-                              size="sm"
-                              className="w-full shrink-0 sm:w-auto"
-                            >
-                              <Link
-                                href={asset.browser_download_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                              
+                              {asset.checksum && (
+                                <div className="hidden sm:flex items-center gap-2 pr-4">
+                                  <span className="text-muted-foreground text-xs">
+                                    SHA256:
+                                  </span>
+                                  <code
+                                    className={`text-[5px] bg-muted px-1.5 py-0.5 rounded font-mono cursor-pointer hover:bg-muted/80 transition-colors ${
+                                      copiedChecksum === asset.name ? 'text-green-600' : ''
+                                    }`}
+                                    onClick={() => copyChecksum(asset.checksum!, asset.name)}
+                                    title="Click to copy checksum"
+                                  >
+                                    {copiedChecksum === asset.name ? 'copied!' : truncateChecksum(asset.checksum)}
+                                  </code>
+                                </div>
+                              )}
+                              
+                              <Button
+                                asChild
+                                size="sm"
+                                className="w-full shrink-0 sm:w-auto"
                               >
-                                Download
-                              </Link>
-                            </Button>
-                          </div>
+                                <Link
+                                  href={asset.browser_download_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  Download
+                                </Link>
+                              </Button>
+                            </div>
                         </CardContent>
                       </Card>
                     ))}

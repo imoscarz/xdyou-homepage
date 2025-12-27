@@ -21,6 +21,8 @@ export type GitHubAsset = {
   download_count: number;
   browser_download_url: string;
   content_type: string;
+  digest?: string;
+  checksum?: string;
 };
 
 /**
@@ -51,7 +53,12 @@ export async function fetchGitHubReleases(
     }
 
     const releases: GitHubRelease[] = await response.json();
-    return releases;
+
+    // Parse checksums from release assets and bodies
+    return releases.map(release => ({
+      ...release,
+      assets: parseChecksumsFromAssetsAndBody(release.body, release.assets)
+    }));
   } catch (error) {
     console.error("Error fetching GitHub releases:", error);
     return [];
@@ -84,11 +91,83 @@ export async function fetchLatestRelease(
     }
 
     const release: GitHubRelease = await response.json();
-    return release;
+
+    // Parse checksums from release assets and body
+    return {
+      ...release,
+      assets: parseChecksumsFromAssetsAndBody(release.body, release.assets)
+    };
   } catch (error) {
     console.error("Error fetching latest GitHub release:", error);
     return null;
   }
+}
+
+/**
+ * Parse checksums from release assets (digest field) and body (as fallback)
+ */
+export function parseChecksumsFromAssetsAndBody(body: string, assets: GitHubAsset[]): GitHubAsset[] {
+  return assets.map(asset => {
+    let checksum = undefined;
+
+    // First, try to extract from digest field (GitHub API provides this)
+    if (asset.digest) {
+      // Format: "sha256:actual_checksum"
+      const digestMatch = asset.digest.match(/^sha256:([a-fA-F0-9]{64})$/i);
+      if (digestMatch) {
+        checksum = digestMatch[1];
+      }
+    }
+
+    // If no digest checksum found, try to parse from body as fallback
+    if (!checksum && body) {
+      const checksums: Record<string, string> = {};
+
+      // Parse various checksum formats from body
+      const lines = body.split('\n');
+
+      for (const line of lines) {
+        // Format: filename: checksum
+        const colonMatch = line.match(/^[\s]*([^\s:]+)[\s]*:[\s]*([a-fA-F0-9]{32,128})[\s]*$/);
+        if (colonMatch) {
+          const [, filename, fileChecksum] = colonMatch;
+          checksums[filename] = fileChecksum;
+          continue;
+        }
+
+        // Format: - SHA256: `checksum` for filename
+        const sha256Match = line.match(/SHA256:[\s]*`([a-fA-F0-9]{64})`[\s]*for[\s]*([^\s]+)/i);
+        if (sha256Match) {
+          const [, fileChecksum, filename] = sha256Match;
+          checksums[filename] = fileChecksum;
+          continue;
+        }
+
+        // Format: - MD5: `checksum` for filename
+        const md5Match = line.match(/MD5:[\s]*`([a-fA-F0-9]{32})`[\s]*for[\s]*([^\s]+)/i);
+        if (md5Match) {
+          const [, fileChecksum, filename] = md5Match;
+          checksums[filename] = fileChecksum;
+          continue;
+        }
+
+        // Format: filename checksum
+        const spaceMatch = line.match(/^[\s]*([^\s]+)[\s]+([a-fA-F0-9]{32,128})[\s]*$/);
+        if (spaceMatch) {
+          const [, filename, fileChecksum] = spaceMatch;
+          checksums[filename] = fileChecksum;
+          continue;
+        }
+      }
+
+      checksum = checksums[asset.name];
+    }
+
+    return {
+      ...asset,
+      checksum
+    };
+  });
 }
 
 /**

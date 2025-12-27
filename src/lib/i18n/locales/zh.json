@@ -50,6 +50,7 @@
     "assets": "资源文件",
     "sourceCode": "源代码",
     "downloadCount": "下载次数",
+    "checksum": "校验和",
     "loadMore": "加载更多",
     "noReleases": "暂无发行记录",
     "toc": "目录"

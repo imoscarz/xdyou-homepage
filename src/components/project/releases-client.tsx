@@ -19,6 +19,7 @@ type ReleasesClientProps = {
     assets: string;
     sourceCode: string;
     downloadCount: string;
+    checksum: string;
     loadMore: string;
     noReleases: string;
     toc: string;
@@ -112,6 +113,7 @@ export default function ReleasesClient({
               assets: dict.assets,
               sourceCode: dict.sourceCode,
               downloadCount: dict.downloadCount,
+              checksum: dict.checksum,
             }}
           />
         ))}

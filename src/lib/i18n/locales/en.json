@@ -45,9 +45,12 @@
     "title": "Release Notes",
     "description": "Version history of XDYou",
     "version": "Version",
-    "releasedOn": "Released on",    "releaseNotes": "Release Notes",    "assets": "Assets",
+    "releasedOn": "Released on",
+    "releaseNotes": "Release Notes",
+    "assets": "Assets",
     "sourceCode": "Source Code",
     "downloadCount": "Downloads",
+    "checksum": "Checksum",
     "loadMore": "Load More",
     "noReleases": "No releases available",
     "toc": "Table of Contents"
