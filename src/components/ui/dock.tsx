@@ -6,7 +6,6 @@ import {
   motion,
   MotionValue,
   useMotionValue,
-  useSpring,
   useTransform,
 } from "motion/react";
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
@@ -146,42 +145,20 @@ const DockIcon = ({
     [size, targetSize, size],
   );
 
-  const scaleTransform = useTransform(sizeTransform, (val: number) =>
-    size === 0 ? 1 : val / size,
-  );
-
-  const scaleValue = useSpring(scaleTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-
-  const scaleSize = useSpring(sizeTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
+  const scale = useTransform(sizeTransform, (val) => val / size);
 
   return (
     <motion.div
       ref={ref}
       style={{
-        width:
-          fluid && !disableMagnification
-            ? "auto"
-            : fluid && disableMagnification
-              ? "auto"
-              : shouldAnimate
-                ? scaleSize
-                : size,
-        height: fluid ? size : shouldAnimate ? scaleSize : size,
+        width: fluid ? "auto" : size,
+        height: fluid ? "auto" : size,
         padding: fluid ? 0 : padding,
-        scale: fluid && shouldAnimate ? scaleValue : undefined,
+        scale: shouldAnimate ? scale : 1,
       }}
       className={cn(
-        "flex cursor-pointer items-center justify-center rounded-full",
-        !fluid && "aspect-square",
-        disableMagnification && "hover:bg-muted-foreground transition-colors",
+        "flex cursor-pointer items-center justify-center overflow-visible",
+        fluid ? "rounded-xl" : "rounded-full aspect-square",
         className,
       )}
       {...props}
