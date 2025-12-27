@@ -146,6 +146,16 @@ const DockIcon = ({
     [size, targetSize, size],
   );
 
+  const scaleTransform = useTransform(sizeTransform, (val: number) =>
+    size === 0 ? 1 : val / size,
+  );
+
+  const scaleValue = useSpring(scaleTransform, {
+    mass: 0.1,
+    stiffness: 150,
+    damping: 12,
+  });
+
   const scaleSize = useSpring(sizeTransform, {
     mass: 0.1,
     stiffness: 150,
@@ -156,9 +166,17 @@ const DockIcon = ({
     <motion.div
       ref={ref}
       style={{
-        width: fluid && disableMagnification ? "auto" : shouldAnimate ? scaleSize : size,
-        height: fluid && disableMagnification ? "auto" : shouldAnimate ? scaleSize : size,
-        padding: fluid && disableMagnification ? 0 : padding,
+        width:
+          fluid && !disableMagnification
+            ? "auto"
+            : fluid && disableMagnification
+              ? "auto"
+              : shouldAnimate
+                ? scaleSize
+                : size,
+        height: fluid ? size : shouldAnimate ? scaleSize : size,
+        padding: fluid ? 0 : padding,
+        scale: fluid && shouldAnimate ? scaleValue : undefined,
       }}
       className={cn(
         "flex cursor-pointer items-center justify-center rounded-full",
