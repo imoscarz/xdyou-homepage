@@ -1,8 +1,9 @@
 // Deprecated: Use siteConfig and projectConfig directly from their modules instead.
 // This stub remains temporarily to prevent import errors if any legacy code references it.
 
-import { contact, navbar } from "@/config/contact";
+import { contact } from "@/config/contact";
 import { discover, footerResources } from "@/config/footer";
+import { navbar } from "@/config/navbar";
 import { projectConfig } from "@/config/project";
 import { siteConfig } from "@/config/site";
 

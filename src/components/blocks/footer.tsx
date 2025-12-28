@@ -141,13 +141,13 @@ export default function Footer() {
               <span>•</span>
               <span>{t.footer.bottom.buildWith}</span>
               <Link
-                href="https://github.com/imoscarz/home-next"
+                href="https://github.com/imoscarz/xdyou-homepage"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground inline-flex items-center gap-1 transition-colors"
               >
                 <Icons.github className="h-4 w-4" />
-                <span>imoscarz/home-next</span>
+                <span>imoscarz/xdyou-homepage</span>
               </Link>
             </div>
           </div>
