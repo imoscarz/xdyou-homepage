@@ -1,6 +1,3 @@
-// Deprecated: Use siteConfig and projectConfig directly from their modules instead.
-// This stub remains temporarily to prevent import errors if any legacy code references it.
-
 import { contact } from "@/config/contact";
 import { discover, footerResources } from "@/config/footer";
 import { navbar } from "@/config/navbar";
@@ -11,20 +8,14 @@ export const BLUR_FADE_DELAY = 0.05;
 
 /**
  * 全局数据配置
+ * @deprecated This section will be removed in future versions.
  */
 export const DATA = {
   ...siteConfig,
-  // 项目信息（英文）
+  // 项目信息（英文） — 保留兼容字段
   name: projectConfig.fullName,
-  subtitle: projectConfig.slogan.en,
   description: projectConfig.description.en,
-  summary: projectConfig.description.en,
-  location: "Xi'an, Shaanxi, China",
-  locationLink: "https://www.xidian.edu.cn",
-  surname: "XDYou",
-  firstName: "Team",
-  initials: "XD",
-  // 其他配置
+  // 其他配置：仅保留核心配置
   navbar,
   contact,
   projectConfig,
