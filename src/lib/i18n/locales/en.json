@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "home": "Home",
+    "docs": "Docs",
+    "news": "News",
+    "releases": "Releases"
+  },
+  "home": {
+    "hero": {
+      "downloadButton": "Download Now",
+      "moreDownloads": "More Download Options",
+      "viewOnGithub": "View on GitHub"
+    },
+    "features": {
+      "badge": "Core Features",
+      "title": "Powerful Features for Campus Life"
+    },
+    "screenshots": {
+      "badge": "Screenshots",
+      "title": "Intuitive Interface, Smooth Experience"
+    },
+    "downloads": {
+      "badge": "Downloads",
+      "title": "Choose Your Platform",
+      "latestVersion": "Latest Version",
+      "releaseNotes": "Release Notes",
+      "downloadFor": "Download",
+      "comingSoon": "Coming Soon",
+      "unavailable": "Unavailable"
+    }
+  },
+  "news": {
+    "title": "News & Announcements",
+    "description": "Latest updates about XDYou project",
+    "search": "Search news...",
+    "filter": "Filter",
+    "readMore": "Read More",
+    "noNews": "No news available",
+    "loadMore": "Load More",
+    "by": "By ",
+    "publishedOn": "Published on",
+    "backToNews": "Back to News"
+  },
+  "releases": {
+    "title": "Release Notes",
+    "description": "Version history of XDYou",
+    "version": "Version",
+    "releasedOn": "Released on",
+    "releaseNotes": "Release Notes",
+    "assets": "Assets",
+    "sourceCode": "Source Code",
+    "downloadCount": "Downloads",
+    "checksum": "Checksum",
+    "loadMore": "Load More",
+    "noReleases": "No releases available",
+    "toc": "Table of Contents"
+  },
+  "docs": {
+    "title": "Documentation",
+    "description": "User guide and development documentation for XDYou",
+    "toc": "Table of Contents",
+    "menu": "Menu",
+    "search": "Search docs...",
+    "noDocs": "No documentation available",
+    "editOnGitHub": "Edit on GitHub"
+  },
+  "footer": {
+    "sections": {
+      "quickNavigation": "Quick Navigation",
+      "connect": "Connect",
+      "resources": "Resources",
+      "discover": "Discover"
+    },
+    "resources": {
+      "docs": "Docs",
+      "news": "News",
+      "releases": "Releases",
+      "github": "GitHub"
+    },
+    "legal": {
+      "allRightsReserved": "All rights reserved",
+      "privacyPolicy": "Privacy Policy",
+      "termsDisclaimer": "Terms & Disclaimer"
+    },
+    "bottom": {
+      "lastUpdated": "Last updated",
+      "madeWith": "Made with",
+      "buildWith": "Build with"
+    }
+  }
+}
