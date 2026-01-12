@@ -27,6 +27,13 @@
       "downloadFor": "下载",
       "comingSoon": "即将推出",
       "unavailable": "暂不可用"
+    },
+    "contributors": {
+      "badge": "贡献者",
+      "title": "感谢所有贡献者",
+      "contributions": "次贡献",
+      "viewProfile": "查看主页",
+      "viewAll": "查看全部贡献者"
     }
   },
   "news": {

@@ -1,9 +1,11 @@
+import ContributorsSection from "@/components/project/contributors-section";
 import DownloadsSection from "@/components/project/downloads-section";
 import FeaturesSection from "@/components/project/features-section";
 import HeroSection from "@/components/project/hero-section";
 import ScreenshotsSection from "@/components/project/screenshots-section";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
+import { fetchGitHubContributors } from "@/lib/contributors";
 import { fetchLatestRelease } from "@/lib/github";
 import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
 
@@ -45,6 +47,13 @@ export default async function Page({ searchParams }: PageProps) {
   const release = await fetchLatestRelease(
     projectConfig.repo.owner,
     projectConfig.repo.name
+  );
+
+  // Fetch contributors from GitHub
+  const contributors = await fetchGitHubContributors(
+    projectConfig.repo.owner,
+    projectConfig.repo.name,
+    projectConfig.contributors.maxDisplay
   );
 
   const latestRelease = release
@@ -132,6 +141,19 @@ export default async function Page({ searchParams }: PageProps) {
           downloadFor: dict.home.downloads.downloadFor,
           comingSoon: dict.home.downloads.comingSoon,
           unavailable: dict.home.downloads.unavailable,
+        }}
+      />
+
+      {/* Contributors Section */}
+      <ContributorsSection
+        contributors={contributors}
+        delay={BLUR_FADE_DELAY * 17}
+        dict={{
+          badge: dict.home.contributors.badge,
+          title: dict.home.contributors.title,
+          contributions: dict.home.contributors.contributions,
+          viewProfile: dict.home.contributors.viewProfile,
+          viewAll: dict.home.contributors.viewAll,
         }}
       />
     </main>

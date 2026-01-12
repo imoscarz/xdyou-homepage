@@ -22,6 +22,11 @@ export const projectConfig = {
     url: "https://github.com/BenderBlog/traintime_pda",
   },
 
+  // 贡献者配置
+  contributors: {
+    maxDisplay: 12, // 最多显示的贡献者数量
+  },
+
   // 项目Logo
   logo: "/icon/logo.png",
 

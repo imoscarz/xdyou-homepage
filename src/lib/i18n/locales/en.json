@@ -27,6 +27,13 @@
       "downloadFor": "Download",
       "comingSoon": "Coming Soon",
       "unavailable": "Unavailable"
+    },
+    "contributors": {
+      "badge": "Contributors",
+      "title": "Thanks to All Contributors",
+      "contributions": "contributions",
+      "viewProfile": "View Profile",
+      "viewAll": "View all contributors"
     }
   },
   "news": {
