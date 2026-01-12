@@ -67,8 +67,8 @@ export default function ReleaseToc({
           <CardTitle className="text-base">{dict.toc}</CardTitle>
         </CardHeader>
         <CardContent
-          className="scrollbar-thin flex-1 space-y-1 overflow-y-auto"
-          style={{ maxHeight: "60vh" }}
+          className="scrollbar-thin flex-1 space-y-1 overflow-y-auto p-0 px-6 pt-6"
+          style={{ maxHeight: "calc(60vh - 60px)" }}
         >
           {displayedReleases.map((release) => (
             <button
@@ -84,20 +84,20 @@ export default function ReleaseToc({
               {release.tag_name}
             </button>
           ))}
-          {hasMore && (
-            <div className="border-t pt-2">
-              <Button
-                onClick={onLoadMore}
-                disabled={isLoading}
-                variant="outline"
-                size="sm"
-                className="w-full"
-              >
-                {isLoading ? "Loading..." : dict.loadMore}
-              </Button>
-            </div>
-          )}
         </CardContent>
+        {hasMore && (
+          <div className="flex-none border-t px-6 pb-6 pt-3">
+            <Button
+              onClick={onLoadMore}
+              disabled={isLoading}
+              variant="outline"
+              size="sm"
+              className="w-full"
+            >
+              {isLoading ? "Loading..." : dict.loadMore}
+            </Button>
+          </div>
+        )}
       </Card>
     </div>
   );
