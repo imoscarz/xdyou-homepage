@@ -85,19 +85,17 @@ export default function ReleaseToc({
             </button>
           ))}
         </CardContent>
-        {hasMore && (
-          <div className="flex-none border-t px-6 pb-6 pt-3">
-            <Button
-              onClick={onLoadMore}
-              disabled={isLoading}
-              variant="outline"
-              size="sm"
-              className="w-full"
-            >
-              {isLoading ? "Loading..." : dict.loadMore}
-            </Button>
-          </div>
-        )}
+        <div className="flex-none border-t px-6 pb-6 pt-3">
+          <Button
+            onClick={onLoadMore}
+            disabled={isLoading || !hasMore}
+            variant="outline"
+            size="sm"
+            className="w-full"
+          >
+            {isLoading ? "Loading..." : dict.loadMore}
+          </Button>
+        </div>
       </Card>
     </div>
   );
