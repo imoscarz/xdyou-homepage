@@ -144,9 +144,6 @@ export default async function Page({ searchParams }: PageProps) {
         dict={{
           badge: dict.home.contributors.badge,
           title: dict.home.contributors.title,
-          subtitle: dict.home.contributors.subtitle,
-          viewProfile: dict.home.contributors.viewProfile,
-          viewDetails: dict.home.contributors.viewDetails,
           viewAll: dict.home.contributors.viewAll,
         }}
       />

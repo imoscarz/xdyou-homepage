@@ -34,7 +34,7 @@
       "subtitle": "Role",
       "viewProfile": "View Profile",
       "viewDetails": "View Details",
-      "viewAll": "View all contributors"
+      "viewAll": "View contributors' details"
     }
   },
   "news": {
@@ -83,6 +83,7 @@
       "docs": "Docs",
       "news": "News",
       "releases": "Releases",
+      "contributors": "Contributors",
       "github": "GitHub"
     },
     "legal": {
@@ -95,5 +96,11 @@
       "madeWith": "Made with",
       "buildWith": "Build with"
     }
+  },
+  "contributors": {
+    "badge": "Contributors",
+    "title": "Thanks to All Contributors",
+    "description": "Meet the developers behind the project",
+    "viewProfile": "View Profile"
   }
 }

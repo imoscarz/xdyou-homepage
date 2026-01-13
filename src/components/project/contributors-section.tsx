@@ -2,20 +2,11 @@
 
 import Link from "next/link";
 
-import { CustomReactMarkdown } from "@/components/react-markdown";
+import { Icons } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import type { contributors } from "@/config/contributors";
-import { projectConfig } from "@/config/project";
 
 type Contributor = (typeof contributors)[number];
 
@@ -25,9 +16,6 @@ interface ContributorsSectionProps {
   dict: {
     badge: string;
     title: string;
-    subtitle: string;
-    viewProfile: string;
-    viewDetails: string;
     viewAll: string;
   };
 }
@@ -61,76 +49,57 @@ export default function ContributorsSection({
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {contributors.map((contributor, index) => (
               <BlurFade key={contributor.name} delay={delay + 0.1 + index * 0.02}>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <button
-                      className="group flex flex-col items-center space-y-2 rounded-lg border bg-card p-4 transition-all hover:shadow-lg w-full"
-                    >
-                      <Avatar className="h-16 w-16 ring-2 ring-transparent transition-all group-hover:ring-primary">
-                        <AvatarImage
-                          src={contributor.avatar}
-                          alt={contributor.name}
-                        />
-                        <AvatarFallback>
-                          {contributor.name.substring(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="text-center w-full">
-                        <p className="text-sm font-medium truncate max-w-full">
-                          {contributor.name}
-                        </p>
-                        {contributor.subtitle && (
-                          <p className="text-xs text-muted-foreground truncate">
-                            {contributor.subtitle}
-                          </p>
+                <div className="flex h-full flex-col items-center space-y-2 rounded-lg border bg-card p-4">
+                  <Avatar className="h-16 w-16">
+                    <AvatarImage
+                      src={contributor.avatar}
+                      alt={contributor.name}
+                    />
+                    <AvatarFallback>
+                      {contributor.name.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="text-center w-full">
+                    <p className="text-sm font-medium truncate max-w-full">
+                      {contributor.name}
+                    </p>
+                    {contributor.subtitle && (
+                      <div className="text-xs text-muted-foreground space-y-0.5">
+                        {Array.isArray(contributor.subtitle) ? (
+                          contributor.subtitle.map((line, idx) => (
+                            <p key={idx} className="truncate">{line}</p>
+                          ))
+                        ) : (
+                          <p className="truncate">{contributor.subtitle}</p>
                         )}
                       </div>
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-md">
-                    <DialogHeader>
-                      <div className="flex items-center gap-4 mb-4">
-                        <Avatar className="h-16 w-16">
-                          <AvatarImage
-                            src={contributor.avatar}
-                            alt={contributor.name}
-                          />
-                          <AvatarFallback>
-                            {contributor.name.substring(0, 2).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <DialogTitle>{contributor.name}</DialogTitle>
-                          {contributor.subtitle && (
-                            <DialogDescription>
-                              {contributor.subtitle}
-                            </DialogDescription>
-                          )}
-                        </div>
-                      </div>
-                    </DialogHeader>
-                    {contributor.profile && (
-                      <div className="prose prose-sm dark:prose-invert max-w-none mt-4">
-                        <CustomReactMarkdown>
-                          {contributor.profile}
-                        </CustomReactMarkdown>
-                      </div>
                     )}
-                    {contributor.url && (
-                      <div className="mt-4">
-                        <Button asChild className="w-full">
+                  </div>
+                  {/* Contact Links - Always reserve space */}
+                  <div className="flex gap-1 pt-1 min-h-[28px]">
+                    {contributor.contacts && contributor.contacts.map((contact, idx) => {
+                      const IconComponent = Icons[contact.icon as keyof typeof Icons];
+                      return IconComponent ? (
+                        <Button
+                          key={idx}
+                          asChild
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7"
+                        >
                           <Link
-                            href={contributor.url}
+                            href={contact.url}
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label={contact.icon}
                           >
-                            {dict.viewProfile}
+                            <IconComponent className="h-3.5 w-3.5" />
                           </Link>
                         </Button>
-                      </div>
-                    )}
-                  </DialogContent>
-                </Dialog>
+                      ) : null;
+                    })}
+                  </div>
+                </div>
               </BlurFade>
             ))}
           </div>
@@ -139,9 +108,7 @@ export default function ContributorsSection({
         <BlurFade delay={delay + 0.2}>
           <div className="text-center">
             <Link
-              href={`${projectConfig.repo.url}/graphs/contributors`}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/contributors"
               className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
             >
               {dict.viewAll}

@@ -15,6 +15,11 @@ export const footerResources = [
     translationKey: "footer.resources.releases",
   },
   {
+    name: "contributors",
+    href: "/contributors",
+    translationKey: "footer.resources.contributors",
+  },
+  {
     name: "github",
     href: "https://github.com/BenderBlog/traintime_pda",
     translationKey: "footer.resources.github",

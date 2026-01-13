@@ -34,7 +34,7 @@
       "subtitle": "角色",
       "viewProfile": "查看主页",
       "viewDetails": "查看详情",
-      "viewAll": "查看全部贡献者"
+      "viewAll": "查看贡献者详细信息"
     }
   },
   "news": {
@@ -83,6 +83,7 @@
       "docs": "文档",
       "news": "新闻",
       "releases": "发行记录",
+      "contributors": "贡献者",
       "github": "GitHub"
     },
     "legal": {
@@ -95,5 +96,11 @@
       "madeWith": "追随",
       "buildWith": "构建自"
     }
+  },
+  "contributors": {
+    "badge": "贡献者",
+    "title": "感谢所有贡献者",
+    "description": "了解项目背后的开发者们",
+    "viewProfile": "查看主页"
   }
 }
