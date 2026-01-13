@@ -182,7 +182,7 @@ export default function DownloadClient({
                   <h3 className="text-lg font-semibold">{platform.name}</h3>
 
                   {/* Windows维护警告 */}
-                  {platform.id === "windows" && dict.windowsMaintenanceWarning && (
+                  {(platform.id === "windows" || platform.id === "linux") && dict.windowsMaintenanceWarning && (
                     <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
                       <p className="text-xs text-yellow-800 dark:text-yellow-100">
                         ⚠️ {dict.windowsMaintenanceWarning}
@@ -342,6 +342,13 @@ export default function DownloadClient({
               <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
                 <Icons.computer className="text-primary size-12" />
                 <h3 className="text-lg font-semibold">Linux</h3>
+                {dict.windowsMaintenanceWarning && (
+                  <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
+                    <p className="text-xs text-yellow-800 dark:text-yellow-100">
+                      ⚠️ {dict.windowsMaintenanceWarning}
+                    </p>
+                  </div>
+                )}
                 <div className="w-full space-y-2">
                   {getPlatformAssets("linux").map((asset) => (
                     <Button
