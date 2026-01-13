@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "cdn.imoscarz.me",
+      },
+      {
+        protocol: "https",
         hostname: "miro.medium.com",
       },
       {

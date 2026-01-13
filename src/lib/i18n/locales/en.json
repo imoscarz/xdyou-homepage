@@ -31,8 +31,9 @@
     "contributors": {
       "badge": "Contributors",
       "title": "Thanks to All Contributors",
-      "contributions": "contributions",
+      "subtitle": "Role",
       "viewProfile": "View Profile",
+      "viewDetails": "View Details",
       "viewAll": "View all contributors"
     }
   },

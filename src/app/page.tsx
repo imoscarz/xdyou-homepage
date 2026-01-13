@@ -3,9 +3,9 @@ import DownloadsSection from "@/components/project/downloads-section";
 import FeaturesSection from "@/components/project/features-section";
 import HeroSection from "@/components/project/hero-section";
 import ScreenshotsSection from "@/components/project/screenshots-section";
+import { contributors } from "@/config/contributors";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
-import { fetchGitHubContributors } from "@/lib/contributors";
 import { fetchLatestRelease } from "@/lib/github";
 import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
 
@@ -47,13 +47,6 @@ export default async function Page({ searchParams }: PageProps) {
   const release = await fetchLatestRelease(
     projectConfig.repo.owner,
     projectConfig.repo.name
-  );
-
-  // Fetch contributors from GitHub
-  const contributors = await fetchGitHubContributors(
-    projectConfig.repo.owner,
-    projectConfig.repo.name,
-    projectConfig.contributors.maxDisplay
   );
 
   const latestRelease = release
@@ -151,8 +144,9 @@ export default async function Page({ searchParams }: PageProps) {
         dict={{
           badge: dict.home.contributors.badge,
           title: dict.home.contributors.title,
-          contributions: dict.home.contributors.contributions,
+          subtitle: dict.home.contributors.subtitle,
           viewProfile: dict.home.contributors.viewProfile,
+          viewDetails: dict.home.contributors.viewDetails,
           viewAll: dict.home.contributors.viewAll,
         }}
       />

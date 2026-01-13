@@ -2,19 +2,32 @@
 
 import Link from "next/link";
 
+import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BlurFade } from "@/components/ui/blur-fade";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import type { contributors } from "@/config/contributors";
 import { projectConfig } from "@/config/project";
-import type { GitHubContributor } from "@/lib/contributors";
+
+type Contributor = (typeof contributors)[number];
 
 interface ContributorsSectionProps {
-  contributors: GitHubContributor[];
+  contributors: readonly Contributor[];
   delay?: number;
   dict: {
     badge: string;
     title: string;
-    contributions: string;
+    subtitle: string;
     viewProfile: string;
+    viewDetails: string;
     viewAll: string;
   };
 }
@@ -47,32 +60,77 @@ export default function ContributorsSection({
         <BlurFade delay={delay + 0.1}>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {contributors.map((contributor, index) => (
-              <BlurFade key={contributor.id} delay={delay + 0.1 + index * 0.02}>
-                <a
-                  href={contributor.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex flex-col items-center space-y-2 rounded-lg border bg-card p-4 transition-all hover:shadow-lg"
-                  title={`${dict.viewProfile}: ${contributor.login}`}
-                >
-                  <Avatar className="h-16 w-16 ring-2 ring-transparent transition-all group-hover:ring-primary">
-                    <AvatarImage
-                      src={contributor.avatar_url}
-                      alt={contributor.login}
-                    />
-                    <AvatarFallback>
-                      {contributor.login.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="text-center">
-                    <p className="text-sm font-medium truncate max-w-full">
-                      {contributor.login}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {contributor.contributions} {dict.contributions}
-                    </p>
-                  </div>
-                </a>
+              <BlurFade key={contributor.name} delay={delay + 0.1 + index * 0.02}>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button
+                      className="group flex flex-col items-center space-y-2 rounded-lg border bg-card p-4 transition-all hover:shadow-lg w-full"
+                    >
+                      <Avatar className="h-16 w-16 ring-2 ring-transparent transition-all group-hover:ring-primary">
+                        <AvatarImage
+                          src={contributor.avatar}
+                          alt={contributor.name}
+                        />
+                        <AvatarFallback>
+                          {contributor.name.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="text-center w-full">
+                        <p className="text-sm font-medium truncate max-w-full">
+                          {contributor.name}
+                        </p>
+                        {contributor.subtitle && (
+                          <p className="text-xs text-muted-foreground truncate">
+                            {contributor.subtitle}
+                          </p>
+                        )}
+                      </div>
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-md">
+                    <DialogHeader>
+                      <div className="flex items-center gap-4 mb-4">
+                        <Avatar className="h-16 w-16">
+                          <AvatarImage
+                            src={contributor.avatar}
+                            alt={contributor.name}
+                          />
+                          <AvatarFallback>
+                            {contributor.name.substring(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <DialogTitle>{contributor.name}</DialogTitle>
+                          {contributor.subtitle && (
+                            <DialogDescription>
+                              {contributor.subtitle}
+                            </DialogDescription>
+                          )}
+                        </div>
+                      </div>
+                    </DialogHeader>
+                    {contributor.profile && (
+                      <div className="prose prose-sm dark:prose-invert max-w-none mt-4">
+                        <CustomReactMarkdown>
+                          {contributor.profile}
+                        </CustomReactMarkdown>
+                      </div>
+                    )}
+                    {contributor.url && (
+                      <div className="mt-4">
+                        <Button asChild className="w-full">
+                          <Link
+                            href={contributor.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {dict.viewProfile}
+                          </Link>
+                        </Button>
+                      </div>
+                    )}
+                  </DialogContent>
+                </Dialog>
               </BlurFade>
             ))}
           </div>

@@ -12,16 +12,13 @@ export const BLUR_FADE_DELAY = 0.05;
  */
 export const DATA = {
   ...siteConfig,
-  // 项目信息（英文） — 保留兼容字段
   name: projectConfig.fullName,
   description: projectConfig.description.en,
-  // 其他配置：仅保留核心配置
   navbar,
   contact,
   projectConfig,
   discover,
   footerResources,
-  // 中文信息
   chinese: {
     name: projectConfig.fullName,
     subtitle: projectConfig.slogan.zh,
