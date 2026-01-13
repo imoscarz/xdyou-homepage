@@ -49,73 +49,73 @@ export default function ContributorsSection({
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {contributors.map((contributor, index) => (
               <BlurFade key={contributor.name} delay={delay + 0.1 + index * 0.02}>
-                <div className="flex h-full flex-col items-center space-y-2 rounded-lg border bg-card p-4">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage
-                      src={contributor.avatar}
-                      alt={contributor.name}
-                    />
-                    <AvatarFallback>
-                      {contributor.name.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="text-center w-full">
-                    <p className="text-sm font-medium truncate max-w-full">
-                      {contributor.name}
-                    </p>
-                    {contributor.subtitle && (
-                      <div className="text-xs text-muted-foreground space-y-0.5">
-                        {Array.isArray(contributor.subtitle) ? (
-                          contributor.subtitle.map((line, idx) => (
-                            <p key={idx} className="truncate">{line}</p>
-                          ))
-                        ) : (
-                          <p className="truncate">{contributor.subtitle}</p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  {/* Contact Links - Always reserve space */}
-                  <div className="flex gap-1 pt-1 min-h-[28px]">
-                    {contributor.contacts && contributor.contacts.map((contact, idx) => {
-                      const IconComponent = Icons[contact.icon as keyof typeof Icons];
-                      return IconComponent ? (
-                        <Button
-                          key={idx}
-                          asChild
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7"
-                        >
-                          <Link
-                            href={contact.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={contact.icon}
-                          >
-                            <IconComponent className="h-3.5 w-3.5" />
-                          </Link>
-                        </Button>
-                      ) : null;
-                    })}
-                  </div>
-                </div>
+                <ContributorDialog contributor={contributor} />
               </BlurFade>
             ))}
           </div>
         </BlurFade>
-
-        <BlurFade delay={delay + 0.2}>
-          <div className="text-center">
-            <Link
-              href="/contributors"
-              className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
-            >
-              {dict.viewAll}
-            </Link>
-          </div>
-        </BlurFade>
       </div>
     </section>
+  );
+}
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+function ContributorDialog({ contributor }: { contributor: Contributor }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="flex h-full w-full cursor-pointer flex-col items-center space-y-2 rounded-lg border bg-card p-4 hover:bg-accent transition">
+          <Avatar className="h-16 w-16">
+            <AvatarImage src={contributor.avatar} alt={contributor.name} />
+            <AvatarFallback>
+              {contributor.name.substring(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="text-center w-full">
+            <p className="text-sm font-medium truncate max-w-full">
+              {contributor.name}
+            </p>
+          </div>
+        </div>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>{contributor.name}</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col items-center space-y-4">
+          <img
+            src={contributor.avatar}
+            alt={contributor.name}
+            className="w-24 h-24 rounded-full"
+          />
+          <ul className="list-disc list-inside text-left w-full text-sm">
+            {Array.isArray(contributor.subtitle) &&
+              contributor.subtitle.map((desc, idx) => (
+                <li key={idx}>{desc}</li>
+              ))}
+          </ul>
+          <p className="text-sm text-muted-foreground text-left w-full">
+            {contributor.profile}
+          </p>
+          {contributor.contacts && Array.isArray(contributor.contacts) ? (
+            <Link
+              href={contributor.contacts[0].url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline text-sm"
+            >
+              主页链接
+            </Link>
+          ) : null}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

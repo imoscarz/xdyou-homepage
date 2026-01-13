@@ -1,6 +1,6 @@
 export const contributors = [
     {
-        name: "BenderBlog Rodriguez",
+        name: "BenderBlog",
         avatar: "https://avatars.githubusercontent.com/u/14026321",
         subtitle: ["主要开发者", "iOS 小部件编写和拼接"],
         profile: "他有个兄弟叫 SuperBart。",
@@ -9,68 +9,68 @@ export const contributors = [
     {
         name: "A1nair",
         avatar: "https://avatars.githubusercontent.com/u/36269472",
-        subtitle: "开发：图书馆搜索和封面",
+        subtitle: ["开发：图书馆搜索和封面"],
         profile: "too mysterous to tell here",
         contacts: [{ icon: "github", url: "https://github.com/A1nair" }],
     },
     {
         name: "Appkad (Kevin)",
         avatar: "https://avatars.githubusercontent.com/u/97880629",
-        subtitle: "开发：考勤历史记录",
+        subtitle: ["开发：考勤历史记录"],
         profile: "too mysterous to tell here",
         contacts: [{ icon: "github", url: "https://github.com/aqqkad" }],
     },
     {
         name: "BellssGit",
         avatar: "https://avatars.githubusercontent.com/u/107785251",
-        subtitle: "支持：最佳&最久故障反馈者",
+        subtitle: ["支持：最佳&最久故障反馈者"],
         profile: "https://www.emoe.xyz",
         contacts: [{ icon: "bilibili", url: "https://space.bilibili.com/17772726" }],
     },
     {
         name: "BrackRat",
         avatar: "https://avatars.githubusercontent.com/u/35328547",
-        subtitle: "设计：主页，登录页，配色，iOS 小部件等",
+        subtitle: ["设计：主页，登录页，配色，iOS 小部件等"],
         profile: "孤独摇滚爱好者",
         contacts: [{ icon: "github", url: "https://github.com/BrackRat" }],
     },
     {
         name: "Breezeline",
         avatar: "https://avatars.githubusercontent.com/u/74224286",
-        subtitle: "支持：无价值无意义的产品经理(他自己的描述)",
+        subtitle: ["支持：无价值无意义的产品经理(他自己的描述)"],
         profile: "据说他和对象去了北京高校",
         contacts: [{ icon: "mail", url: "mailto:ydzhang.ruc@gmail.com" }],
     },
     {
         name: "0xCAFEBABE",
         avatar: "/img/avatars/0xcafebabe.jpg",
-        subtitle: "支持：提供彩蛋代码",
+        subtitle: ["支持：提供彩蛋代码"],
         profile: "今天离⛏考Ⅸ1天🤣，🛋️🤣孩子99，👀👀娃👂🏻平🪨⑩跟谁聊天，👀🔪你🚪这帮人👴Ⅸ◻️心🤣，✈️👨🏻孩子这辈子🍋💩完🤣😭😭😭👴孩子👎⛏🀄️啊😭😭😭他还没⛏考呢😡😡😡被你🚪带🉐天天玩4rch11nux😨😨😨你🚪真🪨🚴🏿④👴🤣天天他🩶来，🍷抱着那个💻玩，嘴里喊着什么，英伟🐘drm驱🕳，滚🕳更新，喜怒🈚️常🉐连饭都忘吃🤣😭😭😭给他报🤣①个月两万🉐🐔📖班，老💩🎺他🗣Ⅰ👇py7hon🀄️🉐常用函🐀，他Ⅸ🩶那个啥破p4cm4n，都Ⅹ被你🚪害🉐呀😡😡😡你🚪这群天天玩4rch🉐没前🐇啊,你🚪🩶🤣👴🉐孩子呀😭😭😭",
         contacts: [{ icon: "home", url: "https://blog.hxzzz.asia/" }],
     },
     {
         name: "chitao1234",
         avatar: "https://avatars.githubusercontent.com/u/25598632",
-        subtitle: "开发：修复滑块不对齐问题",
+        subtitle: ["开发：修复滑块不对齐问题"],
         profile: "祖宗之法不可变，分明 640K 就能满足大部分的电脑使用需求。我还跟你说，我还在 Windows 95 上面运行了 llvm...",
         contacts: [{ icon: "github", url: "https://github.com/chitao1234" }],
     },
     {
         name: "Dimole",
         avatar: "https://avatars.githubusercontent.com/u/24828354",
-        subtitle: "开发支持：辅助修复滑块问题",
+        subtitle: ["开发支持：辅助修复滑块问题"],
         profile: "不是，我的小米电话怎么又出问题了？雷军！金凡！",
         contacts: [{ icon: "github", url: "https://github.com/Dimole" }],
     },
     {
         name: "EliteWars",
         avatar: "https://avatars.githubusercontent.com/u/44139545",
-        subtitle: "设计：体育成绩页面",
+        subtitle: ["设计：体育成绩页面"],
         profile: "老黄这设备还是有点割肉了……",
         contacts: [{ icon: "bilibili", url: "https://space.bilibili.com/49892391/" }],
     },
     {
-        name: "Mother Elliot Flores",
+        name: "Mother Elliot",
         avatar: "/img/avatars/mother_elliot_flores.jpg",
         subtitle: ["国际化：软件英语翻译", "开发指导：情侣课表功能开发指导（该功能已经被移除）"],
         profile: `Could you tell the difference between Purple Potato and the Purple Rat?
@@ -81,7 +81,7 @@ export const contributors = [
     {
         name: "GodHu777777",
         avatar: "https://avatars.githubusercontent.com/u/111997394",
-        subtitle: "国际化：繁体中文转换代码和彩蛋代码",
+        subtitle: ["国际化：繁体中文转换代码和彩蛋代码"],
         profile: "too mysterious to tell here",
         contacts: [{ icon: "github", url: "https://github.com/GodHu777777" }],
     },
@@ -93,39 +93,47 @@ export const contributors = [
         contacts: [{ icon: "github", url: "https://github.com/Hancl777" }],
     },
     {
-        name: "Hazuki Keatsu (叶月枫)",
+        name: "Hazuki Keatsu",
         avatar: "https://avatars.githubusercontent.com/u/111259147",
-        subtitle: "开发：物理实验成绩查询和识别",
+        subtitle: ["开发：物理实验成绩查询和识别"],
         profile: "He plays electric guitar.",
         contacts: [{ icon: "home", url: "https://keatsu.top" }],
     },
     {
         name: "hawa130",
         avatar: "https://avatars.githubusercontent.com/u/26119430",
-        subtitle: "设计：课程详情卡片",
-        profile: `向算卦机器人求问：我的对象今年会有吗？
-
-    回答：也许对象会让你意想不到。`,
+        subtitle: ["设计：课程详情卡片"],
+        profile: `向算卦机器人求问：我的对象今年会有吗？ \n回答：也许对象会让你意想不到。`,
         contacts: [{ icon: "home", url: "https://hawa130.com/" }],
     },
     {
-        name: "hhzm (闪电豹猫)",
+        name: "hhzm",
         avatar: "https://avatars.githubusercontent.com/u/19224718",
-        subtitle: "开发：电费查询账号计算",
+        subtitle: ["开发：电费查询账号计算"],
         profile: "某个游戏的蓝色，长条突出吉祥物",
         contacts: [{ icon: "home", url: "https://hhzm.win/" }],
     },
     {
+        name: "imoscarz",
+        avatar: "https://cdn.imoscarz.me/avatar.png",
+        subtitle: ["开发：考勤历史记录优化", "开发与设计：项目主页"],
+        profile: `Je ne sais pas quoi dire ici.\n非计算机系`,
+        contacts: [
+            { icon: "home", url: "https://imoscarz.me" },
+            { icon: "mail", url: "mailto:one@imoscarz.me" }
+        ],
+    },
+    {
         name: "Ka-mate-ka-ora",
         avatar: "https://avatars.githubusercontent.com/u/187651078",
-        subtitle: "国际化：软件英语翻译优化",
+        subtitle: ["国际化：软件英语翻译优化"],
         profile: "Knowledge itself is a crime, so does P-Group game.",
         contacts: [{ icon: "github", url: "https://github.com/Ka-mate-ka-ora/" }],
     },
     {
         name: "lhx-666-cool",
         avatar: "https://avatars.githubusercontent.com/u/63273792",
-        subtitle: "支持：Windows 和 Linux 构建脚本",
+        subtitle: ["支持：Windows 和 Linux 构建脚本"],
         profile: "小红书天天就对一些小细节不依不饶，真就看脸的时代吧？",
         contacts: [{ icon: "github", url: "https://github.com/lhx-666-cool/" }],
     },
@@ -141,7 +149,7 @@ export const contributors = [
     {
         name: "LQSY-H",
         avatar: "https://avatars.githubusercontent.com/u/142521812",
-        subtitle: "支持：推文宣传图片制作",
+        subtitle: ["支持：推文宣传图片制作"],
         profile: "@凌琼碎玉 在小红书收获了7010次赞与收藏，查看Ta的主页>> https://xhslink.com/m/8ZyTLZ8zry6",
         contacts: [{ icon: "github", url: "https://github.com/LQSY-H" }],
     },
@@ -187,7 +195,7 @@ export const contributors = [
     {
         name: "Rrrilac",
         avatar: "https://avatars.githubusercontent.com/u/128341096",
-        subtitle: "开发支持：电费查询",
+        subtitle: ["开发支持：电费查询"],
         profile: "too mysterious to tell here",
         contacts: [{ icon: "github", url: "https://github.com/Rrrilac" }],
     },
@@ -205,7 +213,7 @@ export const contributors = [
     {
         name: "shadowyingyi",
         avatar: "https://avatars.githubusercontent.com/u/42831635",
-        subtitle: "支持：两次鸽子公众号宣传",
+        subtitle: ["支持：两次鸽子公众号宣传"],
         profile: `本段图片因涉及某个蒲公英头像人物已经被删除
 
 非计算机系`,
@@ -228,14 +236,14 @@ export const contributors = [
     {
         name: "Xiue233",
         avatar: "https://avatars.githubusercontent.com/u/30972246",
-        subtitle: "开发：Android 小部件和拼接",
+        subtitle: ["开发：Android 小部件和拼接"],
         profile: "某个青春动画片相关（提示，衣服上三个蝴蝶结）",
         contacts: [{ icon: "home", url: "https://xiue233.github.io/" }],
     },
     {
         name: "xizi",
         avatar: "/img/avatars/xizi.webp",
-        subtitle: "开发支持：研究生版本开发",
+        subtitle: ["开发支持：研究生版本开发"],
         profile: `某日本三个可爱的东西相关（提示：兄弟，你好香）
 
 非计算机系，贡献者年龄最大者（研三）`,
@@ -244,7 +252,7 @@ export const contributors = [
     {
         name: "wirsbf",
         avatar: "https://avatars.githubusercontent.com/u/144008530",
-        subtitle: "开发：修复调课未按预期进行",
+        subtitle: ["开发：修复调课未按预期进行"],
         profile: "too mysterous to tell here",
         contacts: [{ icon: "home", url: "https://xiue233.github.io/" }],
     },
@@ -258,21 +266,9 @@ export const contributors = [
     {
         name: "ZYar-er",
         avatar: "https://avatars.githubusercontent.com/u/95170599?v=4",
-        subtitle: "开发支持：小工具页面地址更新",
+        subtitle: ["开发支持：小工具页面地址更新"],
         profile: "BRAVO GOLF ZERO ECHO X-RAY NOVEMBER",
         contacts: [{ icon: "github", url: "https://github.com/ZYar-er" }],
-    },
-    {
-        name: "imoscarz",
-        avatar: "https://cdn.imoscarz.me/avatar.png",
-        subtitle: ["开发：考勤历史记录优化", "开发与设计：项目主页"],
-        profile: `非计算机系
-
-Je ne sais pas quoi dire ici.`,
-        contacts: [
-            { icon: "home", url: "https://imoscarz.me" },
-            { icon: "mail", url: "mailto:one@imoscarz.me" }
-        ],
     },
 ] as const;
 

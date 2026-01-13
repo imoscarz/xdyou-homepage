@@ -92,7 +92,7 @@ export default function DownloadClient({
                   <h3 className="text-lg font-semibold">{platform.name}</h3>
 
                   {/* Windows维护警告 */}
-                  {platform.id === "windows" && dict.windowsMaintenanceWarning && (
+                  {(platform.id === "windows" || platform.id === "linux") && dict.windowsMaintenanceWarning && (
                     <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
                       <p className="text-xs text-yellow-800 dark:text-yellow-100">
                         ⚠️ {dict.windowsMaintenanceWarning}
@@ -283,16 +283,16 @@ export default function DownloadClient({
                       </Link>
                     </Button>
                   )) || (
-                    <Button asChild size="sm" className="w-full">
-                      <Link
-                        href={platforms[0]?.downloadUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {dict.downloadFor}
-                      </Link>
-                    </Button>
-                  )}
+                      <Button asChild size="sm" className="w-full">
+                        <Link
+                          href={platforms[0]?.downloadUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {dict.downloadFor}
+                        </Link>
+                      </Button>
+                    )}
                   <Button
                     asChild
                     variant="outline"
@@ -359,16 +359,16 @@ export default function DownloadClient({
                       </Link>
                     </Button>
                   )) || (
-                    <Button asChild size="sm" className="w-full">
-                      <Link
-                        href={platforms[3]?.downloadUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {dict.downloadFor}
-                      </Link>
-                    </Button>
-                  )}
+                      <Button asChild size="sm" className="w-full">
+                        <Link
+                          href={platforms[3]?.downloadUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {dict.downloadFor}
+                        </Link>
+                      </Button>
+                    )}
                 </div>
               </CardContent>
             </Card>
@@ -404,16 +404,16 @@ export default function DownloadClient({
                       </Link>
                     </Button>
                   )) || (
-                    <Button asChild size="sm" className="w-full">
-                      <Link
-                        href={platforms[2]?.downloadUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {dict.downloadFor}
-                      </Link>
-                    </Button>
-                  )}
+                      <Button asChild size="sm" className="w-full">
+                        <Link
+                          href={platforms[2]?.downloadUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {dict.downloadFor}
+                        </Link>
+                      </Button>
+                    )}
                 </div>
               </CardContent>
             </Card>

@@ -105,9 +105,8 @@ export default function ReleaseCard({
                       {dict.releaseNotes}
                     </span>
                     <ChevronDown
-                      className={`size-4 transition-transform ${
-                        isNotesOpen ? "rotate-180" : ""
-                      }`}
+                      className={`size-4 transition-transform ${isNotesOpen ? "rotate-180" : ""
+                        }`}
                     />
                   </Button>
                 </CollapsibleTrigger>
@@ -136,26 +135,27 @@ export default function ReleaseCard({
                       {dict.assets} ({release.assets.length})
                     </h4>
                     <ChevronDown
-                      className={`size-4 transition-transform ${
-                        areAssetsOpen ? "rotate-180" : ""
-                      }`}
+                      className={`size-4 transition-transform ${areAssetsOpen ? "rotate-180" : ""
+                        }`}
                     />
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="mt-2 grid gap-2">
                     {release.assets.map((asset) => {
-                      const isWindowsAsset = asset.name.toLowerCase().includes('windows');
+                      const isDesktopAsset = asset.name.toLowerCase().includes('watermeter');
                       return (
                         <Card key={asset.id} className="border-muted hover:shadow-md dark:hover:shadow-lg transition-all duration-300">
                           <CardContent className="p-3 sm:p-4">
-                            {/* Windows维护警告 */}
-                            {isWindowsAsset && dict.windowsMaintenanceWarning && (
-                              <div className="mb-3 rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-2">
-                                <p className="text-xs text-yellow-800 dark:text-yellow-100">
-                                  ⚠️ {dict.windowsMaintenanceWarning}
-                                </p>
-                              </div>
+                            {/* Windows或Linux维护警告 */}
+                            {(isDesktopAsset) && (
+                              dict.windowsMaintenanceWarning && (
+                                <div className="mb-3 rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-2">
+                                  <p className="text-xs text-yellow-800 dark:text-yellow-100">
+                                    ⚠️ {dict.windowsMaintenanceWarning}
+                                  </p>
+                                </div>
+                              )
                             )}
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                               <div className="flex-1 space-y-1">
@@ -175,16 +175,15 @@ export default function ReleaseCard({
                                   </span>
                                 </div>
                               </div>
-                              
+
                               {asset.checksum && (
                                 <div className="hidden sm:flex items-center gap-2 pr-4">
                                   <span className="text-muted-foreground text-xs">
                                     SHA256:
                                   </span>
                                   <code
-                                    className={`text-[5px] bg-muted px-1.5 py-0.5 rounded font-mono cursor-pointer hover:bg-muted/80 transition-colors ${
-                                      copiedChecksum === asset.name ? 'text-green-600' : ''
-                                    }`}
+                                    className={`text-[5px] bg-muted px-1.5 py-0.5 rounded font-mono cursor-pointer hover:bg-muted/80 transition-colors ${copiedChecksum === asset.name ? 'text-green-600' : ''
+                                      }`}
                                     onClick={() => copyChecksum(asset.checksum!, asset.name)}
                                     title="Click to copy checksum"
                                   >
@@ -192,7 +191,7 @@ export default function ReleaseCard({
                                   </code>
                                 </div>
                               )}
-                              
+
                               <Button
                                 asChild
                                 size="sm"
