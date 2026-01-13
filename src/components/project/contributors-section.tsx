@@ -64,6 +64,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 
 function ContributorDialog({ contributor }: { contributor: Contributor }) {
   return (
@@ -87,27 +88,43 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
         <DialogHeader>
           <DialogTitle>{contributor.name}</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col items-center space-y-4">
-          <img
-            src={contributor.avatar}
-            alt={contributor.name}
-            className="w-24 h-24 rounded-full"
-          />
-          <ul className="list-disc list-inside text-left w-full text-sm">
-            {Array.isArray(contributor.subtitle) &&
-              contributor.subtitle.map((desc, idx) => (
-                <li key={idx}>{desc}</li>
-              ))}
-          </ul>
-          <p className="text-sm text-muted-foreground text-left w-full">
-            {contributor.profile}
-          </p>
+        <div className="space-y-4">
+          {/* 双栏布局：左侧avatar，右侧subtitle */}
+          <div className="flex items-center gap-8">
+            <div className="shrink-0">
+              <img
+                src={contributor.avatar}
+                alt={contributor.name}
+                className="w-24 h-24 rounded-full"
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <ul className="list-disc list-inside text-sm space-y-1">
+                {Array.isArray(contributor.subtitle) &&
+                  contributor.subtitle.map((desc, idx) => (
+                    <li key={idx}>{desc}</li>
+                  ))}
+              </ul>
+            </div>
+          </div>
+          
+          {/* Profile */}
+          {contributor.profile && (
+            <>
+              <Separator />
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words">
+                {contributor.profile}
+              </p>
+            </>
+          )}
+          
+          {/* 联系方式链接 */}
           {contributor.contacts && Array.isArray(contributor.contacts) ? (
             <Link
               href={contributor.contacts[0].url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary underline text-sm"
+              className="text-primary underline text-sm inline-block"
             >
               主页链接
             </Link>
