@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 
-import { Icons } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { Button } from "@/components/ui/button";
 import type { contributors } from "@/config/contributors";
 
 type Contributor = (typeof contributors)[number];

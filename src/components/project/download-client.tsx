@@ -53,7 +53,7 @@ export default function DownloadClient({
         pattern: /watermeter-linux-release-amd64\.zip$/,
         displayName: "ZIP (amd64)",
       },
-      { pattern: /watermeter.*\.AppImage$/, displayName: "AppImage" },
+      { pattern: /watermeter\.Appimage$/i, displayName: "AppImage" },
     ],
     windows: [
       {
@@ -258,11 +258,11 @@ export default function DownloadClient({
       </div>
 
       {/* 桌面端: Flex 三列布局 */}
-      <div className="hidden lg:flex gap-4 h-auto items-stretch">
+      <div className="hidden lg:flex gap-4 items-stretch">
         {/* Android 列 */}
-        <div className="flex-1">
-          <BlurFade delay={delay} key="android">
-            <Card className="h-full hover:scale-105 flex flex-col">
+        <div className="flex-1 flex">
+          <BlurFade delay={delay} key="android" className="w-full flex">
+            <Card className="w-full hover:scale-105 flex flex-col">
               <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
                 <Icons.smartphone className="text-primary size-12" />
                 <h3 className="text-lg font-semibold">Android</h3>
@@ -313,7 +313,7 @@ export default function DownloadClient({
           </BlurFade>
         </div>
 
-        {/* 中间列: iOS 和 Linux */}
+        {/* 中间列: iOS(上方) 和 Windows(下方) */}
         <div className="flex-1 flex flex-col gap-4">
           {/* iOS */}
           <BlurFade delay={delay + 0.05} key="ios">
@@ -336,9 +336,56 @@ export default function DownloadClient({
             </Card>
           </BlurFade>
 
-          {/* Linux */}
-          <BlurFade delay={delay + 0.1} key="linux">
+          {/* Windows */}
+          <BlurFade delay={delay + 0.1} key="windows">
             <Card className="flex-1 hover:scale-105 flex flex-col">
+              <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
+                <Icons.laptop className="text-primary size-12" />
+                <h3 className="text-lg font-semibold">Windows</h3>
+                {dict.windowsMaintenanceWarning && (
+                  <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
+                    <p className="text-xs text-yellow-800 dark:text-yellow-100">
+                      ⚠️ {dict.windowsMaintenanceWarning}
+                    </p>
+                  </div>
+                )}
+                <div className="w-full space-y-2">
+                  {getPlatformAssets("windows").map((asset) => (
+                    <Button
+                      key={asset.id}
+                      asChild
+                      size="sm"
+                      className="w-full"
+                    >
+                      <Link
+                        href={asset.browser_download_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {asset.displayName}
+                      </Link>
+                    </Button>
+                  )) || (
+                      <Button asChild size="sm" className="w-full">
+                        <Link
+                          href={platforms[2]?.downloadUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {dict.downloadFor}
+                        </Link>
+                      </Button>
+                    )}
+                </div>
+              </CardContent>
+            </Card>
+          </BlurFade>
+        </div>
+
+        {/* Linux 列 */}
+        <div className="flex-1 flex">
+          <BlurFade delay={delay + 0.15} key="linux" className="w-full flex">
+            <Card className="w-full hover:scale-105 flex flex-col">
               <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
                 <Icons.computer className="text-primary size-12" />
                 <h3 className="text-lg font-semibold">Linux</h3>
@@ -369,51 +416,6 @@ export default function DownloadClient({
                       <Button asChild size="sm" className="w-full">
                         <Link
                           href={platforms[3]?.downloadUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {dict.downloadFor}
-                        </Link>
-                      </Button>
-                    )}
-                </div>
-              </CardContent>
-            </Card>
-          </BlurFade>
-        </div>
-
-        {/* Windows 列 */}
-        <div className="flex-1">
-          <BlurFade delay={delay + 0.15} key="windows">
-            <Card className="h-full hover:scale-105 flex flex-col">
-              <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
-                <Icons.laptop className="text-primary size-12" />
-                <h3 className="text-lg font-semibold">Windows</h3>
-                <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
-                  <p className="text-xs text-yellow-800 dark:text-yellow-100">
-                    ⚠️ {dict.windowsMaintenanceWarning}
-                  </p>
-                </div>
-                <div className="w-full space-y-2">
-                  {getPlatformAssets("windows").map((asset) => (
-                    <Button
-                      key={asset.id}
-                      asChild
-                      size="sm"
-                      className="w-full"
-                    >
-                      <Link
-                        href={asset.browser_download_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {asset.displayName}
-                      </Link>
-                    </Button>
-                  )) || (
-                      <Button asChild size="sm" className="w-full">
-                        <Link
-                          href={platforms[2]?.downloadUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
