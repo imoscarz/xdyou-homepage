@@ -46,7 +46,14 @@ type Dictionary = {
     progress: string;
   };
   footer: Record<string, unknown>;
-  nav: Record<string, unknown>;
+  nav: {
+    home: string;
+    docs: string;
+    news: string;
+    releases: string;
+    theme: string;
+    language: string;
+  };
   page: Record<string, unknown>;
   home: Record<string, unknown>;
 };

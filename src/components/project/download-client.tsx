@@ -28,6 +28,7 @@ type DownloadClientProps = {
     downloadFor: string;
     comingSoon: string;
     unavailable: string;
+    windowsMaintenanceWarning?: string;
   };
 };
 
@@ -75,84 +76,350 @@ export default function DownloadClient({
   };
 
   return (
-    <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {platforms.map((platform, idx) => {
-        const Icon = Icons[platform.icon];
-        const platformVersions = getPlatformAssets(platform.id);
-        const hasMultipleVersions = platformVersions.length > 1;
+    <div className="mx-auto max-w-4xl">
+      {/* 移动端: 单列 */}
+      <div className="grid grid-cols-1 gap-4 sm:hidden">
+        {platforms.map((platform, idx) => {
+          const Icon = Icons[platform.icon];
+          const platformVersions = getPlatformAssets(platform.id);
+          const hasMultipleVersions = platformVersions.length > 1;
 
-        return (
-          <BlurFade key={platform.id} delay={delay + idx * 0.05}>
-            <Card className={`${!platform.available ? "opacity-60" : ""}`}>
-              <CardContent className="flex flex-col items-center justify-center space-y-3 p-6">
-                <Icon className="text-primary size-12" />
-                <h3 className="text-lg font-semibold">{platform.name}</h3>
+          return (
+            <BlurFade key={platform.id} delay={delay + idx * 0.05}>
+              <Card className={`${!platform.available ? "opacity-60" : "hover:scale-105"}`}>
+                <CardContent className="flex flex-col items-center justify-center space-y-3 p-6">
+                  <Icon className="text-primary size-12" />
+                  <h3 className="text-lg font-semibold">{platform.name}</h3>
 
-                {platform.available ? (
-                  <>
-                    {/* 如果有多个版本，显示选择按钮 */}
-                    {hasMultipleVersions ? (
-                      <div className="w-full space-y-2">
-                        {platformVersions.map((asset) => (
-                          <Button
-                            key={asset.id}
-                            asChild
-                            size="sm"
-                            className="w-full"
-                          >
-                            <Link
-                              href={asset.browser_download_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                  {/* Windows维护警告 */}
+                  {platform.id === "windows" && dict.windowsMaintenanceWarning && (
+                    <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
+                      <p className="text-xs text-yellow-800 dark:text-yellow-100">
+                        ⚠️ {dict.windowsMaintenanceWarning}
+                      </p>
+                    </div>
+                  )}
+
+                  {platform.available ? (
+                    <>
+                      {/* 如果有多个版本，显示选择按钮 */}
+                      {hasMultipleVersions ? (
+                        <div className="w-full space-y-2">
+                          {platformVersions.map((asset) => (
+                            <Button
+                              key={asset.id}
+                              asChild
+                              size="sm"
+                              className="w-full"
                             >
-                              {asset.displayName}
-                            </Link>
-                          </Button>
-                        ))}
-                      </div>
-                    ) : (
-                      <Button asChild size="sm" className="w-full">
-                        <Link
-                          href={
-                            platformVersions[0]?.browser_download_url ||
-                            platform.downloadUrl
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {dict.downloadFor}
-                        </Link>
-                      </Button>
-                    )}
+                              <Link
+                                href={asset.browser_download_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {asset.displayName}
+                              </Link>
+                            </Button>
+                          ))}
+                        </div>
+                      ) : (
+                        <Button asChild size="sm" className="w-full">
+                          <Link
+                            href={
+                              platformVersions[0]?.browser_download_url ||
+                              platform.downloadUrl
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {dict.downloadFor}
+                          </Link>
+                        </Button>
+                      )}
 
-                    {/* 显示备用下载链接 */}
-                    {platform.alternativeUrl && (
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="w-full"
-                      >
-                        <Link
-                          href={platform.alternativeUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                      {/* 显示备用下载链接 */}
+                      {platform.alternativeUrl && (
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
                         >
-                          {platform.alternativeName}
-                        </Link>
-                      </Button>
-                    )}
-                  </>
-                ) : (
-                  <Badge variant="secondary" className="w-full justify-center">
-                    {platform.comingSoon ? dict.comingSoon : dict.unavailable}
-                  </Badge>
-                )}
+                          <Link
+                            href={platform.alternativeUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {platform.alternativeName}
+                          </Link>
+                        </Button>
+                      )}
+                    </>
+                  ) : (
+                    <Badge variant="secondary" className="w-full justify-center">
+                      {platform.comingSoon ? dict.comingSoon : dict.unavailable}
+                    </Badge>
+                  )}
+                </CardContent>
+              </Card>
+            </BlurFade>
+          );
+        })}
+      </div>
+
+      {/* 平板端: 两列 */}
+      <div className="hidden sm:grid lg:hidden grid-cols-2 gap-4">
+        {platforms.map((platform, idx) => {
+          const Icon = Icons[platform.icon];
+          const platformVersions = getPlatformAssets(platform.id);
+          const hasMultipleVersions = platformVersions.length > 1;
+
+          return (
+            <BlurFade key={platform.id} delay={delay + idx * 0.05}>
+              <Card className={`${!platform.available ? "opacity-60" : "hover:scale-105"}`}>
+                <CardContent className="flex flex-col items-center justify-center space-y-3 p-6">
+                  <Icon className="text-primary size-12" />
+                  <h3 className="text-lg font-semibold">{platform.name}</h3>
+
+                  {/* Windows维护警告 */}
+                  {platform.id === "windows" && dict.windowsMaintenanceWarning && (
+                    <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
+                      <p className="text-xs text-yellow-800 dark:text-yellow-100">
+                        ⚠️ {dict.windowsMaintenanceWarning}
+                      </p>
+                    </div>
+                  )}
+
+                  {platform.available ? (
+                    <>
+                      {/* 如果有多个版本，显示选择按钮 */}
+                      {hasMultipleVersions ? (
+                        <div className="w-full space-y-2">
+                          {platformVersions.map((asset) => (
+                            <Button
+                              key={asset.id}
+                              asChild
+                              size="sm"
+                              className="w-full"
+                            >
+                              <Link
+                                href={asset.browser_download_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {asset.displayName}
+                              </Link>
+                            </Button>
+                          ))}
+                        </div>
+                      ) : (
+                        <Button asChild size="sm" className="w-full">
+                          <Link
+                            href={
+                              platformVersions[0]?.browser_download_url ||
+                              platform.downloadUrl
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {dict.downloadFor}
+                          </Link>
+                        </Button>
+                      )}
+
+                      {/* 显示备用下载链接 */}
+                      {platform.alternativeUrl && (
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                        >
+                          <Link
+                            href={platform.alternativeUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {platform.alternativeName}
+                          </Link>
+                        </Button>
+                      )}
+                    </>
+                  ) : (
+                    <Badge variant="secondary" className="w-full justify-center">
+                      {platform.comingSoon ? dict.comingSoon : dict.unavailable}
+                    </Badge>
+                  )}
+                </CardContent>
+              </Card>
+            </BlurFade>
+          );
+        })}
+      </div>
+
+      {/* 桌面端: Flex 三列布局 */}
+      <div className="hidden lg:flex gap-4 h-auto items-stretch">
+        {/* Android 列 */}
+        <div className="flex-1">
+          <BlurFade delay={delay} key="android">
+            <Card className="h-full hover:scale-105 flex flex-col">
+              <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
+                <Icons.smartphone className="text-primary size-12" />
+                <h3 className="text-lg font-semibold">Android</h3>
+                <div className="w-full space-y-2">
+                  {getPlatformAssets("android").map((asset) => (
+                    <Button
+                      key={asset.id}
+                      asChild
+                      size="sm"
+                      className="w-full"
+                    >
+                      <Link
+                        href={asset.browser_download_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {asset.displayName}
+                      </Link>
+                    </Button>
+                  )) || (
+                    <Button asChild size="sm" className="w-full">
+                      <Link
+                        href={platforms[0]?.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {dict.downloadFor}
+                      </Link>
+                    </Button>
+                  )}
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                  >
+                    <Link
+                      href="https://f-droid.org/zh_Hans/packages/io.github.benderblog.traintime_pda/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      F-Droid
+                    </Link>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </BlurFade>
-        );
-      })}
+        </div>
+
+        {/* 中间列: iOS 和 Linux */}
+        <div className="flex-1 flex flex-col gap-4">
+          {/* iOS */}
+          <BlurFade delay={delay + 0.05} key="ios">
+            <Card className="flex-1 hover:scale-105 flex flex-col">
+              <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
+                <Icons.apple className="text-primary size-12" />
+                <h3 className="text-lg font-semibold">iOS</h3>
+                <div className="w-full flex-1 flex items-end">
+                  <Button asChild size="sm" className="w-full">
+                    <Link
+                      href="https://apps.apple.com/us/app/xdyou/id6461723688?l=zh-Hans-CN"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {dict.downloadFor}
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </BlurFade>
+
+          {/* Linux */}
+          <BlurFade delay={delay + 0.1} key="linux">
+            <Card className="flex-1 hover:scale-105 flex flex-col">
+              <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
+                <Icons.computer className="text-primary size-12" />
+                <h3 className="text-lg font-semibold">Linux</h3>
+                <div className="w-full space-y-2">
+                  {getPlatformAssets("linux").map((asset) => (
+                    <Button
+                      key={asset.id}
+                      asChild
+                      size="sm"
+                      className="w-full"
+                    >
+                      <Link
+                        href={asset.browser_download_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {asset.displayName}
+                      </Link>
+                    </Button>
+                  )) || (
+                    <Button asChild size="sm" className="w-full">
+                      <Link
+                        href={platforms[3]?.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {dict.downloadFor}
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </BlurFade>
+        </div>
+
+        {/* Windows 列 */}
+        <div className="flex-1">
+          <BlurFade delay={delay + 0.15} key="windows">
+            <Card className="h-full hover:scale-105 flex flex-col">
+              <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
+                <Icons.laptop className="text-primary size-12" />
+                <h3 className="text-lg font-semibold">Windows</h3>
+                <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
+                  <p className="text-xs text-yellow-800 dark:text-yellow-100">
+                    ⚠️ {dict.windowsMaintenanceWarning}
+                  </p>
+                </div>
+                <div className="w-full space-y-2">
+                  {getPlatformAssets("windows").map((asset) => (
+                    <Button
+                      key={asset.id}
+                      asChild
+                      size="sm"
+                      className="w-full"
+                    >
+                      <Link
+                        href={asset.browser_download_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {asset.displayName}
+                      </Link>
+                    </Button>
+                  )) || (
+                    <Button asChild size="sm" className="w-full">
+                      <Link
+                        href={platforms[2]?.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {dict.downloadFor}
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </BlurFade>
+        </div>
+      </div>
     </div>
   );
 }

@@ -134,6 +134,7 @@ export default async function Page({ searchParams }: PageProps) {
           downloadFor: dict.home.downloads.downloadFor,
           comingSoon: dict.home.downloads.comingSoon,
           unavailable: dict.home.downloads.unavailable,
+          windowsMaintenanceWarning: dict.home.downloads.windowsMaintenanceWarning,
         }}
       />
 

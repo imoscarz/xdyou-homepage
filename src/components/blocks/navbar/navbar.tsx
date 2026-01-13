@@ -15,12 +15,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { DATA } from "@/data";
+import { useDictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export default function Navbar() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [isDesktop, setIsDesktop] = useState(false);
+  const dict = useDictionary();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -34,6 +36,13 @@ export default function Navbar() {
       window.removeEventListener("resize", checkScreenSize);
     };
   }, []);
+
+  // Get translated label for navbar item
+  const getNavLabel = (key: string): string => {
+    if (!dict) return key;
+    const labelKey = key.toLowerCase() as keyof typeof dict.nav;
+    return dict.nav[labelKey] ?? key;
+  };
 
   // Preserve language parameter when navigating
   const buildHref = (path: string) => {
@@ -68,6 +77,7 @@ export default function Navbar() {
         {DATA.navbar.map((item) => {
           const href = buildHref(item.href);
           const isActive = isActivePath(item.href);
+          const translatedLabel = getNavLabel(item.label);
 
           return (
             <DockIcon key={item.href} fluid={isDesktop}>
@@ -86,13 +96,13 @@ export default function Navbar() {
                       isActive &&
                         "bg-accent text-accent-foreground shadow-inner hover:bg-accent/90",
                     )}
-                    aria-label={item.label}
+                    aria-label={translatedLabel}
                     aria-pressed={isActive}
                     {...(item.href.endsWith(".pdf") ? { prefetch: false } : {})}
                   >
                     <item.icon className="size-4" />
                     {isDesktop && (
-                      <span className="text-sm font-medium">{item.label}</span>
+                      <span className="text-sm font-medium">{translatedLabel}</span>
                     )}
                   </Link>
                 </TooltipTrigger>
@@ -100,7 +110,7 @@ export default function Navbar() {
                   side={isDesktop ? "bottom" : "top"}
                   sideOffset={8}
                 >
-                  <p>{item.label}</p>
+                  <p>{translatedLabel}</p>
                 </TooltipContent>
               </Tooltip>
             </DockIcon>
@@ -139,7 +149,7 @@ export default function Navbar() {
               <ModeToggle />
             </TooltipTrigger>
             <TooltipContent side={isDesktop ? "bottom" : "top"} sideOffset={8}>
-              <p>Theme</p>
+              <p>{dict?.nav?.theme ?? "Theme"}</p>
             </TooltipContent>
           </Tooltip>
         </DockIcon>
@@ -152,7 +162,7 @@ export default function Navbar() {
               <LanguageToggle />
             </TooltipTrigger>
             <TooltipContent side={isDesktop ? "bottom" : "top"} sideOffset={8}>
-              <p>Language</p>
+              <p>{dict?.nav?.language ?? "Language"}</p>
             </TooltipContent>
           </Tooltip>
         </DockIcon>

@@ -47,6 +47,7 @@ type DownloadsSectionProps = {
     downloadFor: string;
     comingSoon: string;
     unavailable: string;
+    windowsMaintenanceWarning?: string;
   };
 };
 
@@ -124,6 +125,7 @@ export default function DownloadsSection({
               downloadFor: dict.downloadFor,
               comingSoon: dict.comingSoon,
               unavailable: dict.unavailable,
+              windowsMaintenanceWarning: dict.windowsMaintenanceWarning,
             }}
           />
         </BlurFade>

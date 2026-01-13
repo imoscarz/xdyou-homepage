@@ -26,6 +26,7 @@ type ReleaseCardProps = {
     sourceCode: string;
     downloadCount: string;
     checksum: string;
+    windowsMaintenanceWarning?: string;
   };
 };
 
@@ -143,9 +144,19 @@ export default function ReleaseCard({
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="mt-2 grid gap-2">
-                    {release.assets.map((asset) => (
-                      <Card key={asset.id} className="border-muted">
-                        <CardContent className="p-3 sm:p-4">
+                    {release.assets.map((asset) => {
+                      const isWindowsAsset = asset.name.toLowerCase().includes('windows');
+                      return (
+                        <Card key={asset.id} className="border-muted hover:shadow-md dark:hover:shadow-lg transition-all duration-300">
+                          <CardContent className="p-3 sm:p-4">
+                            {/* Windows维护警告 */}
+                            {isWindowsAsset && dict.windowsMaintenanceWarning && (
+                              <div className="mb-3 rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-2">
+                                <p className="text-xs text-yellow-800 dark:text-yellow-100">
+                                  ⚠️ {dict.windowsMaintenanceWarning}
+                                </p>
+                              </div>
+                            )}
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                               <div className="flex-1 space-y-1">
                                 <p className="text-sm font-medium break-all sm:text-base">
@@ -196,9 +207,10 @@ export default function ReleaseCard({
                                 </Link>
                               </Button>
                             </div>
-                        </CardContent>
-                      </Card>
-                    ))}
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
                   </div>
                 </CollapsibleContent>
               </Collapsible>

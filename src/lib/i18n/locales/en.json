@@ -3,7 +3,9 @@
     "home": "Home",
     "docs": "Docs",
     "news": "News",
-    "releases": "Releases"
+    "releases": "Releases",
+    "theme": "Theme",
+    "language": "Language"
   },
   "home": {
     "hero": {
@@ -26,7 +28,8 @@
       "releaseNotes": "Release Notes",
       "downloadFor": "Download",
       "comingSoon": "Coming Soon",
-      "unavailable": "Unavailable"
+      "unavailable": "Unavailable",
+      "windowsMaintenanceWarning": "The developer cannot guarantee active maintenance of packages for this platform"
     },
     "contributors": {
       "badge": "Contributors",
@@ -61,7 +64,8 @@
     "checksum": "Checksum",
     "loadMore": "Load More",
     "noReleases": "No releases available",
-    "toc": "Table of Contents"
+    "toc": "Table of Contents",
+    "windowsMaintenanceWarning": "The developer cannot guarantee active maintenance of packages for this platform"
   },
   "docs": {
     "title": "Documentation",
