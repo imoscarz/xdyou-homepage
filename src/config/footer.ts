@@ -28,11 +28,11 @@ export const footerResources = [
 
 export const discover = [
   {
-    name: "XDYou GitHub",
-    url: "https://github.com/BenderBlog/traintime_pda",
+    name: "Benderblog",
+    url: "https://legacy.superbart.top/",
   },
   {
-    name: "Xidian University",
-    url: "https://www.xidian.edu.cn/",
+    name: "imoscarz",
+    url: "https://imoscarz.me/",
   },
 ] as const;

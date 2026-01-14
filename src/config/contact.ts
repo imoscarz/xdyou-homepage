@@ -12,7 +12,7 @@ export const contact = {
     },
     Email: {
       name: "Email",
-      url: "mailto:support@xdyou.example.com",
+      url: "mailto:superbart_chen@qq.com",
       icon: Icons.email,
       navbar: false,
       content: true,

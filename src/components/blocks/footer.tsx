@@ -122,7 +122,7 @@ export default function Footer() {
           <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
             <div className="text-muted-foreground flex items-center gap-2 text-sm">
               <span>
-                © {currentYear} {currentLocale === "en" ? DATA.name : DATA.chinese.name}
+                © {currentYear} XDYou / Traintime PDA authors, site designed by imoscarz
               </span>
               <span>•</span>
               <span>{t.footer.legal.allRightsReserved}</span>
