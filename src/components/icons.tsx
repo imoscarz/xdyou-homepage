@@ -6,6 +6,7 @@ import {
   BookMarkedIcon,
   BrainCircuitIcon,
   CalendarIcon,
+  ChevronLeftIcon,
   ChevronRightIcon,
   ClipboardListIcon,
   CodeIcon,
@@ -27,13 +28,17 @@ import {
   Loader2Icon,
   MailIcon,
   MapPinIcon,
+  Maximize2Icon,
   NewspaperIcon,
   NotebookIcon,
   PackageIcon,
+  PauseIcon,
+  PlayIcon,
   ServerIcon,
   SmartphoneIcon,
   TagIcon,
   TrendingUpIcon,
+  XIcon,
 } from "lucide-react";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
@@ -73,11 +78,15 @@ export const Icons = {
   // Existing Icons
   book: (props: IconProps) => <BookIcon {...props} />,
   brain: (props: IconProps) => <BrainCircuitIcon {...props} />,
+  chevronleft: (props: IconProps) => <ChevronLeftIcon {...props} />,
   chevronright: (props: IconProps) => <ChevronRightIcon {...props} />,
   code: (props: IconProps) => <CodeIcon {...props} />,
   database: (props: IconProps) => <DatabaseIcon {...props} />,
   email: (props: IconProps) => <MailIcon {...props} />,
   externalLink: (props: IconProps) => <ExternalLinkIcon {...props} />,
+  maximize2: (props: IconProps) => <Maximize2Icon {...props} />,
+  pause: (props: IconProps) => <PauseIcon {...props} />,
+  play: (props: IconProps) => <PlayIcon {...props} />,
   fileuser: (props: IconProps) => <FileUserIcon {...props} />,
   globe: (props: IconProps) => <GlobeIcon {...props} />,
   heartbeat: (props: IconProps) => <HeartIcon {...props} />,
@@ -112,7 +121,8 @@ export const Icons = {
       />
     </svg>
   ),
-  x: (props: IconProps) => (
+  x: (props: IconProps) => <XIcon {...props} />,
+  xlogo: (props: IconProps) => (
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>X</title>
       <path
@@ -572,7 +582,7 @@ export const Icons = {
   ),
   // Aliases for common naming variations
   mail: (props: IconProps) => Icons.email(props),
-  twitter: (props: IconProps) => Icons.x(props),
+  twitter: (props: IconProps) => Icons.xlogo(props),
 };
 
 export default Icons;

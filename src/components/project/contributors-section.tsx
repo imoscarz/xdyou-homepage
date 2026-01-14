@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { Icons } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BlurFade } from "@/components/ui/blur-fade";
 import type { contributors } from "@/config/contributors";
@@ -118,16 +119,30 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
             </>
           )}
           
-          {/* 联系方式链接 */}
-          {contributor.contacts && Array.isArray(contributor.contacts) ? (
-            <Link
-              href={contributor.contacts[0].url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary underline text-sm inline-block"
-            >
-              主页链接
-            </Link>
+          {/* 主页 / 链接（图标 + 文本，居中） */}
+          {contributor.links && Array.isArray(contributor.links) && contributor.links.length > 0 ? (
+            <div className="flex items-center justify-center gap-4">
+              {contributor.links.map((link: { icon: string; text?: string; url: string }, idx: number) => {
+                const IconComponent = Icons[link.icon as keyof typeof Icons];
+                return (
+                  <Link
+                    key={idx}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={link.text ?? link.icon}
+                    className="flex items-center gap-2 text-sm text-primary hover:underline"
+                  >
+                    {IconComponent ? (
+                      <IconComponent className="h-5 w-5" />
+                    ) : (
+                      <Icons.externalLink className="h-5 w-5" />
+                    )}
+                    <span>{link.text ?? link.icon}</span>
+                  </Link>
+                );
+              })}
+            </div>
           ) : null}
         </div>
       </DialogContent>

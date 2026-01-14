@@ -141,28 +141,69 @@ export const projectConfig = {
 
   // 截图配置
   screenshots: [
+    // Mobile Screenshots
     {
-      src: "/img/placeholder1.png",
-      alt: "XDYou Screenshot 1",
+      src: "/img/screenshots/homepage-mobile.png",
+      alt: "XDYou Mobile Screenshot 1",
+      type: "mobile",
+      caption: {
+        en: "Homepage View",
+        zh: "首页界面",
+      },
+    },
+    {
+      src: "/img/screenshots/schedule-mobile.png",
+      alt: "XDYou Mobile Screenshot 2",
+      type: "mobile",
       caption: {
         en: "Course Schedule View",
         zh: "课程表界面",
       },
     },
     {
-      src: "/img/placeholder2.png",
-      alt: "XDYou Screenshot 2",
+      src: "/img/screenshots/classroom-mobile.png",
+      alt: "XDYou Mobile Screenshot 3",
+      type: "mobile",
       caption: {
-        en: "Exam Query Interface",
-        zh: "考试查询界面",
+        en: "Available Classrooms",
+        zh: "空闲教室",
       },
     },
     {
-      src: "/img/placeholder3.png",
-      alt: "XDYou Screenshot 3",
+      src: "/img/screenshots/club-mobile.png",
+      alt: "XDYou Mobile Screenshot 4",
+      type: "mobile",
       caption: {
-        en: "Campus Services",
-        zh: "校园服务",
+        en: "Clubs",
+        zh: "社团",
+      },
+    },
+    // Desktop Screenshots
+    {
+      src: "/img/screenshots/schedule-desktop.png",
+      alt: "XDYou Desktop Screenshot 1",
+      type: "desktop",
+      caption: {
+        en: "Course Schedule View",
+        zh: "课程表界面(桌面端)",
+      },
+    },
+    {
+      src: "/img/screenshots/homepage-desktop.png",
+      alt: "XDYou Desktop Screenshot 2",
+      type: "desktop",
+      caption: {
+        en: "Homepage View",
+        zh: "首页界面(桌面端)",
+      },
+    },
+    {
+      src: "/img/screenshots/classroom-desktop.png",
+      alt: "XDYou Desktop Screenshot 3",
+      type: "desktop",
+      caption: {
+        en: "Available Classrooms",
+        zh: "空闲教室(桌面端)",
       },
     },
   ],

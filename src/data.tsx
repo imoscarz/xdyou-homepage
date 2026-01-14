@@ -8,7 +8,7 @@ export const BLUR_FADE_DELAY = 0.05;
 
 /**
  * 全局数据配置
- * @deprecated This section will be removed in future versions.
+ * @todo 考虑对数据结构进行重构以适应i18n。
  */
 export const DATA = {
   ...siteConfig,

@@ -37,6 +37,7 @@ export default async function Page({ searchParams }: PageProps) {
   const screenshots = projectConfig.screenshots.map((screenshot) => ({
     src: screenshot.src,
     alt: screenshot.alt,
+    type: screenshot.type,
     caption: isEnglish ? screenshot.caption.en : screenshot.caption.zh,
   }));
 

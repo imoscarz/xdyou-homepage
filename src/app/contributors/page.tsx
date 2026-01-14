@@ -83,10 +83,10 @@ export default async function ContributorsPage({ searchParams }: PageProps) {
                       </div>
                     )}
                   </div>
-                  {/* Contact Links and Homepage - Right Side */}
-                  {contributor.contacts && contributor.contacts.length > 0 && (
+                  {/* Links - Right Side */}
+                  {contributor.links && contributor.links.length > 0 && (
                     <div className="flex gap-1 shrink-0">
-                      {contributor.contacts.map((contact) => {
+                      {contributor.links.map((contact: { icon: string; text?: string; url: string }) => {
                         const IconComponent = Icons[contact.icon as keyof typeof Icons];
                         return (
                         <Button
@@ -100,7 +100,7 @@ export default async function ContributorsPage({ searchParams }: PageProps) {
                             href={contact.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label={contact.icon}
+                            aria-label={contact.text ?? contact.icon}
                           >
                             {IconComponent ? (
                               <IconComponent className="h-4 w-4" />
