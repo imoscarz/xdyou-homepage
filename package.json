@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "prebuild": "node scripts/update-build-date.mjs",
+    "build": "pnpm prebuild && next build",
     "dev": "set NODE_OPTIONS=--no-deprecation && next dev --turbopack",
     "lint": "next lint",
     "start": "next start",

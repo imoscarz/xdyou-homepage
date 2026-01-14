@@ -2,7 +2,7 @@
 export const siteConfig = {
   url: "https://xdyou.example.com",
   faviconUrl: "/icon/logo.png",
-  lastUpdated: "Dec 2025",
+  lastUpdated: "Jan 2026",
   avatarUrl: "/icon/logo.png",
 } as const;
 
