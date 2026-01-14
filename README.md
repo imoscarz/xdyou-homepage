@@ -105,6 +105,9 @@ pnpm install
 # 启动开发服务器（支持 Turbopack）
 pnpm dev
 
+# 检查外部图片引用
+pnpm check:images
+
 # 执行代码检查
 pnpm lint
 
@@ -145,7 +148,9 @@ order: 2
 
 #### 编写文档时的注意事项
 
-1. **图片引用**：由于 Next.js 的安全策略限制，您无法引用在 `next.config.js` 中 `remotePatterns` 声明过的 hostname 之外的站点的图片。因此，在引用图片时，请将图片存放在 `public/img` 下的适当位置并通过相对链接引用图片。
+1. **图片引用**：由于 Next.js 的安全策略限制，您无法引用在 `next.config.ts` 中 `remotePatterns` 声明过的 hostname 之外的站点的图片。因此，在引用图片时，请将图片存放在 `public/img` 下的适当位置并通过相对链接引用图片。
+   
+   **图片检查**：项目已配置 CI 自动检查，本地也可运行 `pnpm check:images` 验证所有图片引用是否合规。
 
 2. **GFM 支持**：文档支持使用 GitHub Flavored Markdown 的特性，如带有提示的引用块（alerts）：
    ```markdown

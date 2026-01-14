@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "set NODE_OPTIONS=--no-deprecation && next dev --turbopack",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "check:images": "node scripts/check-external-images.mjs"
   },
   "dependencies": {
     "@google-analytics/data": "^5.2.0",
