@@ -96,8 +96,10 @@
   
 - **页面辅助工具**： 
   - `src/lib/page-helpers.ts` - 统一的页面逻辑（元数据、i18n、容器类名）
+  - `src/lib/api-helpers.ts` - API 路由辅助函数（请求解析、过滤、响应）
   - `src/lib/utils.tsx` - 通用工具函数（cn、formatDate、jsonldScript）
   - `src/lib/env.ts` - 环境变量管理
+  - `src/lib/hooks/useSearch.ts` - 通用搜索过滤 Hook
   
 - **路由页面**： 
   - `src/app/page.tsx` - 首页
@@ -150,19 +152,6 @@
 - **内容文件**： 
   - `contents/docs/*.md` - 文档 Markdown 文件（frontmatter: title, description, order, category）
   - `contents/news/*.md` - 新闻 Markdown 文件（frontmatter: title, date, author, tags, lang）
-
-重构记录 📝
-- **2026-01-15**: 统一页面辅助函数重构
-  - 创建 `src/lib/page-helpers.ts` 统一页面逻辑（减少 80+ 行重复代码）
-  - 创建 `src/components/layout/page-header.tsx` 可复用头部组件
-  - 重构所有主要页面使用统一架构
-  - 详见 `REFACTORING_SUMMARY.md`（如存在）
-
-- **2026-01-16**: i18n 硬编码文本清理
-  - 移除所有 `locale === "en" ? "A" : "B"` 模式
-  - 新增 `common.language` 和 `common.time` i18n 字段
-  - 更新 `formatDate` 为异步函数使用 i18n
-  - 在英文文档页面添加中文专属内容提示
 
 代码架构最佳实践 🏗️
 1. **页面开发模板**：

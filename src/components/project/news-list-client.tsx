@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSearch } from "@/lib/hooks/useSearch";
 import { NewsPost } from "@/lib/news";
 
 type NewsListClientProps = {
@@ -27,16 +27,10 @@ export default function NewsListClient({
   dict,
   delay = 0,
 }: NewsListClientProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const filteredPosts = posts.filter((post) => {
-    const searchLower = searchTerm.toLowerCase();
-    return (
-      post.title.toLowerCase().includes(searchLower) ||
-      post.excerpt.toLowerCase().includes(searchLower) ||
-      post.tags.some((tag) => tag.toLowerCase().includes(searchLower))
-    );
-  });
+  const { searchTerm, setSearchTerm, filteredItems: filteredPosts } = useSearch(
+    posts,
+    ["title", "excerpt", "tags"],
+  );
 
   return (
     <div className="space-y-6">
