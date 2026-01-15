@@ -3,13 +3,14 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { useLocale } from "@/lib/i18n";
+import { useDictionary, useLocale } from "@/lib/i18n";
 
 export function LanguageToggle() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentLocale = useLocale();
+  const dict = useDictionary();
   const isEnglish = currentLocale === "en";
 
   // Disable language toggle on news detail pages to avoid 404
@@ -26,9 +27,13 @@ export function LanguageToggle() {
     if (isEnglish) {
       // Switch to Chinese (remove lang param)
       params.delete("lang");
+      // Persist locale in cookie for server-rendered pages (e.g., 404)
+      document.cookie = `NEXT_LOCALE=zh; Path=/; Max-Age=${60 * 60 * 24 * 365}`;
     } else {
       // Switch to English
       params.set("lang", "en");
+      // Persist locale in cookie for server-rendered pages (e.g., 404)
+      document.cookie = `NEXT_LOCALE=en; Path=/; Max-Age=${60 * 60 * 24 * 365}`;
     }
 
     // Construct new URL
@@ -49,7 +54,9 @@ export function LanguageToggle() {
       aria-disabled={isNewsDetail || isDocsDetail}
       disabled={isNewsDetail || isDocsDetail}
     >
-      <span className="text-sm font-medium">{isEnglish ? "EN" : "中"}</span>
+      <span className="text-sm font-medium">
+        {dict?.common.language[currentLocale] || (isEnglish ? "EN" : "中")}
+      </span>
     </Button>
   );
 }

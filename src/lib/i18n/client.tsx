@@ -29,6 +29,19 @@ export function useLocale(): Locale {
 }
 
 type Dictionary = {
+  common: {
+    language: {
+      zh: string;
+      en: string;
+    };
+    time: {
+      today: string;
+      daysAgo: string;
+      weeksAgo: string;
+      monthsAgo: string;
+      yearsAgo: string;
+    };
+  };
   blog: {
     by: string;
     readMore: string;

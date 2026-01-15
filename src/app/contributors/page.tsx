@@ -1,57 +1,39 @@
-import { Metadata } from "next";
 import Link from "next/link";
 
 import { Icons } from "@/components/icons";
+import { PageHeader } from "@/components/layout/page-header";
 import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { contributors } from "@/config/contributors";
 import { BLUR_FADE_DELAY } from "@/data";
-import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
+import {
+  generateSimpleMetadata,
+  getPageI18n,
+  PAGE_CONTAINER_CLASSES,
+  type PageProps,
+} from "@/lib/page-helpers";
 
-type PageProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
-export async function generateMetadata({
-  searchParams,
-}: PageProps): Promise<Metadata> {
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
-
-  return {
-    title: dict.contributors.title,
-    description: dict.contributors.description,
-  };
+export async function generateMetadata({ searchParams }: PageProps) {
+  return generateSimpleMetadata(
+    searchParams,
+    "contributors.title",
+    "contributors.description",
+  );
 }
 
 export default async function ContributorsPage({ searchParams }: PageProps) {
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
+  const { dict } = await getPageI18n(searchParams);
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20 xl:px-32 xl:py-24">
-      {/* Header */}
-      <section className="space-y-4">
-        <BlurFade delay={BLUR_FADE_DELAY}>
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              {dict.contributors.title}
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              {dict.contributors.description}
-            </p>
-          </div>
-        </BlurFade>
-      </section>
+    <main className={PAGE_CONTAINER_CLASSES.standard}>
+      <PageHeader
+        title={dict.contributors.title}
+        description={dict.contributors.description}
+      />
 
       {/* Contributors Grid - Masonry Layout */}
       <section className="columns-1 gap-6 space-y-6 md:columns-2">

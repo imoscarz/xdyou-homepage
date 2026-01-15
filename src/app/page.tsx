@@ -7,28 +7,21 @@ import { contributors } from "@/config/contributors";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { fetchLatestRelease } from "@/lib/github";
-import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
-
-type PageProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
+import {
+  getPageI18n,
+  PAGE_CONTAINER_CLASSES,
+  type PageProps,
+  selectLocalizedText,
+} from "@/lib/page-helpers";
 
 export default async function Page({ searchParams }: PageProps) {
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
-
-  // Select data based on locale
-  const isEnglish = locale === "en";
-  const slogan = isEnglish ? projectConfig.slogan.en : projectConfig.slogan.zh;
-  const description = isEnglish
-    ? projectConfig.description.en
-    : projectConfig.description.zh;
+  const { locale, dict } = await getPageI18n(searchParams);
 
   // Prepare features with localized text
   const features = projectConfig.features.map((feature) => ({
     icon: feature.icon,
-    title: isEnglish ? feature.title.en : feature.title.zh,
-    description: isEnglish ? feature.description.en : feature.description.zh,
+    title: selectLocalizedText(locale, feature.title),
+    description: selectLocalizedText(locale, feature.description),
   }));
 
   // Prepare screenshots with localized captions
@@ -36,7 +29,7 @@ export default async function Page({ searchParams }: PageProps) {
     src: screenshot.src,
     alt: screenshot.alt,
     type: screenshot.type,
-    caption: isEnglish ? screenshot.caption.en : screenshot.caption.zh,
+    caption: selectLocalizedText(locale, screenshot.caption),
   }));
 
   // Prepare platforms
@@ -71,12 +64,12 @@ export default async function Page({ searchParams }: PageProps) {
   );
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-16 px-6 py-8 pb-24 sm:space-y-20 sm:px-16 md:px-20 md:py-16 md:pt-14 lg:px-24 lg:py-20 xl:px-32 xl:py-24">
+    <main className={PAGE_CONTAINER_CLASSES.home}>
       {/* Hero Section */}
       <HeroSection
         projectName={projectConfig.fullName}
-        slogan={slogan}
-        description={description}
+        slogan={selectLocalizedText(locale, projectConfig.slogan)}
+        description={selectLocalizedText(locale, projectConfig.description)}
         logo={projectConfig.logo}
         androidUrl={
           androidAsset?.browser_download_url ||

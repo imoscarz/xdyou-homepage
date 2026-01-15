@@ -8,6 +8,7 @@ import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { getAllDocSlugs, getDocBySlugWithCommit } from "@/lib/docs";
 import { getDictionary } from "@/lib/i18n";
+import { PAGE_CONTAINER_CLASSES } from "@/lib/page-helpers";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -57,7 +58,7 @@ export default async function DocPage({ params }: PageProps) {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20">
+    <main className={PAGE_CONTAINER_CLASSES.docs}>
       <BlurFade delay={BLUR_FADE_DELAY}>
         <div className="space-y-4">
           <div className="space-y-2">

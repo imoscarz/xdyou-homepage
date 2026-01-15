@@ -1,11 +1,15 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import { getDictionary } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n/config";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDate(date: string, locale: string = "en-US") {
+export async function formatDate(date: string, locale: Locale = "zh") {
+  const dict = await getDictionary(locale);
   const currentDate = new Date().getTime();
   if (!date.includes("T")) {
     date = `${date}T00:00:00`;
@@ -14,29 +18,25 @@ export function formatDate(date: string, locale: string = "en-US") {
   const timeDifference = Math.abs(currentDate - targetDate);
   const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
-  const fullDate = new Date(date).toLocaleString(locale, {
+  const fullDate = new Date(date).toLocaleString(locale === "zh" ? "zh-CN" : "en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
   });
 
   if (daysAgo < 1) {
-    return locale.startsWith("zh") ? "今天" : "Today";
+    return dict.common.time.today;
   } else if (daysAgo < 7) {
-    const agoText = locale.startsWith("zh") ? "天前" : "d ago";
-    return `${fullDate} (${daysAgo}${agoText})`;
+    return `${fullDate} (${daysAgo}${dict.common.time.daysAgo})`;
   } else if (daysAgo < 30) {
     const weeksAgo = Math.floor(daysAgo / 7);
-    const agoText = locale.startsWith("zh") ? "周前" : "w ago";
-    return `${fullDate} (${weeksAgo}${agoText})`;
+    return `${fullDate} (${weeksAgo}${dict.common.time.weeksAgo})`;
   } else if (daysAgo < 365) {
     const monthsAgo = Math.floor(daysAgo / 30);
-    const agoText = locale.startsWith("zh") ? "个月前" : "mo ago";
-    return `${fullDate} (${monthsAgo}${agoText})`;
+    return `${fullDate} (${monthsAgo}${dict.common.time.monthsAgo})`;
   } else {
     const yearsAgo = Math.floor(daysAgo / 365);
-    const agoText = locale.startsWith("zh") ? "年前" : "y ago";
-    return `${fullDate} (${yearsAgo}${agoText})`;
+    return `${fullDate} (${yearsAgo}${dict.common.time.yearsAgo})`;
   }
 }
 

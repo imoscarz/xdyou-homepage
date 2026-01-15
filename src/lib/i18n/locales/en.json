@@ -1,4 +1,17 @@
 {
+  "common": {
+    "language": {
+      "zh": "CN",
+      "en": "EN"
+    },
+    "time": {
+      "today": "Today",
+      "daysAgo": "d ago",
+      "weeksAgo": "w ago",
+      "monthsAgo": "mo ago",
+      "yearsAgo": "y ago"
+    }
+  },
   "nav": {
     "home": "Home",
     "docs": "Docs",
@@ -74,6 +87,8 @@
     "menu": "Menu",
     "search": "Search docs...",
     "noDocs": "No documentation available",
+    "comingSoon": "Documentation is coming soon. Please visit our GitHub repository for detailed information.",
+    "chineseOnlyNotice": "Note: Documentation is currently available in Chinese only. We are working on English translations.",
     "editOnGitHub": "Edit on GitHub"
   },
   "footer": {
