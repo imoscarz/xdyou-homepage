@@ -43,6 +43,7 @@ export default function ScreenshotsSection({
   const [isMobile, setIsMobile] = useState(false);
   const [isAutoPlay, setIsAutoPlay] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [transitionDirection, setTransitionDirection] = useState<"next" | "prev" | "">("");
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   // 触摸滑动支持
@@ -94,11 +95,32 @@ export default function ScreenshotsSection({
 
   const totalSlides = screenshotGroups.length;
 
+  // 预加载当前/前一张/后一张的图片以避免切换白屏
+  useEffect(() => {
+    if (typeof window === "undefined" || totalSlides === 0) return;
+
+    const loaded = new Set<string>();
+    const preloadGroup = (index: number) => {
+      if (index < 0 || index >= totalSlides) return;
+      screenshotGroups[index]?.forEach(({ src }) => {
+        if (loaded.has(src)) return;
+        const img = new window.Image();
+        img.src = src;
+        loaded.add(src);
+      });
+    };
+
+    preloadGroup(currentIndex);
+    preloadGroup((currentIndex + 1) % totalSlides);
+    preloadGroup((currentIndex - 1 + totalSlides) % totalSlides);
+  }, [currentIndex, screenshotGroups, totalSlides]);
+
   // 自动播放效果
   useEffect(() => {
     if (!isAutoPlay || isFullscreen || totalSlides <= 1) return;
 
     autoPlayTimerRef.current = setInterval(() => {
+      setTransitionDirection("next");
       setCurrentIndex((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
     }, 4000); // 每 4 秒切换一次
 
@@ -117,10 +139,12 @@ export default function ScreenshotsSection({
   }, [isMobile]);
 
   const goToPrevious = () => {
+    setTransitionDirection("prev");
     setCurrentIndex((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
   };
 
   const goToNext = () => {
+    setTransitionDirection("next");
     setCurrentIndex((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
   };
 
@@ -161,6 +185,11 @@ export default function ScreenshotsSection({
   const currentGroup = screenshotGroups[currentIndex];
   const isDesktopGroup = !isMobile && currentGroup[0].type === "desktop";
   const isMobileGroup = currentGroup[0].type === "mobile";
+  const fullscreenAnimationClass = transitionDirection === "prev"
+    ? "animate-slide-right"
+    : transitionDirection === "next"
+      ? "animate-slide-left"
+      : "animate-slide-fade";
 
   return (
     <section id="screenshots" className="py-12">
@@ -180,64 +209,66 @@ export default function ScreenshotsSection({
 
         <BlurFade delay={delay + 0.1}>
           <Card className="mx-auto w-full max-w-6xl overflow-hidden">
-            {/* 移动端：单张移动端截图 */}
-            {isMobile && (
-              <div className="bg-muted/30 relative flex w-full items-center justify-center py-8">
-                <div className="relative aspect-[9/19.5] w-[280px]">
-                  <Image
-                    src={currentGroup[0].src}
-                    alt={currentGroup[0].alt}
-                    fill
-                    className="rounded-lg object-contain shadow-lg"
-                    priority={currentIndex === 0}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* 桌面端：根据类型展示 */}
-            {!isMobile && (
-              <div
-                className={`bg-muted/30 relative w-full p-8 ${containerHeight} flex items-center justify-center`}
-              >
-                {/* Desktop 类型：单张展示 */}
-                {isDesktopGroup && (
-                  <div className="w-full max-w-4xl">
-                    <div className="relative aspect-video w-full">
-                      <Image
-                        src={currentGroup[0].src}
-                        alt={currentGroup[0].alt}
-                        fill
-                        className="rounded-lg object-cover shadow-lg"
-                        priority={currentIndex === 0}
-                      />
-                    </div>
+            <div key={currentIndex} className="animate-slide-fade">
+              {/* 移动端：单张移动端截图 */}
+              {isMobile && (
+                <div className="bg-muted/30 relative flex w-full items-center justify-center py-8">
+                  <div className="relative aspect-[9/19.5] w-[280px]">
+                    <Image
+                      src={currentGroup[0].src}
+                      alt={currentGroup[0].alt}
+                      fill
+                      className="rounded-lg object-contain shadow-lg"
+                      priority={currentIndex === 0}
+                    />
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* Mobile 类型：1-2张并排展示 */}
-                {isMobileGroup && (
-                  <div
-                    className={`flex items-center justify-center gap-6 ${currentGroup.length === 1 ? "max-w-md" : ""}`}
-                  >
-                    {currentGroup.map((screenshot, idx) => (
-                      <div
-                        key={idx}
-                        className="relative aspect-[9/19.5] w-[280px]"
-                      >
+              {/* 桌面端：根据类型展示 */}
+              {!isMobile && (
+                <div
+                  className={`bg-muted/30 relative w-full p-8 ${containerHeight} flex items-center justify-center`}
+                >
+                  {/* Desktop 类型：单张展示 */}
+                  {isDesktopGroup && (
+                    <div className="w-full max-w-4xl">
+                      <div className="relative aspect-video w-full">
                         <Image
-                          src={screenshot.src}
-                          alt={screenshot.alt}
+                          src={currentGroup[0].src}
+                          alt={currentGroup[0].alt}
                           fill
-                          className="rounded-lg object-contain shadow-lg"
-                          priority={currentIndex === 0 && idx === 0}
+                          className="rounded-lg object-cover shadow-lg"
+                          priority={currentIndex === 0}
                         />
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+                    </div>
+                  )}
+
+                  {/* Mobile 类型：1-2张并排展示 */}
+                  {isMobileGroup && (
+                    <div
+                      className={`flex items-center justify-center gap-6 ${currentGroup.length === 1 ? "max-w-md" : ""}`}
+                    >
+                      {currentGroup.map((screenshot, idx) => (
+                        <div
+                          key={idx}
+                          className="relative aspect-[9/19.5] w-[280px]"
+                        >
+                          <Image
+                            src={screenshot.src}
+                            alt={screenshot.alt}
+                            fill
+                            className="rounded-lg object-contain shadow-lg"
+                            priority={currentIndex === 0 && idx === 0}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Navigation */}
             <div className="flex items-center justify-between p-4">
@@ -279,7 +310,10 @@ export default function ScreenshotsSection({
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => setIsFullscreen(true)}
+                  onClick={() => {
+                    setTransitionDirection("");
+                    setIsFullscreen(true);
+                  }}
                   aria-label="全屏查看"
                 >
                   <Icons.maximize2 className="size-4" />
@@ -328,10 +362,14 @@ export default function ScreenshotsSection({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setIsFullscreen(false)}
+                onClick={() => {
+                  setTransitionDirection("");
+                  setIsFullscreen(false);
+                }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  setTransitionDirection("");
                   setIsFullscreen(false);
                 }}
                 aria-label="关闭全屏"
@@ -341,7 +379,10 @@ export default function ScreenshotsSection({
               </Button>
             </div>
 
-            <div className="relative flex h-full w-full max-w-6xl items-center justify-center">
+            <div
+              key={currentIndex}
+              className={`relative flex h-full w-full max-w-6xl items-center justify-center ${fullscreenAnimationClass}`}
+            >
               {isMobile && currentGroup[0].type === "mobile" && (
                 <div className="relative aspect-[9/19.5] w-[280px]">
                   <Image
