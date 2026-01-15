@@ -44,6 +44,10 @@ export default function ScreenshotsSection({
   const [isAutoPlay, setIsAutoPlay] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // 触摸滑动支持
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
 
   // 检测设备类型
   useEffect(() => {
@@ -118,6 +122,36 @@ export default function ScreenshotsSection({
 
   const goToNext = () => {
     setCurrentIndex((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
+  };
+
+  // 触摸滑动处理
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50; // 最小滑动距离
+    
+    if (Math.abs(distance) > minSwipeDistance) {
+      if (distance > 0) {
+        // 左滑 - 下一张
+        goToNext();
+      } else {
+        // 右滑 - 上一张
+        goToPrevious();
+      }
+    }
+    
+    // 重置
+    touchStartX.current = 0;
+    touchEndX.current = 0;
   };
 
   if (screenshotGroups.length === 0) {
@@ -284,14 +318,24 @@ export default function ScreenshotsSection({
 
         {/* 全屏查看模式 */}
         {isFullscreen && (
-          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 p-4">
-            <div className="absolute top-4 right-4">
+          <div 
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 p-4"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className="absolute top-4 right-4 z-10">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsFullscreen(false)}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsFullscreen(false);
+                }}
                 aria-label="关闭全屏"
-                className="text-white hover:bg-white/20"
+                className="text-white hover:bg-white/20 active:bg-white/30 touch-none"
               >
                 <Icons.x className="size-6" />
               </Button>

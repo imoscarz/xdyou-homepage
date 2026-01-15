@@ -508,11 +508,86 @@ function CustomOl({
 }
 
 function CustomLi({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
+  // Check if this is a task list item with checkbox
+  const childrenArray = React.Children.toArray(children);
+  const hasCheckbox = childrenArray.some(
+    (child) =>
+      React.isValidElement(child) &&
+      child.type === "input" &&
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (child.props as any)?.type === "checkbox"
+  );
+
+  if (hasCheckbox) {
+    return (
+      <li className="text-foreground leading-7 list-none flex items-start gap-2" {...props}>
+        {children}
+      </li>
+    );
+  }
+
   return (
     <li className="text-foreground leading-7" {...props}>
       {children}
     </li>
   );
+}
+
+// Custom checkbox for task lists
+function CustomInput({
+  checked,
+  disabled,
+  type,
+  ...props
+}: React.InputHTMLAttributes<HTMLInputElement>) {
+  if (type === "checkbox") {
+    return (
+      <span
+        className="inline-flex items-center justify-center flex-shrink-0 relative"
+        style={{ width: "16px", height: "16px", top: "2px" }}
+      >
+        <input
+          type="checkbox"
+          checked={checked}
+          disabled={disabled}
+          className="peer sr-only"
+          {...props}
+        />
+        <span
+          className={`
+            flex items-center justify-center
+            w-4 h-4 rounded
+            border-2 transition-all duration-200
+            ${
+              checked
+                ? "bg-primary border-primary"
+                : "bg-background border-muted-foreground/30"
+            }
+            ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}
+          `}
+        >
+          {checked && (
+            <svg
+              className="w-3 h-3 text-primary-foreground"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13.5 4.5L6 12L2.5 8.5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </span>
+      </span>
+    );
+  }
+
+  return <input type={type} checked={checked} disabled={disabled} {...props} />;
 }
 
 // Tables
@@ -621,6 +696,7 @@ const components: Components = {
   ul: CustomUl as Components["ul"],
   ol: CustomOl as Components["ol"],
   li: CustomLi as Components["li"],
+  input: CustomInput as Components["input"],
   table: CustomTable as Components["table"],
   thead: CustomThead as Components["thead"],
   tbody: CustomTbody as Components["tbody"],
