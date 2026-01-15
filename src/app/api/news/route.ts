@@ -3,9 +3,17 @@ import { NextResponse } from "next/server";
 import { siteConfig } from "@/config/site";
 import { getAllNewsPosts } from "@/lib/news";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const posts = await getAllNewsPosts();
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get("lang");
+    
+    let posts = await getAllNewsPosts();
+    
+    // 根据语言筛选
+    if (lang) {
+      posts = posts.filter((post) => post.lang === lang);
+    }
 
     return NextResponse.json(
       {
@@ -20,6 +28,7 @@ export async function GET() {
           url: `${siteConfig.url}/news/${post.slug}`,
         })),
         total: posts.length,
+        lang: lang || "all",
       },
       {
         headers: {

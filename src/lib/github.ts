@@ -194,3 +194,90 @@ export function formatReleaseDate(dateString: string): string {
     day: "numeric",
   });
 }
+
+/**
+ * GitHub Commit Types
+ */
+export type GitHubCommit = {
+  sha: string;
+  commit: {
+    author: {
+      name: string;
+      email: string;
+      date: string;
+    };
+    message: string;
+  };
+  author: {
+    login: string;
+    avatar_url: string;
+    html_url: string;
+  } | null;
+  html_url: string;
+};
+
+/**
+ * Fetch last commit info for a specific file
+ * API Documentation: https://docs.github.com/en/rest/commits/commits
+ */
+export async function fetchFileLastCommit(
+  owner: string,
+  repo: string,
+  filePath: string,
+  branch: string = "master",
+): Promise<GitHubCommit | null> {
+  const url = `https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(filePath)}&page=1&per_page=1&sha=${branch}`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+      next: {
+        revalidate: 3600, // Cache for 1 hour
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`GitHub API error: ${response.status}`);
+      return null;
+    }
+
+    const commits: GitHubCommit[] = await response.json();
+    
+    if (commits.length === 0) {
+      return null;
+    }
+
+    return commits[0];
+  } catch (error) {
+    console.error(`Error fetching last commit for ${filePath}:`, error);
+    return null;
+  }
+}
+
+/**
+ * Format date to relative time (e.g., "2 days ago")
+ */
+export function formatRelativeTime(dateString: string, locale: string = "zh-CN"): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+
+  if (diffInSeconds < 60) {
+    return rtf.format(-diffInSeconds, "second");
+  } else if (diffInSeconds < 3600) {
+    return rtf.format(-Math.floor(diffInSeconds / 60), "minute");
+  } else if (diffInSeconds < 86400) {
+    return rtf.format(-Math.floor(diffInSeconds / 3600), "hour");
+  } else if (diffInSeconds < 2592000) {
+    return rtf.format(-Math.floor(diffInSeconds / 86400), "day");
+  } else if (diffInSeconds < 31536000) {
+    return rtf.format(-Math.floor(diffInSeconds / 2592000), "month");
+  } else {
+    return rtf.format(-Math.floor(diffInSeconds / 31536000), "year");
+  }
+}

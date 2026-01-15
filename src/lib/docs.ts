@@ -2,6 +2,8 @@ import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
 
+import { fetchFileLastCommit, type GitHubCommit } from "./github";
+
 const docsDirectory = path.join(process.cwd(), "contents/docs");
 
 export type DocMetadata = {
@@ -15,6 +17,7 @@ export type Doc = {
   slug: string;
   metadata: DocMetadata;
   content: string;
+  lastCommit?: GitHubCommit | null;
 };
 
 /**
@@ -49,6 +52,31 @@ export function getDocBySlug(slug: string): Doc | null {
     console.error(`Error reading doc ${slug}:`, error);
     return null;
   }
+}
+
+/**
+ * Get doc by slug with GitHub last commit info
+ */
+export async function getDocBySlugWithCommit(
+  slug: string,
+  owner: string,
+  repo: string,
+  branch: string = "master",
+): Promise<Doc | null> {
+  const doc = getDocBySlug(slug);
+  
+  if (!doc) {
+    return null;
+  }
+
+  // Fetch last commit info from GitHub
+  const filePath = `contents/docs/${slug}.md`;
+  const lastCommit = await fetchFileLastCommit(owner, repo, filePath, branch);
+
+  return {
+    ...doc,
+    lastCommit,
+  };
 }
 
 /**

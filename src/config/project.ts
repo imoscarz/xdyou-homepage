@@ -22,6 +22,13 @@ export const projectConfig = {
     url: "https://github.com/BenderBlog/traintime_pda",
   },
 
+  // 文档仓库信息（用于获取文档的最后编辑信息）
+  docsRepo: {
+    owner: "imoscarz",
+    name: "xdyou-homepage",
+    branch: "master",
+  },
+
   // 贡献者配置
   contributors: {
     maxDisplay: 12, // 最多显示的贡献者数量

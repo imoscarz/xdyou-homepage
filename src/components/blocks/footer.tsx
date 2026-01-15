@@ -119,11 +119,11 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="space-y-2">
           {/* Copyright and Legal Links - Desktop: same line, Mobile: separate lines */}
-          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div className="text-muted-foreground flex items-center gap-2 text-sm">
-              <span>
-                © {currentYear} XDYou / Traintime PDA authors, site designed by imoscarz
-              </span>
+          <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2">
+              <span>© {currentYear} XDYou / Traintime PDA Authors</span>
+              <span>•</span>
+              <span>Site Designed by imoscarz</span>
               <span>•</span>
               <span>{t.footer.legal.allRightsReserved}</span>
             </div>
@@ -141,13 +141,13 @@ export default function Footer() {
               <span>•</span>
               <span>{t.footer.bottom.buildWith}</span>
               <Link
-                href="https://github.com/imoscarz/xdyou-homepage"
+                href={`https://github.com/${DATA.projectConfig.docsRepo.owner}/${DATA.projectConfig.docsRepo.name}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground inline-flex items-center gap-1 transition-colors"
               >
                 <Icons.github className="h-4 w-4" />
-                <span>imoscarz/xdyou-homepage</span>
+                <span>{DATA.projectConfig.docsRepo.owner}/{DATA.projectConfig.docsRepo.name}</span>
               </Link>
             </div>
           </div>
