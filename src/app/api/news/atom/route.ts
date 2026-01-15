@@ -7,16 +7,19 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const lang = searchParams.get("lang");
-    
+
     let posts = await getAllNewsPosts();
-    
+
     // 根据语言筛选
     if (lang) {
       posts = posts.filter((post) => post.lang === lang);
     }
-    
+
     const siteUrl = siteConfig.url;
-    const latestDate = posts.length > 0 ? new Date(posts[0].date).toISOString() : new Date().toISOString();
+    const latestDate =
+      posts.length > 0
+        ? new Date(posts[0].date).toISOString()
+        : new Date().toISOString();
     const langParam = lang ? `?lang=${lang}` : "";
 
     // 生成Atom feed
@@ -42,7 +45,7 @@ export async function GET(request: Request) {
       <name>${post.author}</name>
     </author>
     <summary type="html"><![CDATA[${post.excerpt}]]></summary>
-  </entry>`
+  </entry>`,
     )
     .join("")}
 </feed>`;
@@ -57,7 +60,7 @@ export async function GET(request: Request) {
     console.error("Error generating Atom feed:", error);
     return NextResponse.json(
       { error: "Failed to generate Atom feed" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

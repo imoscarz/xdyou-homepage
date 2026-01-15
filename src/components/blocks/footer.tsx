@@ -49,12 +49,12 @@ export default function Footer() {
   const t = dict;
 
   return (
-    <footer className="supports-[backdrop-filter]:bg-background/60 border-t bg-background/95 backdrop-blur">
+    <footer className="supports-[backdrop-filter]:bg-background/60 bg-background/95 border-t backdrop-blur">
       <div className="mx-auto max-w-7xl px-6 py-12 pb-20 sm:px-16 md:px-20 lg:px-24 xl:px-32">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {/* Social Links */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold tracking-wider text-foreground">
+            <h3 className="text-foreground text-sm font-semibold tracking-wider">
               {t.footer.sections.connect}
             </h3>
             <div className="flex flex-wrap gap-3">
@@ -66,7 +66,7 @@ export default function Footer() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                     aria-label={social.name}
                   >
                     <social.icon className="h-5 w-5" />
@@ -77,7 +77,7 @@ export default function Footer() {
 
           {/* Resources */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold tracking-wider text-foreground">
+            <h3 className="text-foreground text-sm font-semibold tracking-wider">
               {t.footer.sections.resources}
             </h3>
             <nav className="space-y-2">
@@ -85,9 +85,13 @@ export default function Footer() {
                 <Link
                   key={resource.name}
                   href={resource.href}
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground block text-sm transition-colors"
                 >
-                  {t.footer.resources[resource.name as keyof typeof t.footer.resources]}
+                  {
+                    t.footer.resources[
+                      resource.name as keyof typeof t.footer.resources
+                    ]
+                  }
                 </Link>
               ))}
             </nav>
@@ -95,7 +99,7 @@ export default function Footer() {
 
           {/* Discover */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold tracking-wider text-foreground">
+            <h3 className="text-foreground text-sm font-semibold tracking-wider">
               {t.footer.sections.discover}
             </h3>
             <nav className="space-y-2">
@@ -105,7 +109,7 @@ export default function Footer() {
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground block text-sm transition-colors"
                 >
                   {item.name}
                 </Link>
@@ -119,7 +123,7 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="space-y-2">
           {/* Copyright and Legal Links - Desktop: same line, Mobile: separate lines */}
-          <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex flex-col gap-2 text-sm">
             <div className="flex flex-wrap items-center gap-2">
               <span>© {currentYear} XDYou / Traintime PDA Authors</span>
               <span>•</span>
@@ -147,7 +151,10 @@ export default function Footer() {
                 className="hover:text-foreground inline-flex items-center gap-1 transition-colors"
               >
                 <Icons.github className="h-4 w-4" />
-                <span>{DATA.projectConfig.docsRepo.owner}/{DATA.projectConfig.docsRepo.name}</span>
+                <span>
+                  {DATA.projectConfig.docsRepo.owner}/
+                  {DATA.projectConfig.docsRepo.name}
+                </span>
               </Link>
             </div>
           </div>

@@ -19,10 +19,10 @@ export function LanguageToggle() {
 
   const handleLanguageToggle = (e: React.MouseEvent) => {
     e.preventDefault();
-    
+
     // Create new URLSearchParams
     const params = new URLSearchParams(searchParams.toString());
-    
+
     if (isEnglish) {
       // Switch to Chinese (remove lang param)
       params.delete("lang");
@@ -30,17 +30,17 @@ export function LanguageToggle() {
       // Switch to English
       params.set("lang", "en");
     }
-    
+
     // Construct new URL
     const queryString = params.toString();
     const targetUrl = queryString ? `${pathname}?${queryString}` : pathname;
-    
+
     router.push(targetUrl);
   };
 
   return (
     <Button
-      variant="ghost" 
+      variant="ghost"
       type="button"
       size="icon"
       className="px-2"

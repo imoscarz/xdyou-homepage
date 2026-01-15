@@ -105,13 +105,14 @@ export default function ReleaseCard({
                       {dict.releaseNotes}
                     </span>
                     <ChevronDown
-                      className={`size-4 transition-transform ${isNotesOpen ? "rotate-180" : ""
-                        }`}
+                      className={`size-4 transition-transform ${
+                        isNotesOpen ? "rotate-180" : ""
+                      }`}
                     />
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <Card className="border-0 sm:border border-muted mt-2">
+                  <Card className="border-muted mt-2 border-0 sm:border">
                     <CardContent className="prose prose-sm dark:prose-invert max-w-none p-4">
                       <CustomReactMarkdown>{release.body}</CustomReactMarkdown>
                     </CardContent>
@@ -135,28 +136,33 @@ export default function ReleaseCard({
                       {dict.assets} ({release.assets.length})
                     </h4>
                     <ChevronDown
-                      className={`size-4 transition-transform ${areAssetsOpen ? "rotate-180" : ""
-                        }`}
+                      className={`size-4 transition-transform ${
+                        areAssetsOpen ? "rotate-180" : ""
+                      }`}
                     />
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="mt-2 grid gap-2">
                     {release.assets.map((asset) => {
-                      const isDesktopAsset = asset.name.toLowerCase().includes('watermeter');
+                      const isDesktopAsset = asset.name
+                        .toLowerCase()
+                        .includes("watermeter");
                       return (
-                        <Card key={asset.id} className="border-muted hover:shadow-md dark:hover:shadow-lg transition-all duration-300">
+                        <Card
+                          key={asset.id}
+                          className="border-muted transition-all duration-300 hover:shadow-md dark:hover:shadow-lg"
+                        >
                           <CardContent className="p-3 sm:p-4">
                             {/* Windows或Linux维护警告 */}
-                            {(isDesktopAsset) && (
+                            {isDesktopAsset &&
                               dict.windowsMaintenanceWarning && (
-                                <div className="mb-3 rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-2">
+                                <div className="mb-3 rounded-md border border-yellow-200 bg-yellow-50 p-2 dark:border-yellow-900 dark:bg-yellow-950">
                                   <p className="text-xs text-yellow-800 dark:text-yellow-100">
                                     ⚠️ {dict.windowsMaintenanceWarning}
                                   </p>
                                 </div>
-                              )
-                            )}
+                              )}
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                               <div className="flex-1 space-y-1">
                                 <p className="text-sm font-medium break-all sm:text-base">
@@ -171,23 +177,31 @@ export default function ReleaseCard({
                                   </span>
                                   <span className="hidden lg:inline">•</span>
                                   <span className="hidden lg:inline">
-                                    {asset.content_type.split('/')[1] || asset.content_type}
+                                    {asset.content_type.split("/")[1] ||
+                                      asset.content_type}
                                   </span>
                                 </div>
                               </div>
 
                               {asset.checksum && (
-                                <div className="hidden sm:flex items-center gap-2 pr-4">
+                                <div className="hidden items-center gap-2 pr-4 sm:flex">
                                   <span className="text-muted-foreground text-xs">
                                     SHA256:
                                   </span>
                                   <code
-                                    className={`text-[5px] bg-muted px-1.5 py-0.5 rounded font-mono cursor-pointer hover:bg-muted/80 transition-colors ${copiedChecksum === asset.name ? 'text-green-600' : ''
-                                      }`}
-                                    onClick={() => copyChecksum(asset.checksum!, asset.name)}
+                                    className={`bg-muted hover:bg-muted/80 cursor-pointer rounded px-1.5 py-0.5 font-mono text-[5px] transition-colors ${
+                                      copiedChecksum === asset.name
+                                        ? "text-green-600"
+                                        : ""
+                                    }`}
+                                    onClick={() =>
+                                      copyChecksum(asset.checksum!, asset.name)
+                                    }
                                     title="Click to copy checksum"
                                   >
-                                    {copiedChecksum === asset.name ? 'copied!' : truncateChecksum(asset.checksum)}
+                                    {copiedChecksum === asset.name
+                                      ? "copied!"
+                                      : truncateChecksum(asset.checksum)}
                                   </code>
                                 </div>
                               )}

@@ -85,7 +85,7 @@ export default function ReleaseToc({
             </button>
           ))}
         </CardContent>
-        <div className="flex-none border-t px-6 pb-6 pt-3">
+        <div className="flex-none border-t px-6 pt-3 pb-6">
           <Button
             onClick={onLoadMore}
             disabled={isLoading || !hasMore}

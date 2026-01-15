@@ -47,7 +47,10 @@ export default function ContributorsSection({
         <BlurFade delay={delay + 0.1}>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {contributors.map((contributor, index) => (
-              <BlurFade key={contributor.name} delay={delay + 0.1 + index * 0.02}>
+              <BlurFade
+                key={contributor.name}
+                delay={delay + 0.1 + index * 0.02}
+              >
                 <ContributorDialog contributor={contributor} />
               </BlurFade>
             ))}
@@ -71,15 +74,15 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex h-full w-full cursor-pointer flex-col items-center space-y-2 rounded-lg border bg-card p-4 hover:bg-accent transition">
+        <div className="bg-card hover:bg-accent flex h-full w-full cursor-pointer flex-col items-center space-y-2 rounded-lg border p-4 transition">
           <Avatar className="h-16 w-16">
             <AvatarImage src={contributor.avatar} alt={contributor.name} />
             <AvatarFallback>
               {contributor.name.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="text-center w-full">
-            <p className="text-sm font-medium truncate max-w-full">
+          <div className="w-full text-center">
+            <p className="max-w-full truncate text-sm font-medium">
               {contributor.name}
             </p>
           </div>
@@ -96,11 +99,11 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
               <img
                 src={contributor.avatar}
                 alt={contributor.name}
-                className="w-24 h-24 rounded-full"
+                className="h-24 w-24 rounded-full"
               />
             </div>
-            <div className="flex-1 min-w-0">
-              <ul className="list-disc list-inside text-sm space-y-1">
+            <div className="min-w-0 flex-1">
+              <ul className="list-inside list-disc space-y-1 text-sm">
                 {Array.isArray(contributor.subtitle) &&
                   contributor.subtitle.map((desc, idx) => (
                     <li key={idx}>{desc}</li>
@@ -108,40 +111,47 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
               </ul>
             </div>
           </div>
-          
+
           {/* Profile */}
           {contributor.profile && (
             <>
               <Separator />
-              <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words">
+              <p className="text-muted-foreground text-sm break-words whitespace-pre-wrap">
                 {contributor.profile}
               </p>
             </>
           )}
-          
+
           {/* 主页 / 链接（图标 + 文本，居中） */}
-          {contributor.links && Array.isArray(contributor.links) && contributor.links.length > 0 ? (
+          {contributor.links &&
+          Array.isArray(contributor.links) &&
+          contributor.links.length > 0 ? (
             <div className="flex items-center justify-center gap-4">
-              {contributor.links.map((link: { icon: string; text?: string; url: string }, idx: number) => {
-                const IconComponent = Icons[link.icon as keyof typeof Icons];
-                return (
-                  <Link
-                    key={idx}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={link.text ?? link.icon}
-                    className="flex items-center gap-2 text-sm text-primary hover:underline"
-                  >
-                    {IconComponent ? (
-                      <IconComponent className="h-5 w-5" />
-                    ) : (
-                      <Icons.externalLink className="h-5 w-5" />
-                    )}
-                    <span>{link.text ?? link.icon}</span>
-                  </Link>
-                );
-              })}
+              {contributor.links.map(
+                (
+                  link: { icon: string; text?: string; url: string },
+                  idx: number,
+                ) => {
+                  const IconComponent = Icons[link.icon as keyof typeof Icons];
+                  return (
+                    <Link
+                      key={idx}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={link.text ?? link.icon}
+                      className="text-primary flex items-center gap-2 text-sm hover:underline"
+                    >
+                      {IconComponent ? (
+                        <IconComponent className="h-5 w-5" />
+                      ) : (
+                        <Icons.externalLink className="h-5 w-5" />
+                      )}
+                      <span>{link.text ?? link.icon}</span>
+                    </Link>
+                  );
+                },
+              )}
             </div>
           ) : null}
         </div>

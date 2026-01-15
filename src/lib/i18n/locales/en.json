@@ -106,5 +106,11 @@
     "title": "Thanks to All Contributors",
     "description": "Meet the developers behind the project",
     "viewProfile": "View Profile"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for doesn’t exist, may have been moved or deleted.",
+    "goHome": "Back to Home",
+    "viewNews": "View News"
   }
 }

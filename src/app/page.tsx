@@ -19,9 +19,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   // Select data based on locale
   const isEnglish = locale === "en";
-  const slogan = isEnglish
-    ? projectConfig.slogan.en
-    : projectConfig.slogan.zh;
+  const slogan = isEnglish ? projectConfig.slogan.en : projectConfig.slogan.zh;
   const description = isEnglish
     ? projectConfig.description.en
     : projectConfig.description.zh;
@@ -47,7 +45,7 @@ export default async function Page({ searchParams }: PageProps) {
   // Fetch latest release from GitHub
   const release = await fetchLatestRelease(
     projectConfig.repo.owner,
-    projectConfig.repo.name
+    projectConfig.repo.name,
   );
 
   const latestRelease = release
@@ -62,14 +60,14 @@ export default async function Page({ searchParams }: PageProps) {
 
   // Find platform-specific download URLs
   const androidAsset = release?.assets.find((a) =>
-    a.name.includes("arm64-v8a-release.apk")
+    a.name.includes("arm64-v8a-release.apk"),
   );
   const iosUrl = platforms.find((p) => p.id === "ios")?.downloadUrl || "#";
   const windowsAsset = release?.assets.find((a) =>
-    a.name.includes("windows-release-amd64.zip")
+    a.name.includes("windows-release-amd64.zip"),
   );
   const linuxAsset = release?.assets.find((a) =>
-    a.name.includes("linux-release-amd64.zip")
+    a.name.includes("linux-release-amd64.zip"),
   );
 
   return (
@@ -135,7 +133,8 @@ export default async function Page({ searchParams }: PageProps) {
           downloadFor: dict.home.downloads.downloadFor,
           comingSoon: dict.home.downloads.comingSoon,
           unavailable: dict.home.downloads.unavailable,
-          windowsMaintenanceWarning: dict.home.downloads.windowsMaintenanceWarning,
+          windowsMaintenanceWarning:
+            dict.home.downloads.windowsMaintenanceWarning,
         }}
       />
 

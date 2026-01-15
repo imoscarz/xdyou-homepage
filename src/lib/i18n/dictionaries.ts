@@ -1,7 +1,5 @@
-import type { NextRequest } from "next/server";
-
 import type { Locale } from "./config";
-import { i18n } from "./config";
+import { resolveLocaleFromRequest } from "./resolve";
 
 const dictionaries = {
   zh: () => import("./locales/zh.json").then((module) => module.default),
@@ -22,22 +20,4 @@ export const getDictionary = async (locale: Locale) => {
  * Get locale from request query parameters or headers
  * Priority: query param `lang` > Accept-Language header > default locale
  */
-export const getLocaleFromRequest = (request: NextRequest): Locale => {
-  // 1. Check query parameter
-  const langParam = request.nextUrl.searchParams.get("lang");
-  if (langParam && i18n.locales.includes(langParam as Locale)) {
-    return langParam as Locale;
-  }
-
-  // 2. Check Accept-Language header (optional)
-  const acceptLanguage = request.headers.get("accept-language");
-  if (acceptLanguage) {
-    const preferredLang = acceptLanguage.split(",")[0]?.split("-")[0];
-    if (preferredLang && i18n.locales.includes(preferredLang as Locale)) {
-      return preferredLang as Locale;
-    }
-  }
-
-  // 3. Return default locale
-  return i18n.defaultLocale;
-};
+export const getLocaleFromRequest = resolveLocaleFromRequest;
