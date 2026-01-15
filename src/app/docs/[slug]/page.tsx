@@ -72,7 +72,11 @@ export default async function DocPage({ params }: PageProps) {
           </div>
           
           {doc.lastCommit && (
-            <DocLastEdit lastCommit={doc.lastCommit} />
+            <DocLastEdit
+              lastCommit={doc.lastCommit}
+              slug={slug}
+              docsRepo={projectConfig.docsRepo}
+            />
           )}
         </div>
       </BlurFade>

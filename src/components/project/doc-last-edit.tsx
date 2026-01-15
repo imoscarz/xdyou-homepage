@@ -1,10 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Icons } from "@/components/icons";
 import { formatRelativeTime, type GitHubCommit } from "@/lib/github";
 
 type DocLastEditProps = {
   lastCommit: GitHubCommit;
+  slug: string;
+  docsRepo: {
+    owner: string;
+    name: string;
+    branch: string;
+  };
   locale?: string;
 };
 
@@ -12,10 +19,16 @@ type DocLastEditProps = {
  * 文档最后编辑信息组件
  * 显示最后一次编辑的时间和编辑者信息
  */
-export default function DocLastEdit({ lastCommit, locale = "zh-CN" }: DocLastEditProps) {
+export default function DocLastEdit({
+  lastCommit,
+  slug,
+  docsRepo,
+  locale = "zh-CN",
+}: DocLastEditProps) {
   const author = lastCommit.author;
   const commitDate = lastCommit.commit.author.date;
   const relativeTime = formatRelativeTime(commitDate, locale);
+  const githubUrl = `https://github.com/${docsRepo.owner}/${docsRepo.name}/blob/${docsRepo.branch}/contents/docs/${slug}.md`;
 
   return (
     <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -51,6 +64,18 @@ export default function DocLastEdit({ lastCommit, locale = "zh-CN" }: DocLastEdi
           title={new Date(commitDate).toLocaleString(locale)}
         >
           {relativeTime}
+        </Link>
+        
+        <span>•</span>
+        
+        <Link
+          href={githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+        >
+          <Icons.externalLink className="h-3 w-3" />
+          <span>在Github上查看</span>
         </Link>
     </div>
   );
