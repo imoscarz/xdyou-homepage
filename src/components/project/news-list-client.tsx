@@ -125,26 +125,34 @@ function DateRangePicker({
   };
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-3 p-3 sm:space-y-4 sm:p-4">
+      {/* Month Navigation */}
       <div className="flex items-center justify-between">
         <button
           onClick={prevMonth}
-          className="hover:bg-muted rounded p-1"
+          className="hover:bg-muted rounded-lg p-2 transition-colors sm:p-1"
           type="button"
+          aria-label="Previous month"
         >
-          ←
+          <svg className="h-5 w-5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
         </button>
-        <div className="text-sm font-semibold">{monthName}</div>
+        <div className="text-base font-semibold sm:text-sm">{monthName}</div>
         <button
           onClick={nextMonth}
-          className="hover:bg-muted rounded p-1"
+          className="hover:bg-muted rounded-lg p-2 transition-colors sm:p-1"
           type="button"
+          aria-label="Next month"
         >
-          →
+          <svg className="h-5 w-5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-muted-foreground">
+      {/* Weekday Headers */}
+      <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-muted-foreground sm:gap-0.5 sm:text-xs">
         <div>Su</div>
         <div>Mo</div>
         <div>Tu</div>
@@ -154,7 +162,8 @@ function DateRangePicker({
         <div>Sa</div>
       </div>
 
-      <div className="grid grid-cols-7 gap-1">
+      {/* Calendar Grid */}
+      <div className="grid grid-cols-7 gap-1 sm:gap-0.5">
         {monthDays.map((day, idx) =>
           day === null ? (
             <div key={`empty-${idx}`} />
@@ -162,12 +171,12 @@ function DateRangePicker({
             <button
               key={day}
               onClick={() => handleDayClick(day)}
-              className={`aspect-square rounded text-sm transition-colors ${
+              className={`aspect-square rounded text-sm font-medium transition-colors sm:text-xs ${
                 isStartDate(day)
-                  ? "bg-primary text-primary-foreground font-semibold"
+                  ? "bg-primary text-primary-foreground font-semibold hover:bg-primary/90"
                   : isInRange(day)
-                    ? "bg-secondary text-secondary-foreground"
-                    : "hover:bg-muted"
+                    ? "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    : "hover:bg-muted active:bg-muted/50"
               }`}
               type="button"
             >
@@ -177,35 +186,41 @@ function DateRangePicker({
         )}
       </div>
 
-      <div className="space-y-2">
-        <div className="flex gap-2 text-xs">
+      {/* Date Input Fields */}
+      <div className="space-y-3 sm:space-y-2">
+        <div className="flex gap-2 text-xs sm:text-xs">
           <div className="flex-1">
-            <div className="mb-1 text-muted-foreground">From</div>
+            <label className="mb-2 block text-sm font-medium text-muted-foreground sm:mb-1 sm:text-xs">
+              From
+            </label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => onStartDateChange(e.target.value)}
-              className="border-input bg-background w-full rounded border px-2 py-1 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="border-input bg-background w-full rounded-lg border px-3 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-2 sm:py-1.5 sm:text-xs"
             />
           </div>
           <div className="flex-1">
-            <div className="mb-1 text-muted-foreground">To</div>
+            <label className="mb-2 block text-sm font-medium text-muted-foreground sm:mb-1 sm:text-xs">
+              To
+            </label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => onEndDateChange(e.target.value)}
-              className="border-input bg-background w-full rounded border px-2 py-1 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="border-input bg-background w-full rounded-lg border px-3 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-2 sm:py-1.5 sm:text-xs"
             />
           </div>
         </div>
       </div>
 
+      {/* Clear Button */}
       {(startDate || endDate) && (
         <Button
           variant="ghost"
           size="sm"
           onClick={onClear}
-          className="w-full"
+          className="h-9 w-full text-sm font-medium sm:h-8 sm:text-xs"
         >
           Clear
         </Button>
