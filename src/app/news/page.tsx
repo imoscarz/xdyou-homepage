@@ -95,6 +95,9 @@ export default async function NewsPage({ searchParams }: PageProps) {
           locale={locale}
           dict={{
             search: dict.news.search,
+            searchTags: dict.news.searchTags,
+            filterByTags: dict.news.filterByTags,
+            filterByDate: dict.news.filterByDate,
             readMore: dict.news.readMore,
             noNews: dict.news.noNews,
             by: dict.news.by,
