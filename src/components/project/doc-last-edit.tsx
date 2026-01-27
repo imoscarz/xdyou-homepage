@@ -31,8 +31,8 @@ export default function DocLastEdit({
   const githubUrl = `https://github.com/${docsRepo.owner}/${docsRepo.name}/blob/${docsRepo.branch}/contents/docs/${slug}.md`;
 
   return (
-    <div className="text-muted-foreground flex items-center gap-3 text-sm">
-      <span>最后更新：</span>
+    <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
+      <span className="whitespace-nowrap">最后更新：</span>
 
       {author ? (
         <Link
@@ -54,28 +54,29 @@ export default function DocLastEdit({
         <span className="font-medium">{lastCommit.commit.author.name}</span>
       )}
 
-      <span>•</span>
+      <span className="hidden sm:inline">•</span>
 
       <Link
         href={lastCommit.html_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="hover:text-foreground transition-colors"
+        className="hover:text-foreground whitespace-nowrap transition-colors"
         title={new Date(commitDate).toLocaleString(locale)}
       >
         {relativeTime}
       </Link>
 
-      <span>•</span>
+      <span className="hidden sm:inline">•</span>
 
       <Link
         href={githubUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="hover:text-foreground inline-flex items-center gap-1 transition-colors"
+        className="hover:text-foreground inline-flex items-center gap-1 whitespace-nowrap transition-colors"
       >
         <Icons.externalLink className="h-3 w-3" />
-        <span>在Github上查看</span>
+        <span className="hidden sm:inline">在Github上查看</span>
+        <span className="sm:hidden">查看</span>
       </Link>
     </div>
   );

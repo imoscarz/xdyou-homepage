@@ -196,8 +196,31 @@ code {
   @apply text-sm leading-loose! md:text-base;
 }
 
+/* 行号相关样式仅应用于代码块（pre > code），不影响 inline code */
 pre > code {
   counter-reset: line;
+}
+
+pre > code[data-line-numbers] {
+  counter-reset: line;
+}
+
+pre > code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  @apply mr-4 inline-block w-4 text-right text-gray-500;
+}
+
+pre > code > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+
+  /* Other styling */
+  display: inline-block;
+  width: 1rem;
+  margin-right: 2rem;
+  text-align: right;
+  color: gray;
 }
 
 code[data-theme*="light"],
@@ -214,37 +237,11 @@ code[data-theme*="light"] span {
   }
 }
 
-code[data-line-numbers] {
-  counter-reset: line;
-}
-
-code[data-line-numbers] > [data-line]::before {
-  counter-increment: line;
-  content: counter(line);
-  @apply mr-4 inline-block w-4 text-right text-gray-500;
-}
-
-code {
-  counter-reset: line;
-}
-
-code > [data-line]::before {
-  counter-increment: line;
-  content: counter(line);
-
-  /* Other styling */
-  display: inline-block;
-  width: 1rem;
-  margin-right: 2rem;
-  text-align: right;
-  color: gray;
-}
-
-code[data-line-numbers-max-digits="2"] > [data-line]::before {
+pre > code[data-line-numbers-max-digits="2"] > [data-line]::before {
   width: 2rem;
 }
 
-code[data-line-numbers-max-digits="3"] > [data-line]::before {
+pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
   width: 3rem;
 }
 

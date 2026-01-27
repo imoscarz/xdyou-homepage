@@ -253,7 +253,9 @@ export function CustomCode({
     : String(children ?? "").replace(/\n$/, "");
   const [copied, setCopied] = useState(false);
 
-  const isInline = inline ?? (!match && !/\r|\n/.test(codeString));
+  // Explicitly check inline prop first - if it's explicitly true, always render as inline
+  // Otherwise, only treat as code block if there's a language match or multiline content
+  const isInline = inline === true || (inline !== false && !match && !/\r|\n/.test(codeString));
 
   if (isInline) {
     return (
