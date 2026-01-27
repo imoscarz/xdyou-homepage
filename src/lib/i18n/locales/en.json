@@ -1,4 +1,17 @@
 {
+  "common": {
+    "language": {
+      "zh": "CN",
+      "en": "EN"
+    },
+    "time": {
+      "today": "Today",
+      "daysAgo": "d ago",
+      "weeksAgo": "w ago",
+      "monthsAgo": "mo ago",
+      "yearsAgo": "y ago"
+    }
+  },
   "nav": {
     "home": "Home",
     "docs": "Docs",
@@ -44,7 +57,9 @@
     "title": "News & Announcements",
     "description": "Latest updates about XDYou project",
     "search": "Search news...",
-    "filter": "Filter",
+    "searchTags": "Search tags...",
+    "filterByTags": "Filter by Tags",
+    "filterByDate": "Filter by Date",
     "readMore": "Read More",
     "noNews": "No news available",
     "loadMore": "Load More",
@@ -74,6 +89,8 @@
     "menu": "Menu",
     "search": "Search docs...",
     "noDocs": "No documentation available",
+    "comingSoon": "Documentation is coming soon. Please visit our GitHub repository for detailed information.",
+    "chineseOnlyNotice": "Note: Documentation is currently available in Chinese only. We are working on English translations.",
     "editOnGitHub": "Edit on GitHub"
   },
   "footer": {
@@ -106,5 +123,11 @@
     "title": "Thanks to All Contributors",
     "description": "Meet the developers behind the project",
     "viewProfile": "View Profile"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for doesn’t exist, may have been moved or deleted.",
+    "goHome": "Back to Home",
+    "viewNews": "View News"
   }
 }

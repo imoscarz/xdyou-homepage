@@ -1,13 +1,14 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import DocContent from "@/components/project/doc-content";
 import DocLastEdit from "@/components/project/doc-last-edit";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { getAllDocSlugs, getDocBySlugWithCommit } from "@/lib/docs";
 import { getDictionary } from "@/lib/i18n";
-import { extractHeadings, renderMarkdownToHTML } from "@/lib/markdown-server";
+import { PAGE_CONTAINER_CLASSES } from "@/lib/page-helpers";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -56,12 +57,8 @@ export default async function DocPage({ params }: PageProps) {
     notFound();
   }
 
-  // 服务端渲染 Markdown - 无需客户端 JS
-  const htmlContent = await renderMarkdownToHTML(doc.content);
-  const headings = extractHeadings(doc.content);
-
   return (
-    <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20">
+    <main className={PAGE_CONTAINER_CLASSES.docs}>
       <BlurFade delay={BLUR_FADE_DELAY}>
         <div className="space-y-4">
           <div className="space-y-2">
@@ -85,35 +82,14 @@ export default async function DocPage({ params }: PageProps) {
         </div>
       </BlurFade>
 
-      {/* 网格布局：内容 + 目录侧边栏 */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8 mt-8">
-        {/* 主要内容：服务端渲染的 HTML */}
-        <article
-          className="prose prose-neutral dark:prose-invert max-w-none"
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
+      <BlurFade delay={BLUR_FADE_DELAY * 2}>
+        <DocContent
+          content={doc.content}
+          dict={{
+            toc: dict.releases.toc,
+          }}
         />
-        
-        {/* 目录侧边栏（仅在大屏显示） */}
-        {headings.length > 0 && (
-          <aside className="hidden lg:block">
-            <nav className="sticky top-4">
-              <h3 className="text-sm font-semibold mb-3">{dict.releases.toc}</h3>
-              <ul className="space-y-1 text-sm">
-                {headings.map((heading) => (
-                  <li key={heading.id} style={{ marginLeft: `${(heading.level - 1) * 12}px` }}>
-                    <a
-                      href={`#${heading.id}`}
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {heading.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </aside>
-        )}
-      </div>
+      </BlurFade>
     </main>
   );
 }

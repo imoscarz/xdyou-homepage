@@ -1,9 +1,8 @@
-import { Metadata } from "next";
 import Link from "next/link";
 
 import { Icons } from "@/components/icons";
+import { PageHeaderWithActions } from "@/components/layout/page-header";
 import NewsListClient from "@/components/project/news-list-client";
-import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -13,28 +12,24 @@ import {
 } from "@/components/ui/tooltip";
 import { siteConfig } from "@/config/site";
 import { BLUR_FADE_DELAY } from "@/data";
-import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
 import { getAllNewsPosts } from "@/lib/news";
+import {
+  generateSimpleMetadata,
+  getPageI18n,
+  PAGE_CONTAINER_CLASSES,
+  type PageProps,
+} from "@/lib/page-helpers";
 
-type PageProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
-export async function generateMetadata({
-  searchParams,
-}: PageProps): Promise<Metadata> {
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
-
-  return {
-    title: dict.news.title,
-    description: dict.news.description,
-  };
+export async function generateMetadata({ searchParams }: PageProps) {
+  return generateSimpleMetadata(
+    searchParams,
+    "news.title",
+    "news.description",
+  );
 }
 
 export default async function NewsPage({ searchParams }: PageProps) {
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
+  const { locale, dict } = await getPageI18n(searchParams);
 
   // Get all news posts
   const allPosts = await getAllNewsPosts();
@@ -43,73 +38,55 @@ export default async function NewsPage({ searchParams }: PageProps) {
   const posts = allPosts.filter((post) => post.lang === locale);
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20 xl:px-32 xl:py-24">
-      {/* Header */}
-      <section className="space-y-4">
-        <BlurFade delay={BLUR_FADE_DELAY}>
-          <div className="flex items-start justify-between gap-4">
-            <div className="space-y-2 flex-1">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                {dict.news.title}
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                {dict.news.description}
-              </p>
-            </div>
-            
+    <main className={PAGE_CONTAINER_CLASSES.standard}>
+      <PageHeaderWithActions
+        title={dict.news.title}
+        description={dict.news.description}
+        actions={
+          <>
             {/* RSS Subscribe Buttons */}
-            <div className="flex gap-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      asChild
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" asChild>
+                    <Link
+                      href={`${siteConfig.url}/api/news/rss?lang=${locale}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="RSS Feed"
                     >
-                      <Link
-                        href={`${siteConfig.url}/api/news/rss?lang=${locale}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="RSS Feed"
-                      >
-                        <Icons.rss className="h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>RSS Feed</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                      <Icons.rss className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>RSS Feed</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      asChild
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" asChild>
+                    <Link
+                      href={`${siteConfig.url}/api/news/atom?lang=${locale}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Atom Feed"
                     >
-                      <Link
-                        href={`${siteConfig.url}/api/news/atom?lang=${locale}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Atom Feed"
-                      >
-                        <Icons.atom className="h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Atom Feed</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          </div>
-        </BlurFade>
-      </section>
+                      <Icons.atom className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Atom Feed</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </>
+        }
+      />
 
       {/* News List */}
       <section>
@@ -118,6 +95,9 @@ export default async function NewsPage({ searchParams }: PageProps) {
           locale={locale}
           dict={{
             search: dict.news.search,
+            searchTags: dict.news.searchTags,
+            filterByTags: dict.news.filterByTags,
+            filterByDate: dict.news.filterByDate,
             readMore: dict.news.readMore,
             noNews: dict.news.noNews,
             by: dict.news.by,

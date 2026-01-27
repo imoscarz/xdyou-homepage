@@ -445,7 +445,3 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
     transform: translateX(0);
   }
 }
-
-/* ======================== */
-/* Markdown 服务端渲染样式  */
-/* ======================== */

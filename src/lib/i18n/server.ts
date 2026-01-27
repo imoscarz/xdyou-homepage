@@ -1,5 +1,5 @@
 import type { Locale } from "./config";
-import { i18n } from "./config";
+import { resolveLocaleFromSearchParams } from "./resolve";
 
 /**
  * Get locale from searchParams (use in Server Components)
@@ -17,12 +17,5 @@ export async function getLocaleFromSearchParams(
     | { [key: string]: string | string[] | undefined }
     | Promise<{ [key: string]: string | string[] | undefined }>,
 ): Promise<Locale> {
-  const params = await searchParams;
-  const lang = params.lang;
-
-  if (typeof lang === "string" && i18n.locales.includes(lang as Locale)) {
-    return lang as Locale;
-  }
-
-  return i18n.defaultLocale;
+  return resolveLocaleFromSearchParams(searchParams);
 }

@@ -86,19 +86,22 @@ export default function DownloadClient({
 
           return (
             <BlurFade key={platform.id} delay={delay + idx * 0.05}>
-              <Card className={`${!platform.available ? "opacity-60" : "hover:scale-105"}`}>
+              <Card
+                className={`${!platform.available ? "opacity-60" : "hover:scale-105"}`}
+              >
                 <CardContent className="flex flex-col items-center justify-center space-y-3 p-6">
                   <Icon className="text-primary size-12" />
                   <h3 className="text-lg font-semibold">{platform.name}</h3>
 
                   {/* Windows维护警告 */}
-                  {(platform.id === "windows" || platform.id === "linux") && dict.windowsMaintenanceWarning && (
-                    <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
-                      <p className="text-xs text-yellow-800 dark:text-yellow-100">
-                        ⚠️ {dict.windowsMaintenanceWarning}
-                      </p>
-                    </div>
-                  )}
+                  {(platform.id === "windows" || platform.id === "linux") &&
+                    dict.windowsMaintenanceWarning && (
+                      <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 p-3 dark:border-yellow-900 dark:bg-yellow-950">
+                        <p className="text-xs text-yellow-800 dark:text-yellow-100">
+                          ⚠️ {dict.windowsMaintenanceWarning}
+                        </p>
+                      </div>
+                    )}
 
                   {platform.available ? (
                     <>
@@ -156,7 +159,10 @@ export default function DownloadClient({
                       )}
                     </>
                   ) : (
-                    <Badge variant="secondary" className="w-full justify-center">
+                    <Badge
+                      variant="secondary"
+                      className="w-full justify-center"
+                    >
                       {platform.comingSoon ? dict.comingSoon : dict.unavailable}
                     </Badge>
                   )}
@@ -168,7 +174,7 @@ export default function DownloadClient({
       </div>
 
       {/* 平板端: 两列 */}
-      <div className="hidden sm:grid lg:hidden grid-cols-2 gap-4">
+      <div className="hidden grid-cols-2 gap-4 sm:grid lg:hidden">
         {platforms.map((platform, idx) => {
           const Icon = Icons[platform.icon];
           const platformVersions = getPlatformAssets(platform.id);
@@ -176,19 +182,22 @@ export default function DownloadClient({
 
           return (
             <BlurFade key={platform.id} delay={delay + idx * 0.05}>
-              <Card className={`${!platform.available ? "opacity-60" : "hover:scale-105"}`}>
+              <Card
+                className={`${!platform.available ? "opacity-60" : "hover:scale-105"}`}
+              >
                 <CardContent className="flex flex-col items-center justify-center space-y-3 p-6">
                   <Icon className="text-primary size-12" />
                   <h3 className="text-lg font-semibold">{platform.name}</h3>
 
                   {/* Windows维护警告 */}
-                  {(platform.id === "windows" || platform.id === "linux") && dict.windowsMaintenanceWarning && (
-                    <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
-                      <p className="text-xs text-yellow-800 dark:text-yellow-100">
-                        ⚠️ {dict.windowsMaintenanceWarning}
-                      </p>
-                    </div>
-                  )}
+                  {(platform.id === "windows" || platform.id === "linux") &&
+                    dict.windowsMaintenanceWarning && (
+                      <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 p-3 dark:border-yellow-900 dark:bg-yellow-950">
+                        <p className="text-xs text-yellow-800 dark:text-yellow-100">
+                          ⚠️ {dict.windowsMaintenanceWarning}
+                        </p>
+                      </div>
+                    )}
 
                   {platform.available ? (
                     <>
@@ -246,7 +255,10 @@ export default function DownloadClient({
                       )}
                     </>
                   ) : (
-                    <Badge variant="secondary" className="w-full justify-center">
+                    <Badge
+                      variant="secondary"
+                      className="w-full justify-center"
+                    >
                       {platform.comingSoon ? dict.comingSoon : dict.unavailable}
                     </Badge>
                   )}
@@ -258,22 +270,17 @@ export default function DownloadClient({
       </div>
 
       {/* 桌面端: Flex 三列布局 */}
-      <div className="hidden lg:flex gap-4 items-stretch">
+      <div className="hidden items-stretch gap-4 lg:flex">
         {/* Android 列 */}
-        <div className="flex-1 flex">
-          <BlurFade delay={delay} key="android" className="w-full flex">
-            <Card className="w-full hover:scale-105 flex flex-col">
-              <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
+        <div className="flex flex-1">
+          <BlurFade delay={delay} key="android" className="flex w-full">
+            <Card className="flex w-full flex-col hover:scale-105">
+              <CardContent className="flex flex-1 flex-col items-center justify-center gap-3 p-6">
                 <Icons.smartphone className="text-primary size-12" />
                 <h3 className="text-lg font-semibold">Android</h3>
                 <div className="w-full space-y-2">
                   {getPlatformAssets("android").map((asset) => (
-                    <Button
-                      key={asset.id}
-                      asChild
-                      size="sm"
-                      className="w-full"
-                    >
+                    <Button key={asset.id} asChild size="sm" className="w-full">
                       <Link
                         href={asset.browser_download_url}
                         target="_blank"
@@ -283,16 +290,16 @@ export default function DownloadClient({
                       </Link>
                     </Button>
                   )) || (
-                      <Button asChild size="sm" className="w-full">
-                        <Link
-                          href={platforms[0]?.downloadUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {dict.downloadFor}
-                        </Link>
-                      </Button>
-                    )}
+                    <Button asChild size="sm" className="w-full">
+                      <Link
+                        href={platforms[0]?.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {dict.downloadFor}
+                      </Link>
+                    </Button>
+                  )}
                   <Button
                     asChild
                     variant="outline"
@@ -314,14 +321,14 @@ export default function DownloadClient({
         </div>
 
         {/* 中间列: iOS(上方) 和 Windows(下方) */}
-        <div className="flex-1 flex flex-col gap-4">
+        <div className="flex flex-1 flex-col gap-4">
           {/* iOS */}
           <BlurFade delay={delay + 0.05} key="ios">
-            <Card className="flex-1 hover:scale-105 flex flex-col">
-              <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
+            <Card className="flex flex-1 flex-col hover:scale-105">
+              <CardContent className="flex flex-1 flex-col items-center justify-center gap-3 p-6">
                 <Icons.apple className="text-primary size-12" />
                 <h3 className="text-lg font-semibold">iOS</h3>
-                <div className="w-full flex-1 flex items-end">
+                <div className="flex w-full flex-1 items-end">
                   <Button asChild size="sm" className="w-full">
                     <Link
                       href="https://apps.apple.com/us/app/xdyou/id6461723688?l=zh-Hans-CN"
@@ -338,12 +345,12 @@ export default function DownloadClient({
 
           {/* Windows */}
           <BlurFade delay={delay + 0.1} key="windows">
-            <Card className="flex-1 hover:scale-105 flex flex-col">
-              <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
+            <Card className="flex flex-1 flex-col hover:scale-105">
+              <CardContent className="flex flex-1 flex-col items-center justify-center gap-3 p-6">
                 <Icons.laptop className="text-primary size-12" />
                 <h3 className="text-lg font-semibold">Windows</h3>
                 {dict.windowsMaintenanceWarning && (
-                  <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
+                  <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 p-3 dark:border-yellow-900 dark:bg-yellow-950">
                     <p className="text-xs text-yellow-800 dark:text-yellow-100">
                       ⚠️ {dict.windowsMaintenanceWarning}
                     </p>
@@ -351,12 +358,7 @@ export default function DownloadClient({
                 )}
                 <div className="w-full space-y-2">
                   {getPlatformAssets("windows").map((asset) => (
-                    <Button
-                      key={asset.id}
-                      asChild
-                      size="sm"
-                      className="w-full"
-                    >
+                    <Button key={asset.id} asChild size="sm" className="w-full">
                       <Link
                         href={asset.browser_download_url}
                         target="_blank"
@@ -366,16 +368,16 @@ export default function DownloadClient({
                       </Link>
                     </Button>
                   )) || (
-                      <Button asChild size="sm" className="w-full">
-                        <Link
-                          href={platforms[2]?.downloadUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {dict.downloadFor}
-                        </Link>
-                      </Button>
-                    )}
+                    <Button asChild size="sm" className="w-full">
+                      <Link
+                        href={platforms[2]?.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {dict.downloadFor}
+                      </Link>
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -383,14 +385,14 @@ export default function DownloadClient({
         </div>
 
         {/* Linux 列 */}
-        <div className="flex-1 flex">
-          <BlurFade delay={delay + 0.15} key="linux" className="w-full flex">
-            <Card className="w-full hover:scale-105 flex flex-col">
-              <CardContent className="flex flex-col items-center justify-center gap-3 p-6 flex-1">
+        <div className="flex flex-1">
+          <BlurFade delay={delay + 0.15} key="linux" className="flex w-full">
+            <Card className="flex w-full flex-col hover:scale-105">
+              <CardContent className="flex flex-1 flex-col items-center justify-center gap-3 p-6">
                 <Icons.computer className="text-primary size-12" />
                 <h3 className="text-lg font-semibold">Linux</h3>
                 {dict.windowsMaintenanceWarning && (
-                  <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950 p-3">
+                  <div className="w-full rounded-md border border-yellow-200 bg-yellow-50 p-3 dark:border-yellow-900 dark:bg-yellow-950">
                     <p className="text-xs text-yellow-800 dark:text-yellow-100">
                       ⚠️ {dict.windowsMaintenanceWarning}
                     </p>
@@ -398,12 +400,7 @@ export default function DownloadClient({
                 )}
                 <div className="w-full space-y-2">
                   {getPlatformAssets("linux").map((asset) => (
-                    <Button
-                      key={asset.id}
-                      asChild
-                      size="sm"
-                      className="w-full"
-                    >
+                    <Button key={asset.id} asChild size="sm" className="w-full">
                       <Link
                         href={asset.browser_download_url}
                         target="_blank"
@@ -413,16 +410,16 @@ export default function DownloadClient({
                       </Link>
                     </Button>
                   )) || (
-                      <Button asChild size="sm" className="w-full">
-                        <Link
-                          href={platforms[3]?.downloadUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {dict.downloadFor}
-                        </Link>
-                      </Button>
-                    )}
+                    <Button asChild size="sm" className="w-full">
+                      <Link
+                        href={platforms[3]?.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {dict.downloadFor}
+                      </Link>
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>

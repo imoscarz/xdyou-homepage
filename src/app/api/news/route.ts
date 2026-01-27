@@ -1,19 +1,15 @@
 import { NextResponse } from "next/server";
 
 import { siteConfig } from "@/config/site";
-import { getAllNewsPosts } from "@/lib/news";
+import {
+  API_CACHE_HEADERS,
+  apiErrorResponse,
+  getFilteredNewsPosts,
+} from "@/lib/api-helpers";
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const lang = searchParams.get("lang");
-    
-    let posts = await getAllNewsPosts();
-    
-    // 根据语言筛选
-    if (lang) {
-      posts = posts.filter((post) => post.lang === lang);
-    }
+    const { posts, lang } = await getFilteredNewsPosts(request);
 
     return NextResponse.json(
       {
@@ -31,16 +27,10 @@ export async function GET(request: Request) {
         lang: lang || "all",
       },
       {
-        headers: {
-          "Cache-Control": "s-maxage=3600, stale-while-revalidate",
-        },
-      }
+        headers: API_CACHE_HEADERS,
+      },
     );
   } catch (error) {
-    console.error("Error fetching news posts:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch news posts" },
-      { status: 500 }
-    );
+    return apiErrorResponse("Failed to fetch news posts", error);
   }
 }

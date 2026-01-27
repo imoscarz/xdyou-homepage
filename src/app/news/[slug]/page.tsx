@@ -3,15 +3,15 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
+import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
 import { BLUR_FADE_DELAY } from "@/data";
-import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
-import { renderMarkdownToHTML } from "@/lib/markdown-server";
 import { getAllNewsPosts, getNewsPost } from "@/lib/news";
+import { getPageI18n, PAGE_CONTAINER_CLASSES } from "@/lib/page-helpers";
 
-type PageProps = {
+type NewsPostPageProps = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
@@ -25,7 +25,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps): Promise<Metadata> {
+}: NewsPostPageProps): Promise<Metadata> {
   const { slug } = await params;
   // Try exact slug first
   let post = await getNewsPost(slug);
@@ -54,10 +54,9 @@ export async function generateMetadata({
 export default async function NewsPostPage({
   params,
   searchParams,
-}: PageProps) {
+}: NewsPostPageProps) {
   const { slug } = await params;
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
+  const { locale, dict } = await getPageI18n(searchParams);
 
   // Try exact slug first
   const post = await getNewsPost(slug);
@@ -75,11 +74,8 @@ export default async function NewsPostPage({
     notFound();
   }
 
-  // 服务端渲染 Markdown - 不使用客户端库
-  const htmlContent = await renderMarkdownToHTML(post.content);
-
   return (
-    <main className="mx-auto flex min-h-dvh max-w-4xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20">
+    <main className={PAGE_CONTAINER_CLASSES.article}>
       {/* Back Button */}
       <BlurFade delay={BLUR_FADE_DELAY}>
         <Button asChild variant="ghost" size="sm" className="w-fit">
@@ -111,12 +107,11 @@ export default async function NewsPostPage({
           </div>
         </BlurFade>
 
-        {/* Article Content - 服务端渲染 HTML */}
+        {/* Article Content */}
         <BlurFade delay={BLUR_FADE_DELAY * 3}>
-          <div
-            className="prose prose-lg dark:prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
-          />
+          <div className="prose prose-lg dark:prose-invert max-w-none">
+            <CustomReactMarkdown>{post.content}</CustomReactMarkdown>
+          </div>
         </BlurFade>
       </article>
     </main>

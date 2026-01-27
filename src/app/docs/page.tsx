@@ -1,50 +1,46 @@
-import { Metadata } from "next";
 import Link from "next/link";
 
+import { PageHeader } from "@/components/layout/page-header";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BLUR_FADE_DELAY } from "@/data";
 import { getDocsByCategory } from "@/lib/docs";
-import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
+import {
+  generateSimpleMetadata,
+  getPageI18n,
+  PAGE_CONTAINER_CLASSES,
+  type PageProps,
+} from "@/lib/page-helpers";
 
-type PageProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
-export async function generateMetadata({
-  searchParams,
-}: PageProps): Promise<Metadata> {
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
-
-  return {
-    title: dict.docs.title,
-    description: dict.docs.description,
-  };
+export async function generateMetadata({ searchParams }: PageProps) {
+  return generateSimpleMetadata(
+    searchParams,
+    "docs.title",
+    "docs.description",
+  );
 }
 
 export default async function DocsPage({ searchParams }: PageProps) {
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
+  const { locale, dict } = await getPageI18n(searchParams);
 
   // 从文件系统读取文档
   const docsByCategory = getDocsByCategory();
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20 xl:px-32 xl:py-24">
-      {/* Header */}
-      <section className="space-y-4">
-        <BlurFade delay={BLUR_FADE_DELAY}>
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              {dict.docs.title}
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              {dict.docs.description}
-            </p>
-          </div>
-        </BlurFade>
-      </section>
+    <main className={PAGE_CONTAINER_CLASSES.standard}>
+      <PageHeader
+        title={dict.docs.title}
+        description={dict.docs.description}
+      />
+
+      {/* Chinese Only Notice for English users */}
+      {locale === "en" && dict.docs.chineseOnlyNotice && (
+        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/30">
+          <p className="text-sm text-blue-800 dark:text-blue-200">
+            ℹ️ {dict.docs.chineseOnlyNotice}
+          </p>
+        </div>
+      )}
 
       {/* Docs Grid */}
       <section className="space-y-12">
@@ -80,9 +76,7 @@ export default async function DocsPage({ searchParams }: PageProps) {
             <Card className="bg-muted/50">
               <CardContent className="p-8 text-center">
                 <p className="text-muted-foreground">
-                  {locale === "en"
-                    ? "Documentation is coming soon. Please visit our GitHub repository for detailed information."
-                    : "文档即将推出。请访问我们的GitHub仓库获取详细信息。"}
+                  {dict.docs.comingSoon}
                 </p>
               </CardContent>
             </Card>

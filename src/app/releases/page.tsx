@@ -1,31 +1,25 @@
-import { Metadata } from "next";
-
+import { PageHeader } from "@/components/layout/page-header";
 import ReleasesClient from "@/components/project/releases-client";
-import { BlurFade } from "@/components/ui/blur-fade";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { fetchGitHubReleases } from "@/lib/github";
-import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
+import {
+  generateSimpleMetadata,
+  getPageI18n,
+  PAGE_CONTAINER_CLASSES,
+  type PageProps,
+} from "@/lib/page-helpers";
 
-type PageProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
-export async function generateMetadata({
-  searchParams,
-}: PageProps): Promise<Metadata> {
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
-
-  return {
-    title: dict.releases.title,
-    description: dict.releases.description,
-  };
+export async function generateMetadata({ searchParams }: PageProps) {
+  return generateSimpleMetadata(
+    searchParams,
+    "releases.title",
+    "releases.description",
+  );
 }
 
 export default async function ReleasesPage({ searchParams }: PageProps) {
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
+  const { dict } = await getPageI18n(searchParams);
 
   // Fetch releases from GitHub
   const releases = await fetchGitHubReleases(
@@ -35,20 +29,11 @@ export default async function ReleasesPage({ searchParams }: PageProps) {
   );
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20 xl:px-32 xl:py-24">
-      {/* Header */}
-      <section className="space-y-4">
-        <BlurFade delay={BLUR_FADE_DELAY}>
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              {dict.releases.title}
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              {dict.releases.description}
-            </p>
-          </div>
-        </BlurFade>
-      </section>
+    <main className={PAGE_CONTAINER_CLASSES.standard}>
+      <PageHeader
+        title={dict.releases.title}
+        description={dict.releases.description}
+      />
 
       {/* Releases List */}
       <section>

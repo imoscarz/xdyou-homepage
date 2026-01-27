@@ -21,9 +21,10 @@ interface CustomReactMarkdownProps {
 }
 
 // Ensure theme type satisfies react-syntax-highlighter props
-const prismTheme: { [key: string]: React.CSSProperties } = oneDark as unknown as {
-  [key: string]: React.CSSProperties;
-};
+const prismTheme: { [key: string]: React.CSSProperties } =
+  oneDark as unknown as {
+    [key: string]: React.CSSProperties;
+  };
 
 // Generate stable heading IDs (matches doc-toc logic)
 function generateHeadingId(text: string): string {
@@ -204,7 +205,10 @@ function CustomParagraph({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const props = child.props as any;
       // Check if it's a code block (non-inline code)
-      if (type?.name === "CustomCode" || props?.className?.includes("language-")) {
+      if (
+        type?.name === "CustomCode" ||
+        props?.className?.includes("language-")
+      ) {
         return !props?.inline;
       }
     }
@@ -253,15 +257,14 @@ export function CustomCode({
     : String(children ?? "").replace(/\n$/, "");
   const [copied, setCopied] = useState(false);
 
-  const isInline =
-    inline ?? (!match && !/\r|\n/.test(codeString));
+  const isInline = inline ?? (!match && !/\r|\n/.test(codeString));
 
   if (isInline) {
     return (
       <code
         className={mergeClassNames(
           "not-prose bg-muted/50 rounded px-1.5 py-0.5 font-mono text-sm not-italic",
-          className
+          className,
         )}
         {...props}
       >
@@ -282,8 +285,8 @@ export function CustomCode({
   };
 
   return (
-    <div className="not-prose my-4 overflow-hidden rounded-lg border border-border">
-      <div className="bg-muted flex items-center justify-between border-b border-border px-4 py-2 text-xs">
+    <div className="not-prose border-border my-4 overflow-hidden rounded-lg border">
+      <div className="bg-muted border-border flex items-center justify-between border-b px-4 py-2 text-xs">
         <span className="text-muted-foreground font-mono tracking-wider uppercase">
           {language}
         </span>
@@ -335,46 +338,51 @@ function CustomBlockquote({
 
   // Try to find [!NOTE] pattern in the blockquote content
   const childrenArray = React.Children.toArray(children);
-  
+
   // Find the first non-whitespace React element
-  const firstElementIndex = childrenArray.findIndex(
-    child => React.isValidElement(child)
+  const firstElementIndex = childrenArray.findIndex((child) =>
+    React.isValidElement(child),
   );
-  
+
   if (firstElementIndex !== -1) {
     const firstChild = childrenArray[firstElementIndex];
-    
+
     if (React.isValidElement(firstChild)) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const childProps = firstChild.props as any;
-      
+
       if (childProps?.children) {
         const childContent = React.Children.toArray(childProps.children);
         const firstText = childContent[0];
-        
+
         // Check if first text contains the alert marker
         if (typeof firstText === "string") {
-          const match = firstText.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/);
-          
+          const match = firstText.match(
+            /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/,
+          );
+
           if (match) {
             alertType = match[1];
-            
+
             // Remove the alert marker from the first text
-            const newFirstText = firstText.replace(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/, "").trim();
-            
+            const newFirstText = firstText
+              .replace(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/, "")
+              .trim();
+
             // Reconstruct the content without the marker
-            const newChildContent = newFirstText 
+            const newChildContent = newFirstText
               ? [newFirstText, ...childContent.slice(1)]
               : childContent.slice(1);
-            
+
             // Create new first child with updated content
-            const newFirstChild = newChildContent.length > 0
-              ? React.cloneElement(firstChild, {
-                  ...childProps,
-                  children: newChildContent,
-                })
-              : null;
-            
+            const newFirstChild =
+              newChildContent.length > 0
+                ? React.cloneElement(firstChild, {
+                    ...childProps,
+                    children: newChildContent,
+                  })
+                : null;
+
             // Reconstruct all children, keeping whitespace structure
             const newChildren = [...childrenArray];
             if (newFirstChild) {
@@ -383,7 +391,7 @@ function CustomBlockquote({
               // Remove empty first child
               newChildren.splice(firstElementIndex, 1);
             }
-            
+
             alertContent = newChildren;
           }
         }
@@ -429,13 +437,13 @@ function CustomBlockquote({
     return (
       <blockquote
         className={`my-6 rounded-lg border border-l-4 p-5 ${style.border} ${style.bg} not-italic`}
-        style={{ quotes: 'none' }}
+        style={{ quotes: "none" }}
         {...props}
       >
         <div className="flex items-start gap-3">
           <span className="text-xl">{style.icon}</span>
           <div className="flex-1">
-            <div className="font-semibold mb-1">{style.title}</div>
+            <div className="mb-1 font-semibold">{style.title}</div>
             <div className="text-foreground leading-relaxed">
               {alertContent}
             </div>
@@ -447,13 +455,11 @@ function CustomBlockquote({
 
   return (
     <blockquote
-      className="border-l-blue-600 bg-card my-6 rounded-lg border border-l-4 p-5 shadow-sm not-italic"
-      style={{ quotes: 'none' }}
+      className="bg-card my-6 rounded-lg border border-l-4 border-l-blue-600 p-5 not-italic shadow-sm"
+      style={{ quotes: "none" }}
       {...props}
     >
-      <div className="text-muted-foreground leading-relaxed">
-        {children}
-      </div>
+      <div className="text-muted-foreground leading-relaxed">{children}</div>
     </blockquote>
   );
 }
@@ -468,7 +474,7 @@ function CustomLink({
   return (
     <Link
       href={href || "#"}
-      className="text-primary font-medium transition-colors hover:underline break-all"
+      className="text-primary font-medium break-all transition-colors hover:underline"
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       {...props}
@@ -515,12 +521,15 @@ function CustomLi({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
       React.isValidElement(child) &&
       child.type === "input" &&
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (child.props as any)?.type === "checkbox"
+      (child.props as any)?.type === "checkbox",
   );
 
   if (hasCheckbox) {
     return (
-      <li className="text-foreground leading-7 list-none flex items-start gap-2" {...props}>
+      <li
+        className="text-foreground flex list-none items-start gap-2 leading-7"
+        {...props}
+      >
         {children}
       </li>
     );
@@ -543,7 +552,7 @@ function CustomInput({
   if (type === "checkbox") {
     return (
       <span
-        className="inline-flex items-center justify-center flex-shrink-0 relative"
+        className="relative inline-flex flex-shrink-0 items-center justify-center"
         style={{ width: "16px", height: "16px", top: "2px" }}
       >
         <input
@@ -554,21 +563,15 @@ function CustomInput({
           {...props}
         />
         <span
-          className={`
-            flex items-center justify-center
-            w-4 h-4 rounded
-            border-2 transition-all duration-200
-            ${
-              checked
-                ? "bg-primary border-primary"
-                : "bg-background border-muted-foreground/30"
-            }
-            ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}
-          `}
+          className={`flex h-4 w-4 items-center justify-center rounded border-2 transition-all duration-200 ${
+            checked
+              ? "bg-primary border-primary"
+              : "bg-background border-muted-foreground/30"
+          } ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"} `}
         >
           {checked && (
             <svg
-              className="w-3 h-3 text-primary-foreground"
+              className="text-primary-foreground h-3 w-3"
               viewBox="0 0 16 16"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -596,11 +599,15 @@ function CustomTable({
   ...props
 }: React.HTMLAttributes<HTMLTableElement>) {
   return (
-      <div className="overflow-x-auto px-2">
-        <table className="divide-border min-w-full divide-y" style={{ borderSpacing: "16px 8px" }} {...props}>
-          {children}
-        </table>
-      </div>
+    <div className="overflow-x-auto px-2">
+      <table
+        className="divide-border min-w-full divide-y"
+        style={{ borderSpacing: "16px 8px" }}
+        {...props}
+      >
+        {children}
+      </table>
+    </div>
   );
 }
 
@@ -644,7 +651,7 @@ function CustomTh({
 }: React.HTMLAttributes<HTMLTableCellElement>) {
   return (
     <th
-      className={`text-foreground text-left text-sm font-semibold px-6 py-3 first:pl-8 last:pr-8 ${className}`}
+      className={`text-foreground px-6 py-3 text-left text-sm font-semibold first:pl-8 last:pr-8 ${className}`}
       {...props}
     >
       {children}
@@ -659,7 +666,7 @@ function CustomTd({
 }: React.HTMLAttributes<HTMLTableCellElement>) {
   return (
     <td
-      className={`text-foreground text-sm px-6 py-3 first:pl-8 last:pr-8 ${className}`}
+      className={`text-foreground px-6 py-3 text-sm first:pl-8 last:pr-8 ${className}`}
       {...props}
     >
       {children}
@@ -667,16 +674,13 @@ function CustomTd({
   );
 }
 
-
 // Horizontal rule
 function CustomHr(props: React.HTMLAttributes<HTMLHRElement>) {
   return <hr className="border-border my-8 border-t-2" {...props} />;
 }
 
 // Pre: Just pass through children to avoid prose styles
-function CustomPre({
-  children,
-}: React.HTMLAttributes<HTMLPreElement>) {
+function CustomPre({ children }: React.HTMLAttributes<HTMLPreElement>) {
   return <>{children}</>;
 }
 

@@ -6,7 +6,12 @@ import { contributors } from "@/config/contributors";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { fetchLatestRelease } from "@/lib/github";
-import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
+import {
+  getPageI18n,
+  PAGE_CONTAINER_CLASSES,
+  type PageProps,
+  selectLocalizedText,
+} from "@/lib/page-helpers";
 
 // 懒加载非首屏组件
 const ScreenshotsSection = dynamic(
@@ -22,28 +27,14 @@ const ContributorsSection = dynamic(
   { ssr: true }
 );
 
-type PageProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
 export default async function Page({ searchParams }: PageProps) {
-  const locale = await getLocaleFromSearchParams(searchParams);
-  const dict = await getDictionary(locale);
-
-  // Select data based on locale
-  const isEnglish = locale === "en";
-  const slogan = isEnglish
-    ? projectConfig.slogan.en
-    : projectConfig.slogan.zh;
-  const description = isEnglish
-    ? projectConfig.description.en
-    : projectConfig.description.zh;
+  const { locale, dict } = await getPageI18n(searchParams);
 
   // Prepare features with localized text
   const features = projectConfig.features.map((feature) => ({
     icon: feature.icon,
-    title: isEnglish ? feature.title.en : feature.title.zh,
-    description: isEnglish ? feature.description.en : feature.description.zh,
+    title: selectLocalizedText(locale, feature.title),
+    description: selectLocalizedText(locale, feature.description),
   }));
 
   // Prepare screenshots with localized captions
@@ -51,7 +42,7 @@ export default async function Page({ searchParams }: PageProps) {
     src: screenshot.src,
     alt: screenshot.alt,
     type: screenshot.type,
-    caption: isEnglish ? screenshot.caption.en : screenshot.caption.zh,
+    caption: selectLocalizedText(locale, screenshot.caption),
   }));
 
   // Prepare platforms
@@ -60,7 +51,7 @@ export default async function Page({ searchParams }: PageProps) {
   // Fetch latest release from GitHub
   const release = await fetchLatestRelease(
     projectConfig.repo.owner,
-    projectConfig.repo.name
+    projectConfig.repo.name,
   );
 
   const latestRelease = release
@@ -75,23 +66,23 @@ export default async function Page({ searchParams }: PageProps) {
 
   // Find platform-specific download URLs
   const androidAsset = release?.assets.find((a) =>
-    a.name.includes("arm64-v8a-release.apk")
+    a.name.includes("arm64-v8a-release.apk"),
   );
   const iosUrl = platforms.find((p) => p.id === "ios")?.downloadUrl || "#";
   const windowsAsset = release?.assets.find((a) =>
-    a.name.includes("windows-release-amd64.zip")
+    a.name.includes("windows-release-amd64.zip"),
   );
   const linuxAsset = release?.assets.find((a) =>
-    a.name.includes("linux-release-amd64.zip")
+    a.name.includes("linux-release-amd64.zip"),
   );
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-7xl flex-col space-y-16 px-6 py-8 pb-24 sm:space-y-20 sm:px-16 md:px-20 md:py-16 md:pt-14 lg:px-24 lg:py-20 xl:px-32 xl:py-24">
+    <main className={PAGE_CONTAINER_CLASSES.home}>
       {/* Hero Section */}
       <HeroSection
         projectName={projectConfig.fullName}
-        slogan={slogan}
-        description={description}
+        slogan={selectLocalizedText(locale, projectConfig.slogan)}
+        description={selectLocalizedText(locale, projectConfig.description)}
         logo={projectConfig.logo}
         androidUrl={
           androidAsset?.browser_download_url ||
@@ -145,7 +136,8 @@ export default async function Page({ searchParams }: PageProps) {
           downloadFor: dict.home.downloads.downloadFor,
           comingSoon: dict.home.downloads.comingSoon,
           unavailable: dict.home.downloads.unavailable,
-          windowsMaintenanceWarning: dict.home.downloads.windowsMaintenanceWarning,
+          windowsMaintenanceWarning:
+            dict.home.downloads.windowsMaintenanceWarning,
         }}
       />
 

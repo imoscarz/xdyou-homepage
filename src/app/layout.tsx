@@ -56,16 +56,16 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   // Also: opengraph-image.png, opengraph-image.alt.txt
   openGraph: {
-    title: `${DATA.chinese.name}`,
-    description: DATA.chinese.description,
+    title: DATA.name,
+    description: DATA.description,
     url: DATA.url,
-    siteName: `${DATA.chinese.name}`,
+    siteName: DATA.name,
     locale: "zh_CN",
     type: "website",
   },
   // Also: twitter-image.png, twitter-image.alt.txt
   twitter: {
-    title: `${DATA.chinese.name}`,
+    title: DATA.name,
     card: "summary_large_image",
   },
   alternates: {

@@ -31,52 +31,52 @@ export default function DocLastEdit({
   const githubUrl = `https://github.com/${docsRepo.owner}/${docsRepo.name}/blob/${docsRepo.branch}/contents/docs/${slug}.md`;
 
   return (
-    <div className="flex items-center gap-3 text-sm text-muted-foreground">
-        <span>最后更新：</span>
-        
-        {author ? (
-          <Link
-            href={author.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:text-foreground transition-colors"
-          >
-            <Image
-              src={author.avatar_url}
-              alt={author.login}
-              width={20}
-              height={20}
-              className="rounded-full"
-            />
-            <span className="font-medium">{author.login}</span>
-          </Link>
-        ) : (
-          <span className="font-medium">{lastCommit.commit.author.name}</span>
-        )}
-        
-        <span>•</span>
-        
+    <div className="text-muted-foreground flex items-center gap-3 text-sm">
+      <span>最后更新：</span>
+
+      {author ? (
         <Link
-          href={lastCommit.html_url}
+          href={author.html_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-foreground transition-colors"
-          title={new Date(commitDate).toLocaleString(locale)}
+          className="hover:text-foreground flex items-center gap-2 transition-colors"
         >
-          {relativeTime}
+          <Image
+            src={author.avatar_url}
+            alt={author.login}
+            width={20}
+            height={20}
+            className="rounded-full"
+          />
+          <span className="font-medium">{author.login}</span>
         </Link>
-        
-        <span>•</span>
-        
-        <Link
-          href={githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
-        >
-          <Icons.externalLink className="h-3 w-3" />
-          <span>在Github上查看</span>
-        </Link>
+      ) : (
+        <span className="font-medium">{lastCommit.commit.author.name}</span>
+      )}
+
+      <span>•</span>
+
+      <Link
+        href={lastCommit.html_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-foreground transition-colors"
+        title={new Date(commitDate).toLocaleString(locale)}
+      >
+        {relativeTime}
+      </Link>
+
+      <span>•</span>
+
+      <Link
+        href={githubUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-foreground inline-flex items-center gap-1 transition-colors"
+      >
+        <Icons.externalLink className="h-3 w-3" />
+        <span>在Github上查看</span>
+      </Link>
     </div>
   );
 }
