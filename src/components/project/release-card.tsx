@@ -4,7 +4,6 @@ import { ChevronDown, FileBox, FileCode, ScrollText, Tag } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
@@ -112,8 +111,8 @@ export default function ReleaseCard({
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <Card className="border-0 sm:border border-muted mt-2">
-                    <CardContent className="prose prose-sm dark:prose-invert max-w-none p-4">
-                      <CustomReactMarkdown>{release.body}</CustomReactMarkdown>
+                    <CardContent className="prose prose-sm dark:prose-invert max-w-none p-4 whitespace-pre-wrap text-sm">
+                      {release.body}
                     </CardContent>
                   </Card>
                 </CollapsibleContent>

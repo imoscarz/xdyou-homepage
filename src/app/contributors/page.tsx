@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 import { Icons } from "@/components/icons";
-import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
@@ -119,10 +118,8 @@ export default async function ContributorsPage({ searchParams }: PageProps) {
                 <>
                   <Separator />
                   <CardContent className="pt-6">
-                    <div className="prose prose-sm dark:prose-invert max-w-none">
-                      <CustomReactMarkdown>
-                        {contributor.profile}
-                      </CustomReactMarkdown>
+                    <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">
+                      {contributor.profile}
                     </div>
                   </CardContent>
                 </>

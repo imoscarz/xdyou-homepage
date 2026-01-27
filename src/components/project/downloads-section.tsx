@@ -4,7 +4,6 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 import DownloadClient from "@/components/project/download-client";
-import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -98,10 +97,8 @@ export default function DownloadsSection({
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pt-4">
-                  <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <CustomReactMarkdown>
-                      {latestRelease.notes}
-                    </CustomReactMarkdown>
+                  <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">
+                    {latestRelease.notes}
                   </div>
                 </CollapsibleContent>
               </Collapsible>
