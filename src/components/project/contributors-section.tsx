@@ -98,7 +98,20 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
             <div className="shrink-0">
               {/* 使用原生 img 标签，避免消耗 Vercel 图片优化限额 */}
               <img
-                src={contributor.avatar}
+                src={(function addSize(src: string) {
+                  try {
+                    const u = new URL(src);
+                    if (u.hostname === "avatars.githubusercontent.com") {
+                      if (!u.searchParams.has("s") && !u.searchParams.has("size")) {
+                        u.searchParams.set("s", "96");
+                      }
+                      return u.toString();
+                    }
+                  } catch {
+                    return src;
+                  }
+                  return src;
+                })(contributor.avatar)}
                 alt={contributor.name}
                 className="h-24 w-24 rounded-full"
                 loading="lazy"

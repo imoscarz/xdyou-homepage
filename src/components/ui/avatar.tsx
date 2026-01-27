@@ -49,7 +49,29 @@ function AvatarImage({ src, alt, className, unoptimized = true, ...rest }: Avata
   if (!src) return null;
   // Use provided sizes if present, otherwise fall back to a sensible default (48px)
   const sizes = (rest as unknown as { sizes?: string }).sizes ?? "48px";
-  const { props } = getImageProps({ src, alt, fill: true, sizes, unoptimized });
+  // Derive an integer pixel size from sizes string
+  const requestedPx = (() => {
+    const m = String(sizes).match(/(\d+)/);
+    const n = m ? parseInt(m[1], 10) : 48;
+    return Number.isFinite(n) && n > 0 ? n : 48;
+  })();
+
+  // If the src is a GitHub avatar, add s=<size> query to reduce upstream bytes
+  let finalSrc = src;
+  try {
+    const u = new URL(src);
+    if (u.hostname === "avatars.githubusercontent.com") {
+      const hasSize = u.searchParams.has("s") || u.searchParams.has("size");
+      if (!hasSize) {
+        u.searchParams.set("s", String(requestedPx));
+      }
+      finalSrc = u.toString();
+    }
+  } catch {
+    // ignore invalid URL (likely local image path)
+  }
+
+  const { props } = getImageProps({ src: finalSrc, alt, fill: true, sizes, unoptimized });
   return <AvatarPrimitive.Image {...props} {...rest} className={className} />;
 }
 
