@@ -4,7 +4,6 @@ import { ChevronDown, FileBox, FileCode, ScrollText, Tag } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
@@ -18,6 +17,7 @@ import { formatFileSize, formatReleaseDate, GitHubRelease } from "@/lib/github";
 
 type ReleaseCardProps = {
   release: GitHubRelease;
+  releaseHtml?: string;
   delay?: number;
   dict: {
     releasedOn: string;
@@ -32,6 +32,7 @@ type ReleaseCardProps = {
 
 export default function ReleaseCard({
   release,
+  releaseHtml,
   delay = 0,
   dict,
 }: ReleaseCardProps) {
@@ -114,7 +115,11 @@ export default function ReleaseCard({
                 <CollapsibleContent>
                   <Card className="border-muted mt-2 border-0 sm:border">
                     <CardContent className="prose prose-sm dark:prose-invert max-w-none p-4">
-                      <CustomReactMarkdown>{release.body}</CustomReactMarkdown>
+                      {releaseHtml ? (
+                        <div dangerouslySetInnerHTML={{ __html: releaseHtml }} />
+                      ) : (
+                        <p>{release.body}</p>
+                      )}
                     </CardContent>
                   </Card>
                 </CollapsibleContent>

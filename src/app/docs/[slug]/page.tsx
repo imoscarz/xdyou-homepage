@@ -84,7 +84,7 @@ export default async function DocPage({ params }: PageProps) {
 
       <BlurFade delay={BLUR_FADE_DELAY * 2}>
         <DocContent
-          content={doc.content}
+          content={doc.html || ""}
           dict={{
             toc: dict.releases.toc,
           }}

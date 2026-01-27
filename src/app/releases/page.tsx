@@ -3,6 +3,7 @@ import ReleasesClient from "@/components/project/releases-client";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { fetchGitHubReleases } from "@/lib/github";
+import { renderMarkdownToHTML } from "@/lib/markdown-server";
 import {
   generateSimpleMetadata,
   getPageI18n,
@@ -28,6 +29,14 @@ export default async function ReleasesPage({ searchParams }: PageProps) {
     10 // Fetch 10 releases initially
   );
 
+  // 服务端预渲染 release body 为 HTML
+  const releasesWithHtml = await Promise.all(
+    releases.map(async (release) => ({
+      ...release,
+      html: release.body ? await renderMarkdownToHTML(release.body) : "",
+    }))
+  );
+
   return (
     <main className={PAGE_CONTAINER_CLASSES.standard}>
       <PageHeader
@@ -38,7 +47,7 @@ export default async function ReleasesPage({ searchParams }: PageProps) {
       {/* Releases List */}
       <section>
         <ReleasesClient
-          initialReleases={releases}
+          initialReleases={releasesWithHtml}
           dict={{
             version: dict.releases.version,
             releasedOn: dict.releases.releasedOn,

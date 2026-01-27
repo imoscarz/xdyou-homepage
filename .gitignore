@@ -34,6 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-#Temp files
+# Temp files
 *.tmp
-temp
+/temp

@@ -1,15 +1,12 @@
 /**
  * 服务端 Markdown 渲染器
- * 替代客户端的 react-markdown + shiki + katex
- * 预计节省 810 KB JavaScript
+ * 替代客户端的 react-markdown + shiki
  */
 
-import rehypeKatex from "rehype-katex";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
@@ -30,7 +27,6 @@ const rehypePrettyCodeOptions = {
  * 服务端 Markdown 转 HTML
  * - 完全在服务端处理，不需要客户端 JS
  * - 支持 GitHub Flavored Markdown
- * - 支持 KaTeX 数学公式
  * - 支持代码高亮（Shiki）
  * - 自动生成 heading ID
  *
@@ -49,11 +45,9 @@ export async function renderMarkdownToHTML(
   const result = await unified()
     .use(remarkParse) // 解析 Markdown
     .use(remarkGfm) // GitHub Flavored Markdown 扩展
-    .use(remarkMath) // 数学公式支持
     .use(remarkRehype, { allowDangerousHtml: true }) // 转换为 HTML AST
     .use(rehypeSlug) // 自动生成 heading ID
     .use(rehypePrettyCode, { theme: rehypePrettyCodeOptions.theme, keepBackground: false, defaultLang: "plaintext" }) // 代码高亮
-    .use(rehypeKatex) // 数学公式渲染
     .use(rehypeStringify, { allowDangerousHtml: true }) // 转换为 HTML 字符串
     .process(markdown);
 

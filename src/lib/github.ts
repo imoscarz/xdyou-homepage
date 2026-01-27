@@ -12,6 +12,7 @@ export type GitHubRelease = {
   assets: GitHubAsset[];
   zipball_url: string;
   tarball_url: string;
+  html?: string; // 服务端渲染的 Markdown HTML
 };
 
 export type GitHubAsset = {

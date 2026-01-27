@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
@@ -110,7 +109,7 @@ export default async function NewsPostPage({
         {/* Article Content */}
         <BlurFade delay={BLUR_FADE_DELAY * 3}>
           <div className="prose prose-lg dark:prose-invert max-w-none">
-            <CustomReactMarkdown>{post.content}</CustomReactMarkdown>
+            <div dangerouslySetInnerHTML={{ __html: post.html }} />
           </div>
         </BlurFade>
       </article>

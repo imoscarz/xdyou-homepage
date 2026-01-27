@@ -1,7 +1,5 @@
 "use client";
 
-import "katex/dist/katex.min.css";
-
 import { Check, Copy } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,9 +7,7 @@ import React, { useMemo, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
 
 import { Button } from "@/components/ui/button";
 
@@ -718,8 +714,8 @@ export function CustomReactMarkdown({
     <div className={className}>
       <ReactMarkdown
         components={components}
-        remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex]}
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[]}
       >
         {children}
       </ReactMarkdown>

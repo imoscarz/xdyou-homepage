@@ -2,6 +2,8 @@ import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
 
+import { renderMarkdownToHTML } from "./markdown-server";
+
 export type NewsPost = {
   slug: string;
   title: string;
@@ -10,6 +12,7 @@ export type NewsPost = {
   tags: string[];
   lang: string;
   content: string;
+  html: string;
   excerpt: string;
 };
 
@@ -47,6 +50,7 @@ export async function getAllNewsPosts(): Promise<NewsPost[]> {
         tags: data.tags || [],
         lang: data.lang || "en",
         content,
+        html: "", // 列表中不需要完整 HTML，后续在 getNewsPost 时渲染
         excerpt,
       };
     });
@@ -77,6 +81,9 @@ export async function getNewsPost(slug: string): Promise<NewsPost | null> {
       .trim()
       .slice(0, 200) + "...";
 
+  // 服务端渲染 Markdown 到 HTML
+  const html = await renderMarkdownToHTML(content);
+
   return {
     slug,
     title: data.title || "Untitled",
@@ -85,6 +92,7 @@ export async function getNewsPost(slug: string): Promise<NewsPost | null> {
     tags: data.tags || [],
     lang: data.lang || "en",
     content,
+    html,
     excerpt,
   };
 }

@@ -107,6 +107,7 @@ export default function ReleasesClient({
           <ReleaseCard
             key={release.id}
             release={release}
+            releaseHtml={release.html}
             delay={delay + idx * 0.05}
             dict={{
               releasedOn: dict.releasedOn,

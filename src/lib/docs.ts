@@ -3,6 +3,7 @@ import matter from "gray-matter";
 import path from "path";
 
 import { fetchFileLastCommit, type GitHubCommit } from "./github";
+import { renderMarkdownToHTML } from "./markdown-server";
 
 const docsDirectory = path.join(process.cwd(), "contents/docs");
 
@@ -17,6 +18,7 @@ export type Doc = {
   slug: string;
   metadata: DocMetadata;
   content: string;
+  html?: string;
   lastCommit?: GitHubCommit | null;
 };
 
@@ -69,12 +71,16 @@ export async function getDocBySlugWithCommit(
     return null;
   }
 
+  // 服务端渲染 Markdown 到 HTML
+  const html = await renderMarkdownToHTML(doc.content);
+
   // Fetch last commit info from GitHub
   const filePath = `contents/docs/${slug}.md`;
   const lastCommit = await fetchFileLastCommit(owner, repo, filePath, branch);
 
   return {
     ...doc,
+    html,
     lastCommit,
   };
 }

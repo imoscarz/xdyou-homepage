@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
-@import "katex/dist/katex.min.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -340,15 +339,6 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 
 .prose pre code {
   @apply bg-transparent px-0 py-0;
-}
-
-/* 数学公式样式 */
-.prose .katex-display {
-  @apply overflow-x-auto py-4;
-}
-
-.prose .katex {
-  @apply text-base;
 }
 
 /* 目录样式 */
