@@ -41,7 +41,9 @@ type AvatarImageProps = {
 
 function AvatarImage({ src, alt, className, ...rest }: AvatarImageProps) {
   if (!src) return null;
-  const { props } = getImageProps({ src, alt, fill: true });
+  // Use provided sizes if present, otherwise fall back to a sensible default (48px)
+  const sizes = (rest as unknown as { sizes?: string }).sizes ?? "48px";
+  const { props } = getImageProps({ src, alt, fill: true, sizes });
   return <AvatarPrimitive.Image {...props} {...rest} className={className} />;
 }
 

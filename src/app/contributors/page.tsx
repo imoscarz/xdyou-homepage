@@ -63,6 +63,7 @@ export default async function ContributorsPage({ searchParams }: PageProps) {
                     <AvatarImage
                       src={contributor.avatar}
                       alt={contributor.name}
+                      sizes="80px"
                     />
                     <AvatarFallback>
                       {contributor.name.substring(0, 2).toUpperCase()}

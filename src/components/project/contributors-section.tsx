@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 import { Icons } from "@/components/icons";
@@ -73,7 +74,7 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
       <DialogTrigger asChild>
         <div className="flex h-full w-full cursor-pointer flex-col items-center space-y-2 rounded-lg border bg-card p-4 hover:bg-accent transition">
           <Avatar className="h-16 w-16">
-            <AvatarImage src={contributor.avatar} alt={contributor.name} />
+            <AvatarImage src={contributor.avatar} alt={contributor.name} sizes="64px" />
             <AvatarFallback>
               {contributor.name.substring(0, 2).toUpperCase()}
             </AvatarFallback>
@@ -92,11 +93,13 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
         <div className="space-y-4">
           {/* 双栏布局：左侧avatar，右侧subtitle */}
           <div className="flex items-center gap-8">
-            <div className="shrink-0">
-              <img
+            <div className="shrink-0 relative w-24 h-24">
+              <Image
                 src={contributor.avatar}
                 alt={contributor.name}
-                className="w-24 h-24 rounded-full"
+                fill
+                className="rounded-full object-cover"
+                sizes="96px"
               />
             </div>
             <div className="flex-1 min-w-0">
