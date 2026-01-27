@@ -96,10 +96,12 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
           {/* 双栏布局：左侧avatar，右侧subtitle */}
           <div className="flex items-center gap-8">
             <div className="shrink-0">
+              {/* 使用原生 img 标签，避免消耗 Vercel 图片优化限额 */}
               <img
                 src={contributor.avatar}
                 alt={contributor.name}
                 className="h-24 w-24 rounded-full"
+                loading="lazy"
               />
             </div>
             <div className="min-w-0 flex-1">

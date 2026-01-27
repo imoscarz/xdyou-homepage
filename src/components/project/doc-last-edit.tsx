@@ -47,6 +47,7 @@ export default function DocLastEdit({
             width={20}
             height={20}
             className="rounded-full"
+            unoptimized
           />
           <span className="font-medium">{author.login}</span>
         </Link>

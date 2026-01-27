@@ -37,13 +37,19 @@ Avatar.displayName = AvatarPrimitive.Root.displayName;
 type AvatarImageProps = {
   src?: string;
   alt: string;
+  /**
+   * 是否优化图片
+   * 默认 true（不优化），节省 Vercel 图片优化限额
+   * 对于小头像（通常 ≤64px）不需要优化
+   */
+  unoptimized?: boolean;
 } & React.ComponentProps<typeof AvatarPrimitive.Image>;
 
-function AvatarImage({ src, alt, className, ...rest }: AvatarImageProps) {
+function AvatarImage({ src, alt, className, unoptimized = true, ...rest }: AvatarImageProps) {
   if (!src) return null;
   // Use provided sizes if present, otherwise fall back to a sensible default (48px)
   const sizes = (rest as unknown as { sizes?: string }).sizes ?? "48px";
-  const { props } = getImageProps({ src, alt, fill: true, sizes });
+  const { props } = getImageProps({ src, alt, fill: true, sizes, unoptimized });
   return <AvatarPrimitive.Image {...props} {...rest} className={className} />;
 }
 
