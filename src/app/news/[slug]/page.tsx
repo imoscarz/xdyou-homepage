@@ -7,11 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
 import { BLUR_FADE_DELAY } from "@/data";
-<<<<<<< Updated upstream
 import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
-=======
 import { renderMarkdownToHTML } from "@/lib/markdown-server";
->>>>>>> Stashed changes
 import { getAllNewsPosts, getNewsPost } from "@/lib/news";
 
 type PageProps = {

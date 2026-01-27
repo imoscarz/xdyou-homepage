@@ -280,8 +280,6 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background-color: hsl(var(--muted-foreground) / 0.4);
 }
-<<<<<<< Updated upstream
-=======
 
 @layer utilities {
   .animate-slide-fade {
@@ -447,4 +445,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
     transform: translateX(0);
   }
 }
->>>>>>> Stashed changes
+
+/* ======================== */
+/* Markdown 服务端渲染样式  */
+/* ======================== */

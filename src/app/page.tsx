@@ -1,13 +1,26 @@
-import ContributorsSection from "@/components/project/contributors-section";
-import DownloadsSection from "@/components/project/downloads-section";
+import dynamic from "next/dynamic";
+
 import FeaturesSection from "@/components/project/features-section";
 import HeroSection from "@/components/project/hero-section";
-import ScreenshotsSection from "@/components/project/screenshots-section";
 import { contributors } from "@/config/contributors";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { fetchLatestRelease } from "@/lib/github";
 import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
+
+// 懒加载非首屏组件
+const ScreenshotsSection = dynamic(
+  () => import("@/components/project/screenshots-section"),
+  { ssr: true } // 保留 SSR 以支持 SEO
+);
+const DownloadsSection = dynamic(
+  () => import("@/components/project/downloads-section"),
+  { ssr: true }
+);
+const ContributorsSection = dynamic(
+  () => import("@/components/project/contributors-section"),
+  { ssr: true }
+);
 
 type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -105,7 +118,6 @@ export default async function Page({ searchParams }: PageProps) {
       {/* Features Section */}
       <FeaturesSection
         features={features}
-        delay={BLUR_FADE_DELAY * 5}
         dict={{
           badge: dict.home.features.badge,
           title: dict.home.features.title,
@@ -115,7 +127,6 @@ export default async function Page({ searchParams }: PageProps) {
       {/* Screenshots Section */}
       <ScreenshotsSection
         screenshots={screenshots}
-        delay={BLUR_FADE_DELAY * 10}
         dict={{
           badge: dict.home.screenshots.badge,
           title: dict.home.screenshots.title,
@@ -126,7 +137,6 @@ export default async function Page({ searchParams }: PageProps) {
       <DownloadsSection
         platforms={platforms}
         latestRelease={latestRelease}
-        delay={BLUR_FADE_DELAY * 15}
         dict={{
           badge: dict.home.downloads.badge,
           title: dict.home.downloads.title,
@@ -142,7 +152,6 @@ export default async function Page({ searchParams }: PageProps) {
       {/* Contributors Section */}
       <ContributorsSection
         contributors={contributors}
-        delay={BLUR_FADE_DELAY * 17}
         dict={{
           badge: dict.home.contributors.badge,
           title: dict.home.contributors.title,

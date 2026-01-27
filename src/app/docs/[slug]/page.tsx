@@ -7,11 +7,7 @@ import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { getAllDocSlugs, getDocBySlugWithCommit } from "@/lib/docs";
 import { getDictionary } from "@/lib/i18n";
-<<<<<<< Updated upstream
-=======
 import { extractHeadings, renderMarkdownToHTML } from "@/lib/markdown-server";
-import { PAGE_CONTAINER_CLASSES } from "@/lib/page-helpers";
->>>>>>> Stashed changes
 
 type PageProps = {
   params: Promise<{ slug: string }>;
