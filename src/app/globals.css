@@ -280,3 +280,171 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background-color: hsl(var(--muted-foreground) / 0.4);
 }
+<<<<<<< Updated upstream
+=======
+
+@layer utilities {
+  .animate-slide-fade {
+    animation: slide-fade 320ms ease-in-out;
+  }
+  .animate-slide-left {
+    animation: slide-left 260ms ease-in-out;
+  }
+  .animate-slide-right {
+    animation: slide-right 260ms ease-in-out;
+  }
+}
+
+@keyframes slide-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ======================== */
+/* Markdown 服务端渲染样式  */
+/* ======================== */
+
+/* Prose 基础样式 */
+.prose {
+  @apply max-w-none;
+}
+
+.prose pre {
+  @apply rounded-lg border border-border bg-muted p-4 overflow-x-auto;
+  background-color: var(--shiki-light-bg, #f8f8f8);
+}
+
+.dark .prose pre {
+  background-color: var(--shiki-dark-bg, #1e1e1e);
+}
+
+/* 代码块内代码 */
+.prose code {
+  @apply bg-muted px-1.5 py-0.5 rounded text-sm;
+}
+
+.prose pre code {
+  @apply bg-transparent px-0 py-0;
+}
+
+/* 数学公式样式 */
+.prose .katex-display {
+  @apply overflow-x-auto py-4;
+}
+
+.prose .katex {
+  @apply text-base;
+}
+
+/* 目录样式 */
+.prose-toc {
+  @apply list-none pl-0 space-y-1;
+}
+
+.prose-toc li {
+  @apply list-none;
+}
+
+.prose-toc a {
+  @apply text-muted-foreground hover:text-foreground transition-colors;
+  @apply text-sm;
+}
+
+.toc-level-1 {
+  @apply pl-0;
+}
+
+.toc-level-2 {
+  @apply pl-4;
+}
+
+.toc-level-3 {
+  @apply pl-8;
+}
+
+.toc-level-4 {
+  @apply pl-12;
+}
+
+.toc-level-5 {
+  @apply pl-16;
+}
+
+.toc-level-6 {
+  @apply pl-20;
+}
+
+/* GitHub 风格警告块 */
+.prose blockquote[data-type="note"] {
+  @apply border-l-blue-500 bg-blue-50 dark:bg-blue-950;
+}
+
+.prose blockquote[data-type="warning"] {
+  @apply border-l-yellow-500 bg-yellow-50 dark:bg-yellow-950;
+}
+
+.prose blockquote[data-type="danger"] {
+  @apply border-l-red-500 bg-red-50 dark:bg-red-950;
+}
+
+/* 表格样式 */
+.prose table {
+  @apply w-full border-collapse;
+}
+
+.prose th {
+  @apply bg-muted px-4 py-2 text-left font-semibold;
+}
+
+.prose td {
+  @apply border border-border px-4 py-2;
+}
+
+.prose tr:nth-child(even) {
+  @apply bg-muted/50;
+}
+
+/* 标题 ID 锚点 */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply scroll-mt-20; /* 与导航栏高度一致 */
+}
+
+.prose h2 a,
+.prose h3 a,
+.prose h4 a {
+  @apply no-underline;
+}
+
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+>>>>>>> Stashed changes

@@ -1,6 +1,6 @@
 // Site configuration
 export const siteConfig = {
-  url: "https://xdyou.example.com",
+  url: "https://xdyou.superbart.top",
   faviconUrl: "/icon/favicon.png",
   lastUpdated: "Jan 2026",
   avatarUrl: "/icon/logo.png",

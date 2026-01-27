@@ -3,12 +3,15 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import { CustomReactMarkdown } from "@/components/react-markdown";
 import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
 import { BLUR_FADE_DELAY } from "@/data";
+<<<<<<< Updated upstream
 import { getDictionary, getLocaleFromSearchParams } from "@/lib/i18n";
+=======
+import { renderMarkdownToHTML } from "@/lib/markdown-server";
+>>>>>>> Stashed changes
 import { getAllNewsPosts, getNewsPost } from "@/lib/news";
 
 type PageProps = {
@@ -75,6 +78,9 @@ export default async function NewsPostPage({
     notFound();
   }
 
+  // 服务端渲染 Markdown - 不使用客户端库
+  const htmlContent = await renderMarkdownToHTML(post.content);
+
   return (
     <main className="mx-auto flex min-h-dvh max-w-4xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20">
       {/* Back Button */}
@@ -108,11 +114,12 @@ export default async function NewsPostPage({
           </div>
         </BlurFade>
 
-        {/* Article Content */}
+        {/* Article Content - 服务端渲染 HTML */}
         <BlurFade delay={BLUR_FADE_DELAY * 3}>
-          <div className="prose prose-lg dark:prose-invert max-w-none">
-            <CustomReactMarkdown>{post.content}</CustomReactMarkdown>
-          </div>
+          <div
+            className="prose prose-lg dark:prose-invert max-w-none"
+            dangerouslySetInnerHTML={{ __html: htmlContent }}
+          />
         </BlurFade>
       </article>
     </main>
