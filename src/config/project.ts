@@ -37,42 +37,63 @@ export const projectConfig = {
   // 项目Logo
   logo: "/icon/logo.png",
 
+  // 安装包格式配置（用于识别不同平台的安装包）
+  assetPatterns: {
+    android: [
+      { pattern: /app-arm64-v8a-release\.apk$/i, displayName: "ARM64" },
+      { pattern: /app-armeabi-v7a-release\.apk$/i, displayName: "ARMv7" },
+      { pattern: /app-x86_64-release\.apk$/i, displayName: "x86_64" },
+    ],
+    linux: [
+      {
+        pattern: /watermeter-linux-release-amd64\.zip$/i,
+        displayName: "ZIP (amd64)",
+      },
+      { pattern: /watermeter\.Appimage$/i, displayName: "AppImage" },
+    ],
+    windows: [
+      {
+        pattern: /watermeter-windows-release-amd64\.zip$/i,
+        displayName: "ZIP (amd64)",
+      },
+    ],
+    ios: [],
+  },
+
   // 下载平台配置
   platforms: [
     {
       id: "android",
       name: "Android",
       icon: "smartphone",
-      downloadUrl:
-        "https://github.com/BenderBlog/traintime_pda/releases/latest",
+      available: true,
+      supportedFormats: ["apk"],
       alternativeUrl:
         "https://f-droid.org/zh_Hans/packages/io.github.benderblog.traintime_pda/",
       alternativeName: "F-Droid",
-      available: true,
     },
     {
       id: "ios",
       name: "iOS",
       icon: "apple",
+      available: true,
+      supportedFormats: ["ipa"],
       downloadUrl:
         "https://apps.apple.com/us/app/xdyou/id6461723688?l=zh-Hans-CN",
-      available: true,
     },
     {
       id: "windows",
       name: "Windows",
       icon: "laptop",
-      downloadUrl:
-        "https://github.com/BenderBlog/traintime_pda/releases/latest",
       available: true,
+      supportedFormats: ["zip", "exe"],
     },
     {
       id: "linux",
       name: "Linux",
       icon: "computer",
-      downloadUrl:
-        "https://github.com/BenderBlog/traintime_pda/releases/latest",
       available: true,
+      supportedFormats: ["zip", "appimage", "deb", "rpm"],
     },
   ],
 

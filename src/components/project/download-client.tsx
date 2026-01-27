@@ -7,17 +7,19 @@ import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { projectConfig } from "@/config/project";
 import type { GitHubAsset } from "@/lib/github";
 
 type Platform = {
   id: string;
   name: string;
   icon: keyof typeof Icons;
-  downloadUrl: string;
+  downloadUrl?: string;
   alternativeUrl?: string;
   alternativeName?: string;
   available: boolean;
   comingSoon?: boolean;
+  supportedFormats?: string[];
 };
 
 type DownloadClientProps = {
@@ -38,34 +40,9 @@ export default function DownloadClient({
   delay,
   dict,
 }: DownloadClientProps) {
-  // 定义每个平台的安装包命名模式
-  const platformAssets: Record<
-    string,
-    { pattern: RegExp; displayName: string }[]
-  > = {
-    android: [
-      { pattern: /app-arm64-v8a-release\.apk$/, displayName: "ARM64" },
-      { pattern: /app-armeabi-v7a-release\.apk$/, displayName: "ARMv7" },
-      { pattern: /app-x86_64-release\.apk$/, displayName: "x86_64" },
-    ],
-    linux: [
-      {
-        pattern: /watermeter-linux-release-amd64\.zip$/,
-        displayName: "ZIP (amd64)",
-      },
-      { pattern: /watermeter\.Appimage$/i, displayName: "AppImage" },
-    ],
-    windows: [
-      {
-        pattern: /watermeter-windows-release-amd64\.zip$/,
-        displayName: "ZIP (amd64)",
-      },
-    ],
-  };
-
   const getPlatformAssets = (platformId: string) => {
-    const patterns = platformAssets[platformId];
-    if (!patterns) return [];
+    const patterns = projectConfig.assetPatterns[platformId as keyof typeof projectConfig.assetPatterns];
+    if (!patterns || patterns.length === 0) return [];
 
     return patterns
       .map((p) => {
@@ -130,7 +107,8 @@ export default function DownloadClient({
                           <Link
                             href={
                               platformVersions[0]?.browser_download_url ||
-                              platform.downloadUrl
+                              platform.downloadUrl ||
+                              "#"
                             }
                             target="_blank"
                             rel="noopener noreferrer"
@@ -226,7 +204,8 @@ export default function DownloadClient({
                           <Link
                             href={
                               platformVersions[0]?.browser_download_url ||
-                              platform.downloadUrl
+                              platform.downloadUrl ||
+                              "#"
                             }
                             target="_blank"
                             rel="noopener noreferrer"
@@ -292,7 +271,7 @@ export default function DownloadClient({
                   )) || (
                     <Button asChild size="sm" className="w-full">
                       <Link
-                        href={platforms[0]?.downloadUrl}
+                        href={platforms[0]?.downloadUrl || "#"}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -370,7 +349,7 @@ export default function DownloadClient({
                   )) || (
                     <Button asChild size="sm" className="w-full">
                       <Link
-                        href={platforms[2]?.downloadUrl}
+                        href={platforms[2]?.downloadUrl || "#"}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -412,7 +391,7 @@ export default function DownloadClient({
                   )) || (
                     <Button asChild size="sm" className="w-full">
                       <Link
-                        href={platforms[3]?.downloadUrl}
+                        href={platforms[3]?.downloadUrl || "#"}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

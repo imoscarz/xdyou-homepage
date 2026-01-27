@@ -64,16 +64,16 @@ export default async function Page({ searchParams }: PageProps) {
       }
     : undefined;
 
-  // Find platform-specific download URLs
+  // Find platform-specific download URLs using configured patterns
   const androidAsset = release?.assets.find((a) =>
-    a.name.includes("arm64-v8a-release.apk"),
+    projectConfig.assetPatterns.android[0].pattern.test(a.name),
   );
   const iosUrl = platforms.find((p) => p.id === "ios")?.downloadUrl || "#";
   const windowsAsset = release?.assets.find((a) =>
-    a.name.includes("windows-release-amd64.zip"),
+    projectConfig.assetPatterns.windows[0].pattern.test(a.name),
   );
   const linuxAsset = release?.assets.find((a) =>
-    a.name.includes("linux-release-amd64.zip"),
+    projectConfig.assetPatterns.linux[0].pattern.test(a.name),
   );
 
   return (

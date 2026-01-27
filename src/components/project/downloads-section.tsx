@@ -18,7 +18,7 @@ type Platform = {
   id: string;
   name: string;
   icon: keyof typeof import("@/components/icons").Icons;
-  downloadUrl: string;
+  downloadUrl?: string;
   alternativeUrl?: string;
   alternativeName?: string;
   available: boolean;
