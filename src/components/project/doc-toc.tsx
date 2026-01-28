@@ -22,43 +22,27 @@ export default function DocToc({ content, dict }: DocTocProps) {
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
-    // Extract headings from markdown content
-    const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+    // Extract headings from rendered HTML content
     const extracted: Heading[] = [];
-    let match;
-
-    while ((match = headingRegex.exec(content)) !== null) {
-      const level = match[1].length;
-      const text = match[2].trim();
-      let id = text
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
-
-      // If ID is empty, use a hash of the original text (matching react-markdown logic)
-      if (!id) {
-        let hash = 0;
-        for (let i = 0; i < text.length; i++) {
-          hash = (hash << 5) - hash + text.charCodeAt(i);
-          hash = hash & hash; // Convert to 32bit integer
+    
+    // Wait a tick to ensure DOM has updated
+    setTimeout(() => {
+      const container = document.querySelector('.prose');
+      if (!container) return;
+      
+      const headingElements = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      headingElements.forEach((element) => {
+        const id = element.id;
+        const text = element.textContent || '';
+        const level = parseInt(element.tagName.substring(1), 10);
+        
+        if (id && text) {
+          extracted.push({ id, text, level });
         }
-        id = `heading-${Math.abs(hash).toString(36)}`;
-      }
-
-      // Ensure unique IDs by checking for duplicates
-      const existingIds = extracted.map((h) => h.id);
-      let uniqueId = id;
-      let counter = 1;
-      while (existingIds.includes(uniqueId)) {
-        uniqueId = `${id}-${counter}`;
-        counter++;
-      }
-
-      extracted.push({ id: uniqueId, text, level });
-    }
-
-    setHeadings(extracted);
+      });
+      
+      setHeadings(extracted);
+    }, 0);
   }, [content]);
 
   useEffect(() => {
