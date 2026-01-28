@@ -395,7 +395,7 @@ pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
 }
 
 .prose th {
-  @apply bg-muted px-4 py-2 text-left font-semibold;
+  @apply border border-border bg-muted px-4 py-2 text-left font-semibold;
 }
 
 .prose td {
