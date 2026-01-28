@@ -113,15 +113,13 @@ export default function ReleaseCard({
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <Card className="border-muted mt-2 border-0 sm:border">
-                    <CardContent className="prose prose-sm dark:prose-invert max-w-none p-4">
-                      {releaseHtml ? (
-                        <div dangerouslySetInnerHTML={{ __html: releaseHtml }} />
-                      ) : (
-                        <p>{release.body}</p>
-                      )}
-                    </CardContent>
-                  </Card>
+                  <div className="prose prose-sm dark:prose-invert max-w-none mt-3 rounded-lg border border-border bg-card p-4">
+                    {releaseHtml ? (
+                      <div dangerouslySetInnerHTML={{ __html: releaseHtml }} />
+                    ) : (
+                      <p>{release.body}</p>
+                    )}
+                  </div>
                 </CollapsibleContent>
               </Collapsible>
             </div>
