@@ -28,8 +28,7 @@ XDYou 项目的主页，为西安电子科技大学学生提供课程表查询�
 │   │   ├── layout/             # 布局组件（页面头部等）
 │   │   ├── project/            # 项目相关组件
 │   │   ├── ui/                 # UI 基础组件（shadcn/ui）
-│   │   ├── icons.tsx           # 图标组件集中管理
-│   │   └── react-markdown.tsx  # Markdown 渲染器（客户端预览）
+│   │   └── icons.tsx           # 图标组件集中管理
 │   ├── config/                 # 配置文件
 │   │   ├── project.ts          # 项目主配置
 │   │   ├── contributors.ts     # 贡献者信息
@@ -244,9 +243,7 @@ frontmatter配置如下：
 - **语言**: [TypeScript](https://www.typescriptlang.org/) - 类型安全的 JavaScript
 - **样式**: [Tailwind CSS](https://tailwindcss.com/) - 原子化 CSS 框架
 - **UI 组件**: [shadcn/ui](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/)
-- **Markdown**: 
-  - 服务端：[unified](https://unifiedjs.com/) + [remark-gfm](https://github.com/remarkjs/remark-gfm) + [rehype-slug](https://github.com/rehypejs/rehype-slug)
-  - 客户端：[react-markdown](https://github.com/remarkjs/react-markdown)（仅用于预览）
+- **Markdown**: [unified](https://unifiedjs.com/) + [remark-gfm](https://github.com/remarkjs/remark-gfm) + [remark-github-blockquote-alert](https://github.com/binyamin/remark-github-blockquote-alert) + [rehype-slug](https://github.com/rehypejs/rehype-slug)
 - **代码高亮**: [Shiki](https://shiki.matsu.io/)
 - **图标**: [Lucide React](https://lucide.dev/)
 - **主题**: [next-themes](https://github.com/pacocoursey/next-themes)

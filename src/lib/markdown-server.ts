@@ -7,6 +7,7 @@ import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
+import remarkGithubBlockquoteAlert from "remark-github-blockquote-alert";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
@@ -45,6 +46,7 @@ export async function renderMarkdownToHTML(
   const result = await unified()
     .use(remarkParse) // 解析 Markdown
     .use(remarkGfm) // GitHub Flavored Markdown 扩展
+    .use(remarkGithubBlockquoteAlert) // GitHub Alert 语法支持
     .use(remarkRehype, { allowDangerousHtml: true }) // 转换为 HTML AST
     .use(rehypeSlug) // 自动生成 heading ID
     .use(rehypePrettyCode, { theme: rehypePrettyCodeOptions.theme, keepBackground: false, defaultLang: "plaintext" }) // 代码高亮

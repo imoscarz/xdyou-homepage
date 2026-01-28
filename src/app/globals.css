@@ -338,6 +338,13 @@ pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
   @apply bg-transparent px-0 py-0;
 }
 
+/* 链接样式 */
+.prose a {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 /* 目录样式 */
 .prose-toc {
   @apply list-none pl-0 space-y-1;
@@ -377,16 +384,80 @@ pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
 }
 
 /* GitHub 风格警告块 */
-.prose blockquote[data-type="note"] {
-  @apply border-l-blue-500 bg-blue-50 dark:bg-blue-950;
+.prose .markdown-alert {
+  @apply border-l-4 px-3 py-2.5 my-4 rounded-r-lg;
 }
 
-.prose blockquote[data-type="warning"] {
-  @apply border-l-yellow-500 bg-yellow-50 dark:bg-yellow-950;
+.prose .markdown-alert-note {
+  @apply border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/30;
 }
 
-.prose blockquote[data-type="danger"] {
-  @apply border-l-red-500 bg-red-50 dark:bg-red-950;
+.prose .markdown-alert-tip {
+  @apply border-l-green-500 bg-green-50/50 dark:bg-green-950/30;
+}
+
+.prose .markdown-alert-important {
+  @apply border-l-purple-500 bg-purple-50/50 dark:bg-purple-950/30;
+}
+
+.prose .markdown-alert-warning {
+  @apply border-l-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/30;
+}
+
+.prose .markdown-alert-caution {
+  @apply border-l-red-500 bg-red-50/50 dark:bg-red-950/30;
+}
+
+.prose .markdown-alert-title {
+  @apply font-semibold mb-1 flex items-center gap-2 text-sm;
+}
+
+.prose .markdown-alert-title svg {
+  @apply flex-shrink-0 w-4 h-4;
+}
+
+.prose .markdown-alert-note .markdown-alert-title {
+  @apply text-blue-700 dark:text-blue-400;
+}
+
+.prose .markdown-alert-note .markdown-alert-title svg {
+  @apply fill-blue-700 dark:fill-blue-400;
+}
+
+.prose .markdown-alert-tip .markdown-alert-title {
+  @apply text-green-700 dark:text-green-400;
+}
+
+.prose .markdown-alert-tip .markdown-alert-title svg {
+  @apply fill-green-700 dark:fill-green-400;
+}
+
+.prose .markdown-alert-important .markdown-alert-title {
+  @apply text-purple-700 dark:text-purple-400;
+}
+
+.prose .markdown-alert-important .markdown-alert-title svg {
+  @apply fill-purple-700 dark:fill-purple-400;
+}
+
+.prose .markdown-alert-warning .markdown-alert-title {
+  @apply text-yellow-700 dark:text-yellow-400;
+}
+
+.prose .markdown-alert-warning .markdown-alert-title svg {
+  @apply fill-yellow-700 dark:fill-yellow-400;
+}
+
+.prose .markdown-alert-caution .markdown-alert-title {
+  @apply text-red-700 dark:text-red-400;
+}
+
+.prose .markdown-alert-caution .markdown-alert-title svg {
+  @apply fill-red-700 dark:fill-red-400;
+}
+
+.prose .markdown-alert > :last-child {
+  @apply mb-0;
 }
 
 /* 表格样式 */

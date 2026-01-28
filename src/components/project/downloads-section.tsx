@@ -29,6 +29,7 @@ type LatestRelease = {
   version: string;
   date: string;
   notes: string;
+  notesHtml?: string;
   downloadUrl: string;
   assets?: GitHubAsset[];
 };
@@ -97,9 +98,16 @@ export default function DownloadsSection({
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pt-4">
-                  <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">
-                    {latestRelease.notes}
-                  </div>
+                  {latestRelease.notesHtml ? (
+                    <div 
+                      className="prose prose-sm dark:prose-invert max-w-none text-sm"
+                      dangerouslySetInnerHTML={{ __html: latestRelease.notesHtml }}
+                    />
+                  ) : (
+                    <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">
+                      {latestRelease.notes}
+                    </div>
+                  )}
                 </CollapsibleContent>
               </Collapsible>
             </CardContent>

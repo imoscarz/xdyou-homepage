@@ -29,7 +29,6 @@
   - **共享组件**：`src/components/ui/*` (shadcn/ui)、`src/components/project/*` (业务组件)
 - **Markdown 渲染**：
   - **服务端**：`src/lib/markdown-server.ts` - 使用 unified 管道（remarkGfm、Shiki 代码高亮、rehype-slug 自动生成 heading ID）
-  - **客户端**：`src/components/react-markdown.tsx` - 仅用于客户端预览（TOC 使用 DOM 提取而非客户端渲染）
   - 支持：代码高亮（Shiki）、GitHub 风格警告、图像优化、Heading ID 自动生成
 - **UI 风格与设计系统**：
   - **组件库**：shadcn/ui (基于 Radix UI)，位于 `src/components/ui/*`
@@ -85,7 +84,7 @@
 - **页面辅助**：`page-helpers.ts`, `api-helpers.ts`, `utils.tsx`, `env.ts`
 - **路由页面**：`page.tsx` (首页含 ContributorsSection), `docs/[slug]`, `news/[slug]`, `releases`, `not-found`
 - **API/Feed**：`api/news` (JSON), `api/news/rss`, `api/news/atom`
-- **组件库**：`react-markdown.tsx`, `project/*`, `ui/*` (shadcn/ui), `blocks/navbar/`, `blocks/footer.tsx`, `layout/page-header.tsx`
+- **组件库**：`project/*`, `ui/*` (shadcn/ui), `blocks/navbar/`, `blocks/footer.tsx`, `layout/page-header.tsx`
 - **配置中心**：`site.ts`, `project.ts` (含 assetPatterns), `navbar.ts`, `footer.ts`, `contact.ts`, `contributors.ts`, `data.tsx`
 - **国际化**：`i18n/config.ts`, `locales/{zh,en}.json`, `resolve.ts`, `server-headers.ts`, `client.tsx`, `dictionaries.ts`, `server.ts`
 - **基础设施**：`middleware.ts`, `layout.tsx`, `globals.css`, `next.config.ts`, `eslint.config.mts`, `tsconfig.json`

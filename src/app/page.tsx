@@ -6,6 +6,7 @@ import { contributors } from "@/config/contributors";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { fetchLatestRelease } from "@/lib/github";
+import { renderMarkdownToHTML } from "@/lib/markdown-server";
 import {
   getPageI18n,
   PAGE_CONTAINER_CLASSES,
@@ -59,6 +60,7 @@ export default async function Page({ searchParams }: PageProps) {
         version: release.tag_name,
         date: new Date(release.published_at).toLocaleDateString(locale),
         notes: release.body || "No release notes available.",
+        notesHtml: await renderMarkdownToHTML(release.body || "No release notes available."),
         downloadUrl: release.html_url,
         assets: release.assets,
       }
