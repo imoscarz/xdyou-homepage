@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, FileBox, FileCode, ScrollText, Tag } from "lucide-react";
+import { AlertTriangle, ChevronDown, FileBox, FileCode, ScrollText, Tag } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -13,6 +13,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { formatFileSize, formatReleaseDate, GitHubRelease } from "@/lib/github";
 
 type ReleaseCardProps = {
@@ -146,31 +152,40 @@ export default function ReleaseCard({
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <div className="mt-2 grid gap-2">
+                  <div className="mt-3 grid gap-3">
                     {release.assets.map((asset) => {
                       const isDesktopAsset = asset.name
                         .toLowerCase()
                         .includes("watermeter");
                       return (
-                        <Card
+                        <div
                           key={asset.id}
-                          className="border-muted transition-all duration-300 hover:shadow-md dark:hover:shadow-lg"
+                          className="rounded-lg border border-border bg-card p-3 sm:p-4"
                         >
-                          <CardContent className="p-3 sm:p-4">
-                            {/* Windows或Linux维护警告 */}
-                            {isDesktopAsset &&
-                              dict.windowsMaintenanceWarning && (
-                                <div className="mb-3 rounded-md border border-yellow-200 bg-yellow-50 p-2 dark:border-yellow-900 dark:bg-yellow-950">
-                                  <p className="text-xs text-yellow-800 dark:text-yellow-100">
-                                    ⚠️ {dict.windowsMaintenanceWarning}
-                                  </p>
-                                </div>
-                              )}
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                               <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium break-all sm:text-base">
-                                  {asset.name}
-                                </p>
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm font-medium break-all sm:text-base">
+                                    {asset.name}
+                                  </p>
+                                  {isDesktopAsset && dict.windowsMaintenanceWarning && (
+                                    <TooltipProvider delayDuration={0}>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <button 
+                                            className="inline-flex items-center focus:outline-none"
+                                            aria-label="Maintenance warning"
+                                          >
+                                            <AlertTriangle className="size-4 flex-shrink-0 text-yellow-600 dark:text-yellow-400" />
+                                          </button>
+                                        </TooltipTrigger>
+                                        <TooltipContent className="max-w-xs">
+                                          <p className="text-xs">{dict.windowsMaintenanceWarning}</p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+                                  )}
+                                </div>
                                 <div className="text-muted-foreground flex flex-wrap gap-1.5 text-xs">
                                   <span>{formatFileSize(asset.size)}</span>
                                   <span>•</span>
@@ -223,8 +238,7 @@ export default function ReleaseCard({
                                 </Link>
                               </Button>
                             </div>
-                          </CardContent>
-                        </Card>
+                        </div>
                       );
                     })}
                   </div>

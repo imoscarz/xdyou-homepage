@@ -28,6 +28,10 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# Temporary reports and analysis files
+/temp/
+*.log
+
 # vercel
 .vercel
 
@@ -36,4 +40,3 @@ yarn-error.log*
 
 # Temp files
 *.tmp
-/temp

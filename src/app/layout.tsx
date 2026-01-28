@@ -24,6 +24,7 @@ import { cn, jsonldScript } from "@/lib/utils";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
 });
 
 /* Metadata */
@@ -90,6 +91,9 @@ export default function ChineseLayout({
   return (
     <html lang="zh" suppressHydrationWarning>
       <head>
+        {/* Preconnect to external resources */}
+        <link rel="preconnect" href="https://avatars.githubusercontent.com" />
+        
         {/* Google Tag Manager */}
         {/* Baidu Site Verification */}
 

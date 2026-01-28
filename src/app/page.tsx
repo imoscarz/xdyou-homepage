@@ -1,7 +1,9 @@
 import dynamic from "next/dynamic";
 
+import DownloadsSection from "@/components/project/downloads-section";
 import FeaturesSection from "@/components/project/features-section";
 import HeroSection from "@/components/project/hero-section";
+import ScreenshotsSection from "@/components/project/screenshots-section";
 import { contributors } from "@/config/contributors";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
@@ -15,15 +17,7 @@ import {
 } from "@/lib/page-helpers";
 
 // 懒加载非首屏组件
-const ScreenshotsSection = dynamic(
-  () => import("@/components/project/screenshots-section"),
-  { ssr: true } // 保留 SSR 以支持 SEO
-);
-const DownloadsSection = dynamic(
-  () => import("@/components/project/downloads-section"),
-  { ssr: true }
-);
-const ContributorsSection = dynamic(
+const ContributorsSectionDynamic = dynamic(
   () => import("@/components/project/contributors-section"),
   { ssr: true }
 );
@@ -144,7 +138,7 @@ export default async function Page({ searchParams }: PageProps) {
       />
 
       {/* Contributors Section */}
-      <ContributorsSection
+      <ContributorsSectionDynamic
         contributors={contributors}
         dict={{
           badge: dict.home.contributors.badge,

@@ -41,13 +41,14 @@ export default function HeroSection({
     <section id="hero" className="mt-16 sm:mt-28">
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12">
         {/* Logo on mobile - top left */}
-        <div className="flex md:hidden">
+        <div className="flex md:hidden h-[120px] w-[120px]">
           <BlurFade delay={delay}>
             <Image
               src={logo}
               alt={`${projectName} Logo`}
               width={120}
               height={120}
+              sizes="(max-width: 640px) 120px, (max-width: 1200px) 150px, 180px"
               className="rounded-2xl object-contain"
               priority
             />

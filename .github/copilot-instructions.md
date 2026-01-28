@@ -253,6 +253,33 @@
   - 使用 `console.log` 调试（仅开发环境）
   - 查看 Next.js 编译输出（终端信息）
 
+- **报告文件生成规范** (AI 代理生成分析/优化报告时遵循)：
+  - **存储位置**: 所有报告文件统一生成在 `temp/reports/{report-type}/{date}/` 目录下
+  - **目录结构示例**:
+    ```
+    temp/
+    └── reports/
+        ├── performance/          (性能分析报告)
+        │   ├── 2026-01-28/
+        │   │   ├── ANALYSIS.md
+        │   │   ├── SUMMARY.md
+        │   │   └── DETAILS.md
+        │   └── 2026-01-29/
+        ├── refactoring/         (重构相关报告)
+        ├── migration/           (迁移相关报告)
+        └── audit/               (代码审计报告)
+    ```
+  - **命名规范**:
+    - 主报告: `{TYPE}_REPORT.md` (如 `PERFORMANCE_REPORT.md`)
+    - 摘要: `SUMMARY.md` 或 `EXECUTIVE_SUMMARY.md`
+    - 检查清单: `CHECKLIST.md` 或 `QUICK_CHECKLIST.md`
+    - 详细分析: `ANALYSIS.md` 或 `DETAILED_ANALYSIS.md`
+    - 代码对比: `CHANGES.md` 或 `CHANGES_DETAILED.md`
+    - 实施指南: `IMPLEMENTATION.md` 或 `IMPLEMENTATION_GUIDE.md`
+  - **避免纳入版本管理**: `temp/` 目录已在 `.gitignore` 中，报告文件不会被提交
+  - **目录整洁**: 每个报告类型和日期创建单独目录，避免根目录文件堆积
+  - **示例**: 性能优化报告应生成在 `temp/reports/performance/2026-01-28/` 下，包含 `PERFORMANCE_REPORT.md`、`SUMMARY.md`、`ANALYSIS.md` 等文件
+
 这确保提交的代码符合项目标准且能成功构建部署。
 
 贡献与 PR 建议 ✅
