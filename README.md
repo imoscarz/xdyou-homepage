@@ -20,24 +20,27 @@ XDYou 项目的主页，为西安电子科技大学学生提供课程表查询�
 │   │   ├── api/                # API 路由（新闻 RSS/Atom feed）
 │   │   ├── docs/               # 文档页面
 │   │   ├── news/               # 新闻页面
-│   │   ├── contributors/       # 贡献者页面
 │   │   ├── releases/           # 版本发布页面
 │   │   └── globals.css         # 全局样式
 │   ├── components/             # React 组件
 │   │   ├── blocks/             # 页面块组件（导航栏、底栏）
+│   │   ├── layout/             # 布局组件（页面头部等）
 │   │   ├── project/            # 项目相关组件
 │   │   ├── ui/                 # UI 基础组件（shadcn/ui）
 │   │   ├── icons.tsx           # 图标组件集中管理
-│   │   └── react-markdown.tsx  # Markdown 渲染器
+│   │   └── react-markdown.tsx  # Markdown 渲染器（客户端预览）
 │   ├── config/                 # 配置文件
 │   │   ├── project.ts          # 项目主配置
 │   │   ├── contributors.ts     # 贡献者信息
 │   │   ├── navbar.ts           # 导航栏配置
+│   │   ├── footer.ts           # 页脚配置
 │   │   └── ...
 │   ├── lib/                    # 工具库
 │   │   ├── github.ts           # GitHub API 工具
 │   │   ├── docs.ts             # 文档处理
 │   │   ├── news.ts             # 新闻处理
+│   │   ├── markdown-server.ts  # 服务端 Markdown 渲染
+│   │   ├── page-helpers.ts     # 页面开发辅助函数
 │   │   ├── i18n/               # 国际化
 │   │   └── utils.tsx           # 通用工具
 │   └── contents/               # Markdown 内容文件
@@ -53,13 +56,32 @@ XDYou 项目的主页，为西安电子科技大学学生提供课程表查询�
 
 主页的配置文件位于 `src/config` 目录下，主要配置文件说明：
 
-- **`project.ts`** - 项目核心配置（截图、功能列表、下载链接等）
+- **`project.ts`** - 项目核心配置（截图、功能列表、下载链接、资产模式等）
 - **`contributors.ts`** - 贡献者信息配置
 - **`navbar.ts`** - 导航栏配置
 - **`footer.ts`** - 页脚配置
 - **`site.ts`** - 站点元数据配置
 
 ### 重要配置说明
+
+#### 资产模式配置 (`project.ts`)
+
+项目使用集中化的资产模式配置来匹配不同平台的发布资产：
+
+```typescript
+assetPatterns: {
+  android: [
+    { pattern: /app-arm64-v8a-release\.apk$/i, displayName: "ARM64" },
+    { pattern: /app-armeabi-v7a-release\.apk$/i, displayName: "ARMv7" },
+  ],
+  linux: [
+    { pattern: /watermeter-linux-release-amd64\.zip$/i, displayName: "ZIP (amd64)" },
+  ],
+  // ...
+}
+```
+
+使用方式：`projectConfig.assetPatterns.android[0].pattern.test(asset.name)`
 
 #### 截图配置 (`project.ts`)
 
@@ -148,7 +170,7 @@ order: 2
 
 #### 编写文档时的注意事项
 
-1. **图片引用**：由于 Next.js 的安全策略限制，您无法引用在 `next.config.ts` 中 `remotePatterns` 声明过的 hostname 之外的站点的图片。因此，在引用图片时，请将图片存放在 `public/img` 下的适当位置并通过相对链接引用图片。
+1. **图片引用**：由于 Next.js 的安全策略限制与图片优化需要，您无法引用在 `next.config.ts` 中 `remotePatterns` 声明过的 hostname 之外的站点的图片。因此，在引用图片时，请将图片存放在 `public/img` 下的适当位置并通过相对链接引用图片。
    
    **图片检查**：项目已配置 CI 自动检查，本地也可运行 `pnpm check:images` 验证所有图片引用是否合规。
 
@@ -161,17 +183,7 @@ order: 2
    > 这是一个警告信息
    ```
 
-3. **数学公式**：文档支持使用 $\LaTeX$ 公式，通过 `$` 或 `$$` 调用：
-   ```markdown
-   行内公式：$E = mc^2$
-   
-   块级公式：
-   $$
-   \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
-   $$
-   ```
-
-4. **代码高亮**：支持语法高亮的代码块，使用三个反引号并指定语言。
+3. **代码高亮**：支持语法高亮的代码块（Shiki），使用三个反引号并指定语言。
 
 ### 添加新闻
 
@@ -233,10 +245,10 @@ frontmatter配置如下：
 - **语言**: [TypeScript](https://www.typescriptlang.org/) - 类型安全的 JavaScript
 - **样式**: [Tailwind CSS](https://tailwindcss.com/) - 原子化 CSS 框架
 - **UI 组件**: [shadcn/ui](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/)
-- **动画**: [Framer Motion](https://www.framer.com/motion/)
-- **Markdown**: [react-markdown](https://github.com/remarkjs/react-markdown) + [remark-gfm](https://github.com/remarkjs/remark-gfm)
-- **数学公式**: [KaTeX](https://katex.org/)
-- **代码高亮**: [react-syntax-highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)
+- **Markdown**: 
+  - 服务端：[unified](https://unifiedjs.com/) + [remark-gfm](https://github.com/remarkjs/remark-gfm) + [rehype-slug](https://github.com/rehypejs/rehype-slug)
+  - 客户端：[react-markdown](https://github.com/remarkjs/react-markdown)（仅用于预览）
+- **代码高亮**: [Shiki](https://shiki.matsu.io/)
 - **图标**: [Lucide React](https://lucide.dev/)
 - **主题**: [next-themes](https://github.com/pacocoursey/next-themes)
 - **分析**: [Vercel Analytics](https://vercel.com/analytics) & [Speed Insights](https://vercel.com/docs/speed-insights)

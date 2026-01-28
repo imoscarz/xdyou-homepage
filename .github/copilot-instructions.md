@@ -27,14 +27,27 @@
   - **Server Components（默认）**：页面、数据获取、布局（无 `"use client"`）
   - **Client Components**：交互组件、客户端状态管理（显式 `"use client"`，建议 `-client.tsx` 后缀）
   - **共享组件**：`src/components/ui/*` (shadcn/ui)、`src/components/project/*` (业务组件)
-- **Markdown 渲染**：`src/components/react-markdown.tsx`
-  - 支持：KaTeX 数学公式、代码高亮（Shiki）、GitHub 风格警告、图像优化
-  - Heading ID 自动生成、TOC 目录对齐
-- **样式系统**：
-  - Tailwind CSS 4.1（配置于 `globals.css`）
-  - 主题支持：`next-themes`（light/dark/system）
-  - 动画：自定义 keyframes（slide-fade、slide-left、slide-right）
-  - 字体：Geist Sans、Geist Mono（由 `next/font` 加载）
+- **Markdown 渲染**：
+  - **服务端**：`src/lib/markdown-server.ts` - 使用 unified 管道（remarkGfm、Shiki 代码高亮、rehype-slug 自动生成 heading ID）
+  - **客户端**：`src/components/react-markdown.tsx` - 仅用于客户端预览（TOC 使用 DOM 提取而非客户端渲染）
+  - 支持：代码高亮（Shiki）、GitHub 风格警告、图像优化、Heading ID 自动生成
+- **UI 风格与设计系统**：
+  - **组件库**：shadcn/ui (基于 Radix UI)，位于 `src/components/ui/*`
+  - **样式方案**：Tailwind CSS 4.1 (配置于 `globals.css`)
+  - **主题系统**：next-themes 支持 light/dark/system 三种模式
+  - **颜色规范**：
+    - 背景：`bg-background` / `bg-card`
+    - 文本：`text-foreground` / `text-muted-foreground`
+    - 主色调：`bg-primary` / `text-primary`
+    - 边框：`border` (使用 CSS 变量)
+  - **间距规范**：使用 Tailwind 标准间距 (4px 基数)
+  - **圆角规范**：`rounded-lg` (卡片)、`rounded-md` (按钮)、`rounded-full` (头像)
+  - **动画效果**：
+    - BlurFade：页面元素渐入动画
+    - 自定义 keyframes：slide-fade、slide-left、slide-right
+    - Transition：使用 `transition-colors`、`transition-transform` 等
+  - **响应式设计**：移动优先，断点 sm/md/lg/xl/2xl
+  - **字体**：Geist Sans (正文)、Geist Mono (代码)，通过 next/font 优化
 - **国际化（i18n）**：
   - 双语支持：中文（默认）、英文
   - 策略：查询参数 `?lang=en`（无中间件重定向）
@@ -42,116 +55,41 @@
   - 解析优先级：URL 参数 > Cookie > Accept-Language > 默认
 
 一致性与约定 ✅
-- 新的客户端组件建议使用 `-client.tsx` 命名并在文件头部添加 `"use client"`。
-- 配置集中在 `src/config/`（`site.ts`, `project.ts`, `navbar.ts`, `footer.ts` 等）。多数配置使用 `as const`，请保持类型不变。
-- 内容 frontmatter：遵循现有样例（参见 `contents/docs/*.md` 与 `contents/news/*.md`），解析由 `gray-matter` 完成。
-- **页面开发规范**：
-  - 使用 `src/lib/page-helpers.ts` 中的统一辅助函数（`PageProps`, `getPageI18n`, `generateSimpleMetadata`, `selectLocalizedText`, `PAGE_CONTAINER_CLASSES`）
-  - 使用 `src/components/layout/page-header.tsx` 中的可复用头部组件（`PageHeader`, `PageHeaderWithActions`）
-  - 避免重复实现元数据生成、locale 获取、容器类名等逻辑
+- **组件命名**：客户端组件使用 `-client.tsx` 后缀并在文件头部添加 `"use client"`
+- **配置管理**：集中在 `src/config/`，多数使用 `as const` 保持类型不变
+- **UI 一致性**：
+  - 使用 `cn()` 工具函数合并类名 (`@/lib/utils.tsx`)
+  - 复用 shadcn/ui 组件而非自定义实现
+  - 遵循现有组件的视觉风格和交互模式
+  - 颜色使用 CSS 变量 (支持主题切换)
+- **页面开发**：
+  - 使用 `PAGE_CONTAINER_CLASSES` 统一容器样式
+  - 使用 `PageHeader` 组件统一页面标题
+  - 使用 `page-helpers.ts` 中的辅助函数 (元数据、i18n、locale)
+- **内容规范**：遵循现有 Markdown frontmatter 格式 (docs/news)
 
 项目特色功能 🌟
-- **动态图标系统**：
-  - `src/app/favicon.ico` 和 `src/app/icon.png` - 动态生成带圆角的 favicon
-  - 使用 `sharp` 库进行图像处理（32x32 favicon，192x192 icon）
-  
-- **截图轮播系统**（`src/components/project/screenshots-section.tsx`）：
-  - 自动播放（6秒间隔）+ 手动导航
-  - 智能图片预加载（当前 + 前后各 1 张）
-  - 方向感知动画（slide-left / slide-right）
-  - 全屏模式支持触摸滑动和键盘导航
-  - 响应式设计（移动端优化）
-  
-- **GitHub 深度集成**：
-  - 自动获取最新 releases（`src/lib/github.ts`）
-  - 下载统计和校验和信息（SHA-256）
-  - 多平台下载按钮（Windows/Linux/macOS）
-  - 贡献者信息展示（avatar + GitHub 链接）
-  
-- **Feed 支持**（`src/app/api/news/`）：
-  - RSS 2.0 格式（`/api/news/rss`）
-  - Atom 1.0 格式（`/api/news/atom`）
-  - CDN 友好缓存策略（s-maxage=3600, stale-while-revalidate）
-  - 自动生成基于 Markdown 新闻内容
-  
-- **SEO 全面优化**：
-  - JSON-LD 结构化数据（`src/app/jsonld.tsx` - WebSite + Organization）
-  - 动态 sitemap（`src/app/sitemap.ts` - 包含所有页面）
-  - robots.txt 配置（`src/app/robots.ts` - 允许所有爬虫）
-  - PWA manifest（`src/app/manifest.ts` - 支持安装到桌面）
-  - Open Graph 和 Twitter Cards（每页自动生成）
-  
+- **动态图标系统**：动态生成带圆角的 favicon (32x32) 和 icon (192x192)，使用 sharp 库处理
+- **截图轮播系统**：自动播放 (6秒) + 手动导航 + 智能预加载 + 方向感知动画 + 全屏模式 + 触摸/键盘支持
+- **GitHub 深度集成**：自动获取 releases (下载统计、SHA-256)、贡献者信息 (avatar + 链接)
+- **Feed 支持**：RSS 2.0、Atom 1.0，CDN 缓存策略 (s-maxage=3600, stale-while-revalidate)
+- **SEO 优化**：JSON-LD 结构化数据、动态 sitemap、robots.txt、PWA manifest、Open Graph
 - **性能优化**：
-  - 图片优化（Next.js Image 组件 + WebP 格式）
-  - 字体优化（Geist 字体 next/font 自动优化）
-  - 代码分割（按路由自动分割）
-  - 静态生成 20 个页面（首次加载快）
+  - 图片：WebP 格式、尺寸优化 (deviceSizes: 4个, imageSizes: 6个)、减少约 70% 变体数量
+  - 头像：GitHub avatars 自动附加 `?s=<size>` 参数 (默认 48px，对话框 96px)
+  - 字体：Geist 通过 next/font 自动优化
+  - 构建：19 个静态页面 (SSG)、服务端 Markdown 预渲染、依赖精简 (~80KB)
 
 重要文件参考（快速跳转）📚
-- **内容与生成**： 
-  - `src/lib/docs.ts` - 文档内容读取与处理
-  - `src/lib/news.ts` - 新闻内容读取与处理
-  - `src/lib/github.ts` - GitHub API 集成（releases、contributors）
-  - `src/lib/contributors.ts` - 贡献者信息处理
-  
-- **页面辅助工具**： 
-  - `src/lib/page-helpers.ts` - 统一的页面逻辑（元数据、i18n、容器类名）
-  - `src/lib/api-helpers.ts` - API 路由辅助函数（请求解析、过滤、响应）
-  - `src/lib/utils.tsx` - 通用工具函数（cn、formatDate、jsonldScript）
-  - `src/lib/env.ts` - 环境变量管理
-  - `src/lib/hooks/useSearch.ts` - 通用搜索过滤 Hook
-  
-- **路由页面**： 
-  - `src/app/page.tsx` - 首页
-  - `src/app/docs/[slug]/page.tsx` - 文档详情页
-  - `src/app/news/[slug]/page.tsx` - 新闻详情页
-  - `src/app/releases/page.tsx` - 发行记录页
-  - `src/app/contributors/page.tsx` - 贡献者页
-  - `src/app/not-found.tsx` - 404 页面
-  
-- **API / Feed**： 
-  - `src/app/api/news/route.ts` - 新闻 JSON API
-  - `src/app/api/news/rss/route.ts` - RSS feed
-  - `src/app/api/news/atom/route.ts` - Atom feed
-  
-- **组件库**： 
-  - `src/components/react-markdown.tsx` - Markdown 渲染器
-  - `src/components/project/*` - 项目特定组件（hero、features、screenshots 等）
-  - `src/components/ui/*` - UI 基础组件（shadcn/ui）
-  - `src/components/blocks/navbar/` - 导航栏组件（navbar、language-toggle、mode-toggle）
-  - `src/components/blocks/footer.tsx` - 页脚组件
-  - `src/components/layout/page-header.tsx` - 可复用页面头部
-  
-- **配置中心**： 
-  - `src/config/site.ts` - 站点基础配置（URL、favicon、lastUpdated）
-  - `src/config/project.ts` - 项目配置（名称、描述、功能、截图、平台）
-  - `src/config/navbar.ts` - 导航栏配置
-  - `src/config/footer.ts` - 页脚配置
-  - `src/config/contact.ts` - 联系方式配置
-  - `src/config/contributors.ts` - 贡献者配置
-  - `src/data.tsx` - 全局数据聚合（整合所有配置）
-  
-- **国际化（i18n）**： 
-  - `src/lib/i18n/config.ts` - i18n 配置（locales、defaultLocale）
-  - `src/lib/i18n/locales/zh.json` - 中文字典
-  - `src/lib/i18n/locales/en.json` - 英文字典
-  - `src/lib/i18n/resolve.ts` - 统一的 locale 解析器
-  - `src/lib/i18n/server-headers.ts` - 服务端 locale 解析（server-only）
-  - `src/lib/i18n/client.tsx` - 客户端 hooks（useLocale、useDictionary）
-  - `src/lib/i18n/dictionaries.ts` - 字典加载器
-  - `src/lib/i18n/server.ts` - 服务端辅助函数
-  
-- **基础设施**： 
-  - `src/middleware.ts` - Next.js 中间件（当前为空实现，i18n 使用查询参数策略）
-  - `src/app/layout.tsx` - 根布局（元数据、主题、字体）
-  - `src/app/globals.css` - 全局样式（Tailwind、动画、主题变量）
-  - `next.config.ts` - Next.js 配置（图片优化、远程模式）
-  - `eslint.config.mts` - ESLint 配置
-  - `tsconfig.json` - TypeScript 配置
-  
-- **内容文件**： 
-  - `contents/docs/*.md` - 文档 Markdown 文件（frontmatter: title, description, order, category）
-  - `contents/news/*.md` - 新闻 Markdown 文件（frontmatter: title, date, author, tags, lang）
+- **内容与生成**：`docs.ts`, `news.ts`, `github.ts`, `contributors.ts`
+- **页面辅助**：`page-helpers.ts`, `api-helpers.ts`, `utils.tsx`, `env.ts`
+- **路由页面**：`page.tsx` (首页含 ContributorsSection), `docs/[slug]`, `news/[slug]`, `releases`, `not-found`
+- **API/Feed**：`api/news` (JSON), `api/news/rss`, `api/news/atom`
+- **组件库**：`react-markdown.tsx`, `project/*`, `ui/*` (shadcn/ui), `blocks/navbar/`, `blocks/footer.tsx`, `layout/page-header.tsx`
+- **配置中心**：`site.ts`, `project.ts` (含 assetPatterns), `navbar.ts`, `footer.ts`, `contact.ts`, `contributors.ts`, `data.tsx`
+- **国际化**：`i18n/config.ts`, `locales/{zh,en}.json`, `resolve.ts`, `server-headers.ts`, `client.tsx`, `dictionaries.ts`, `server.ts`
+- **基础设施**：`middleware.ts`, `layout.tsx`, `globals.css`, `next.config.ts`, `eslint.config.mts`, `tsconfig.json`
+- **内容文件**：`contents/docs/*.md`, `contents/news/*.md`
 
 代码架构最佳实践 🏗️
 1. **页面开发模板**：
@@ -199,7 +137,24 @@
    - 避免重复实现标题+描述+BlurFade 的布局模式
    - 相似功能提取为可复用组件或工具函数
 
-5. **Markdown 内容规范**：
+5. **资产模式配置规范**：
+   使用 `projectConfig.assetPatterns` 进行平台资产匹配，避免硬编码：
+   - **配置位置**：`src/config/project.ts` 中的 `assetPatterns` 对象
+   - **格式示例**：
+     ```typescript
+     assetPatterns: {
+       android: [
+         { pattern: /app-arm64-v8a-release\.apk$/i, displayName: "ARM64" },
+       ],
+       linux: [
+         { pattern: /watermeter-linux-release-amd64\.zip$/i, displayName: "ZIP (amd64)" },
+       ],
+     }
+     ```
+   - **使用方式**：`projectConfig.assetPatterns.android[0].pattern.test(asset.name)`
+   - **优势**：统一资产匹配逻辑、易于维护、类型安全
+
+6. **Markdown 内容规范**：
    - **文档** (`contents/docs/*.md`)：
      ```md
      ---
@@ -260,45 +215,15 @@
   5. 使用 `PAGE_CONTAINER_CLASSES` 选择容器样式
   6. 使用 `PageHeader` 组件渲染标题
 
-- 编辑文档注意：`react-markdown` 的 heading id 生成有特定规则（见 `generateHeadingId`），若需要 TOC 锚点请遵循它的字符处理。
-- 如果要在页面里引用外部图片徽章（shields.io），`react-markdown` 会用普通 `<img>` 显示；其它图片使用 `next/image`（受限于 Next 的 images config）。
+- **文档 TOC 实现**：
+  - 文档页面使用 `DocToc` 组件（`src/components/project/doc-toc.tsx`）
+  - 从渲染后的 HTML DOM 提取标题（而非 Markdown 解析）
+  - 使用 `querySelector('.prose')` 查找 h1-h6 元素
+  - 读取 `element.id`（由 rehype-slug 服务端生成）、`textContent`、`tagName`
+  - 支持滚动跟踪和锚点导航
+- 如果要在页面里引用外部图片徽章（shields.io），会用普通 `<img>` 显示；其它图片使用 `next/image`（受限于 Next 的 images config）。
 
 调试与运维提示 ⚠️
-- **开发服务器**：
-  - 使用 Turbopack：`pnpm dev` (等同于 `next dev --turbopack`)
-  - 热刷新：Markdown 内容、组件更改即时可见
-  - 端口：默认 `http://localhost:3000`
-  
-- **API 路由**：
-  - `/api/news` - JSON 格式新闻列表（支持 `?lang=en/zh` 过滤）
-  - `/api/news/rss` - RSS 2.0 feed（带缓存：`s-maxage=3600, stale-while-revalidate`）
-  - `/api/news/atom` - Atom 1.0 feed（同样缓存策略）
-  
-- **环境变量**：
-  - 通过 `src/lib/env.ts` 管理（使用 `@t3-oss/env-nextjs` 验证）
-  - 公共变量：`NEXT_PUBLIC_*` 前缀
-  
-- **图片优化**：
-  - 远程图片域名在 `next.config.ts` 中配置 `remotePatterns`
-  - 支持域名：`cdn.imoscarz.me`、GitHub avatars、shields.io 等
-  - 格式：WebP（自动优化）
-  - 缓存：31 天 TTL
-  
-- **构建输出**：
-  - 静态页面：20 个（docs、news、其他）
-  - 路由类型：○ Static、● SSG、ƒ Dynamic
-  - First Load JS：约 102 KB 共享，首页 ~556 KB
-  
-- **跨平台注意**：
-  - Windows：`dev` 脚本使用 `set NODE_OPTIONS=...`
-  - CI/CD：考虑使用 `cross-env` 确保环境变量跨平台兼容
-  
-- **脚本工具**：
-  - `scripts/update-build-date.mjs` - 自动更新构建日期到 `site.ts`
-  - `scripts/check-external-images.mjs` - 检查外部图片链接有效性
-  - 构建前自动执行：`pnpm prebuild`
-
-功能开发工作流 🚀
 - **开发前准备**：
   1. 确认 Node 版本在 18.18.0 ~ 22 范围内
   2. 使用 `pnpm install` 安装依赖
@@ -313,40 +238,7 @@
 - **提交前验证**（必须执行）：
   1. `pnpm lint` - 检查代码风格与 ESLint 规则
   2. `pnpm build` - 验证构建无错误（TypeScript 类型检查 + 静态生成）
-  3. 确认构建成功（20 个静态页面生成）
-  4. 执行 `git commit` 提交变更
-
-- **常见开发场景**：
-  - **修改配置**：编辑 `src/config/*.ts`，自动类型检查
-  - **新增内容**：在 `contents/` 添加 Markdown 文件，无需重启
-  - **调整样式**：修改 Tailwind 类名或 `globals.css`，即时生效
-  - **更新 i18n**：同步修改 `locales/en.json` 和 `zh.json`
-  - **添加组件**：客户端组件使用 `-client.tsx` 后缀
-
-- **调试技巧**：
-  - 使用 VS Code 的 TypeScript 错误提示
-  - 检查浏览器控制台的运行时错误
-  - 使用 `console.log` 调试（仅开发环境）
-  - 查看 Next.js 编译输出（终端信息）
-
-这确保提交的代码符合项目标准且能成功构建部署。
-
-功能开发工作流 🚀
-- **开发前准备**：
-  1. 确认 Node 版本在 18.18.0 ~ 22 范围内
-  2. 使用 `pnpm install` 安装依赖
-  3. 了解要修改的模块和相关文件
-
-- **开发过程**：
-  1. 启动开发服务器：`pnpm dev`
-  2. 按需修改代码、配置或内容
-  3. 浏览器实时预览更改（Turbopack 热刷新）
-  4. 遵循项目约定（见"代码架构最佳实践"）
-
-- **提交前验证**（必须执行）：
-  1. `pnpm lint` - 检查代码风格与 ESLint 规则
-  2. `pnpm build` - 验证构建无错误（TypeScript 类型检查 + 静态生成）
-  3. 确认构建成功（20 个静态页面生成）
+  3. 确认构建成功（19 个静态页面生成）
   4. 执行 `git commit` 提交变更
 
 - **常见开发场景**：
@@ -372,5 +264,32 @@
   - 复用现有辅助函数和组件
   - 避免重复实现已有功能
   - 保持 i18n 完整性（同步更新英文和中文）
+
+性能优化实践指南 ⚡
+- **图片使用**：
+  - 优先使用 WebP 格式
+  - 使用 Next.js Image 组件而非 `<img>` 标签
+  - GitHub 头像会自动添加尺寸参数，无需手动处理
+  - 避免添加过多 deviceSizes 和 imageSizes 配置
+  
+- **依赖管理**：
+  - 定期检查未使用的依赖（`pnpm list`）
+  - 移除不需要的库减少打包体积
+  - 优先选择体积小的替代方案
+  
+- **服务端优先**：
+  - 优先使用 Server Components（默认）
+  - 仅在需要交互时使用 Client Components
+  - 数据获取和计算在服务端完成
+  
+- **Markdown 处理**：
+  - Markdown 在服务端预渲染为 HTML
+  - 客户端通过 DOM 操作处理已渲染内容
+  - 避免在客户端重复解析 Markdown
+  
+- **资源配置**：
+  - 使用配置文件管理资产模式（`assetPatterns`）
+  - 避免硬编码文件名和正则表达式
+  - 保持配置集中化便于维护
 
 如果有遗漏或想补充的实践点，请指出我将更新此文件（例如：CI 流程、发布脚本、或更详细的组件开发约定）。
