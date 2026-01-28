@@ -97,6 +97,7 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
           <div className="flex items-center gap-8">
             <div className="shrink-0">
               {/* 使用原生 img 标签，避免消耗 Vercel 图片优化限额 */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={(function addSize(src: string) {
                   try {

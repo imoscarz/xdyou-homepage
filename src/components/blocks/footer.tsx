@@ -36,8 +36,8 @@ export default function Footer() {
 
   useEffect(() => {
     const loadDictionary = async () => {
-      const module = await import(`@/lib/i18n/locales/${currentLocale}.json`);
-      setDict(module.default);
+      const loadedModule = await import(`@/lib/i18n/locales/${currentLocale}.json`);
+      setDict(loadedModule.default);
     };
     loadDictionary();
   }, [currentLocale]);

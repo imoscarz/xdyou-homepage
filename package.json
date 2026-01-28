@@ -6,7 +6,8 @@
     "prebuild": "node scripts/update-build-date.mjs",
     "build": "pnpm prebuild && next build",
     "dev": "set NODE_OPTIONS=--no-deprecation && next dev --turbopack",
-    "lint": "next lint",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "start": "next start",
     "check:images": "node scripts/check-external-images.mjs"
   },

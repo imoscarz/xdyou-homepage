@@ -10,10 +10,10 @@
  * - src/config/project.ts 中的截图配置
  */
 
-import { readFileSync, readdirSync, statSync } from 'fs';
-import { join, extname } from 'path';
-import { fileURLToPath } from 'url';
+import { readdirSync, readFileSync, statSync } from 'fs';
+import { extname,join } from 'path';
 import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

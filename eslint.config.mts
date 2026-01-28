@@ -1,19 +1,42 @@
 import js from "@eslint/js";
-import { defineConfig } from "eslint/config";
+import nextPlugin from "@next/eslint-plugin-next";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
-export default defineConfig([
+export default tseslint.config(
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    plugins: { js, "simple-import-sort": simpleImportSort },
+    plugins: {
+      "@next/next": nextPlugin,
+      "simple-import-sort": simpleImportSort,
+    },
     rules: {
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs["core-web-vitals"].rules,
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
     },
-    extends: ["js/recommended"],
-    languageOptions: { globals: globals.browser },
+    languageOptions: { 
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      }
+    },
   },
-  tseslint.configs.recommended,
-]);
+  {
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "out/**",
+      "build/**",
+      "public/**",
+      "next-env.d.ts",
+      "*.config.js",
+      "*.config.ts",
+      "*.config.mjs",
+    ],
+  }
+);
