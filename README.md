@@ -10,6 +10,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 XDYou 项目的主页，为西安电子科技大学学生提供课程表查询、考试安排、校园服务等功能的移动应用。
+
 </div>
 
 ## 项目结构
@@ -80,8 +81,6 @@ assetPatterns: {
   // ...
 }
 ```
-
-使用方式：`projectConfig.assetPatterns.android[0].pattern.test(asset.name)`
 
 #### 截图配置 (`project.ts`)
 
@@ -255,7 +254,11 @@ frontmatter配置如下：
 
 ## 许可证
 
-本项目采用 [MIT License](LICENSE) 开源协议。
+本项目源代码采用 [MIT License](LICENSE) 开源协议。
+
+本项目中的文档（见`contents`目录）遵循 [BenderBlog/traintime_pda](https://github.com/BenderBlog/traintime_pda) 采用 [MPL-2.0 License](https://github.com/BenderBlog/traintime_pda/blob/main/LICENSE) 开源协议。
+
+XDYou Logo等一些美术资源，许可信息参见 [这个文件](https://github.com/BenderBlog/traintime_pda/blob/main/assets/README.MD)
 
 ---
 
