@@ -7,7 +7,6 @@ export const contact = {
       url: "https://github.com/BenderBlog/traintime_pda",
       icon: Icons.github,
       navbar: false,
-      content: true,
       footer: true,
     },
     Email: {
@@ -15,7 +14,13 @@ export const contact = {
       url: "mailto:superbart_chen@qq.com",
       icon: Icons.email,
       navbar: false,
-      content: true,
+      footer: true,
+    },
+    QQ: {
+      name: "QQ", 
+      url: "https://qm.qq.com/q/G6JHg3G68o",
+      icon: Icons.qq,
+      navbar: false,
       footer: true,
     },
   },

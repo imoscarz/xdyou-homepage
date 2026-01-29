@@ -119,7 +119,7 @@ export default function Navbar() {
           );
         })}
         <Separator orientation="vertical" className="h-full" />
-        {/* {Object.entries(DATA.contact.social)
+        {Object.entries(DATA.contact.social)
           .filter(([, social]) => social.navbar)
           .map(([name, social]) => (
             <DockIcon key={name}>
@@ -127,6 +127,8 @@ export default function Navbar() {
                 <TooltipTrigger asChild>
                   <Link
                     href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={cn(
                       buttonVariants({ variant: "ghost", size: "icon" }),
                       "size-12",
@@ -135,13 +137,13 @@ export default function Navbar() {
                     <social.icon className="size-4" />
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent side={isDesktop ? "bottom" : "top"} sideOffset={8}>
                   <p>{name}</p>
                 </TooltipContent>
               </Tooltip>
             </DockIcon>
           ))}
-        <Separator orientation="vertical" className="h-full py-2" /> */}
+        <Separator orientation="vertical" className="h-full py-2" />
         <DockIcon
           fluid
           className="md:hover:bg-muted-foreground transition-none hover:bg-transparent md:transition-colors"
