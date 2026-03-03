@@ -18,6 +18,10 @@ import { DATA } from "@/data";
 import { useDictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
+const navbarSocialEntries = Object.entries(DATA.contact.social).filter(
+  ([, social]) => social.navbar,
+);
+
 export default function Navbar() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -118,31 +122,36 @@ export default function Navbar() {
             </DockIcon>
           );
         })}
-        <Separator orientation="vertical" className="h-full" />
-        {Object.entries(DATA.contact.social)
-          .filter(([, social]) => social.navbar)
-          .map(([name, social]) => (
-            <DockIcon key={name}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-12",
-                    )}
+        {navbarSocialEntries.length > 0 && (
+          <>
+            <Separator orientation="vertical" className="h-full" />
+            {navbarSocialEntries.map(([name, social]) => (
+              <DockIcon key={name}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        buttonVariants({ variant: "ghost", size: "icon" }),
+                        "size-12",
+                      )}
+                    >
+                      <social.icon className="size-4" />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side={isDesktop ? "bottom" : "top"}
+                    sideOffset={8}
                   >
-                    <social.icon className="size-4" />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side={isDesktop ? "bottom" : "top"} sideOffset={8}>
-                  <p>{name}</p>
-                </TooltipContent>
-              </Tooltip>
-            </DockIcon>
-          ))}
+                    <p>{name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </DockIcon>
+            ))}
+          </>
+        )}
         <Separator orientation="vertical" className="h-full py-2" />
         <DockIcon
           fluid
