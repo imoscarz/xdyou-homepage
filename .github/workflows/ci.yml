@@ -27,8 +27,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check external images
-        run: node scripts/check-external-images.mjs
+      - name: Check images
+        run: node scripts/check-images.mjs
 
       - name: Lint
         run: pnpm lint

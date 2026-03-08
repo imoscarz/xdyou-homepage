@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "start": "next start",
-    "check:images": "node scripts/check-external-images.mjs"
+    "check:images": "node scripts/check-images.mjs"
   },
   "dependencies": {
     "@google-analytics/data": "^5.2.0",

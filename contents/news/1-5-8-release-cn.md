@@ -33,7 +33,7 @@ lang: "zh"
 
 版本更新后，有 iOS 用户反馈在锁屏页面负一层看不到我程序的小部件，如下图所示。
 
-![](img/blog/ios-locked.jpg)
+![](/img/blog/ios-locked.jpg)
 
 用户还提供了与其相关的[官方文档](https://support.apple.com/zh-cn/guide/security/secbb0a1f9b4/web)，这里面提到：
 
@@ -67,7 +67,7 @@ try fileManager.setAttributes(
 )
 ```
 
-![](img/blog/ios-locked-fix.jpg)
+![](/img/blog/ios-locked-fix.jpg)
 
 
 该修复将随下个版本发布，该修复已由一个用户通过 adhoc 构建渠道验证。上图中在锁定模式下，负一屏中我程序小部件正常显示。
@@ -78,11 +78,11 @@ try fileManager.setAttributes(
 
 快开学的时候，我收到了大量画图错误的反馈。在一个用户的帮助下，我修复了该错误，顺手加了个显示具体错误信息的特性。我把修复后包传给这个用户的时候，我本想看到绘图正常，结果来了个这个：
 
-![](img/blog/cookie-exception.jpg)
+![](/img/blog/cookie-exception.jpg)
 
 Cookie拦截器在处理一个响应头`Set-Cookie: Secure`的时候报错，服务器真给我塞了个这个？于是我打开浏览器抓包，发现真的是这样：
 
-![](img/blog/abnormal-cookie.png)
+![](/img/blog/abnormal-cookie.png)
 
 鉴于这是库的问题，我去该库[提了个 issue](https://github.com/cfug/dio/issues/2492)。这类错误实际上很好修，过滤掉错误的 Cookie 就行了，不过我担心他们不认，就没搞。出乎我意料的是，他们直接一个 AI 修复就完了，允许在处理出错时候直接返回空值。好可惜啊，我错过了一个好的 PR 机会。
 

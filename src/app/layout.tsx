@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
+import Script from "next/script";
 import { ThemeProvider } from "next-themes";
 import { Suspense } from "react";
 
@@ -94,7 +95,20 @@ export default function ChineseLayout({
         {/* Preconnect to external resources */}
         <link rel="preconnect" href="https://avatars.githubusercontent.com" />
         
-        {/* Google Tag Manager */}
+        {/* Google Analytics */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.gaMeasurementId}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${siteConfig.gaMeasurementId}');
+          `}
+        </Script>
+
         {/* Baidu Site Verification */}
 
         {/* JSON-LD Schemas */}
@@ -109,9 +123,6 @@ export default function ChineseLayout({
           fontSans.variable,
         )}
       >
-        {/* Google Tag Manager (noscript) */}
-        {/* End Google Tag Manager (noscript) */}
-
         {/* Main Layout */}
         <ThemeProvider attribute="class" defaultTheme="system">
           <TooltipProvider delayDuration={0}>
