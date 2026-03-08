@@ -20,6 +20,7 @@ type ReleasesClientProps = {
     sourceCode: string;
     downloadCount: string;
     checksum: string;
+    download: string;
     loadMore: string;
     noReleases: string;
     toc: string;
@@ -116,6 +117,7 @@ export default function ReleasesClient({
               sourceCode: dict.sourceCode,
               downloadCount: dict.downloadCount,
               checksum: dict.checksum,
+              download: dict.download,
               windowsMaintenanceWarning: dict.windowsMaintenanceWarning,
             }}
           />

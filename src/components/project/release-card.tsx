@@ -32,6 +32,7 @@ type ReleaseCardProps = {
     sourceCode: string;
     downloadCount: string;
     checksum: string;
+    download: string;
     windowsMaintenanceWarning?: string;
   };
 };
@@ -64,7 +65,7 @@ export default function ReleaseCard({
     <BlurFade delay={delay}>
       <Card className="scroll-mt-24" data-release-id={release.id}>
         <CardHeader className="bg-muted/50">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex flex-row items-start justify-between gap-4">
             <div className="flex-1 space-y-2">
               <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
                 <Tag className="size-4 sm:size-5" />
@@ -84,7 +85,7 @@ export default function ReleaseCard({
               asChild
               variant="default"
               size="sm"
-              className="w-full sm:w-auto"
+              className="shrink-0"
             >
               <Link
                 href={release.html_url}
@@ -162,7 +163,7 @@ export default function ReleaseCard({
                           key={asset.id}
                           className="rounded-lg border border-border bg-card p-3 sm:p-4"
                         >
-                            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                            <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
                               <div className="flex-1 space-y-1">
                                 <div className="flex items-center gap-2">
                                   <p className="text-sm font-medium break-all sm:text-base">
@@ -227,14 +228,14 @@ export default function ReleaseCard({
                               <Button
                                 asChild
                                 size="sm"
-                                className="w-full shrink-0 sm:w-auto"
+                                className="shrink-0"
                               >
                                 <Link
                                   href={asset.browser_download_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  Download
+                                  {dict.download}
                                 </Link>
                               </Button>
                             </div>
