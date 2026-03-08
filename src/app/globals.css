@@ -237,6 +237,13 @@ code[data-theme*="light"] span {
   }
 }
 
+/* Class-based dark mode (next-themes) */
+.dark code[data-theme*="dark"],
+.dark code[data-theme*="dark"] span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
 pre > code[data-line-numbers-max-digits="2"] > [data-line]::before {
   width: 2rem;
 }

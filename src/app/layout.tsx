@@ -94,6 +94,8 @@ export default function ChineseLayout({
       <head>
         {/* Preconnect to external resources */}
         <link rel="preconnect" href="https://avatars.githubusercontent.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         
         {/* Google Analytics */}
         <Script

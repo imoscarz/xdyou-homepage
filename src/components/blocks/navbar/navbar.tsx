@@ -101,7 +101,7 @@ export default function Navbar() {
                         "bg-accent text-accent-foreground hover:bg-accent/90 shadow-inner",
                     )}
                     aria-label={translatedLabel}
-                    aria-pressed={isActive}
+                    aria-current={isActive ? "page" : undefined}
                     {...(item.href.endsWith(".pdf") ? { prefetch: false } : {})}
                   >
                     <item.icon className="size-4" />

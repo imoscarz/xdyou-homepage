@@ -97,25 +97,6 @@ export default function ScreenshotsSection({
 
   const totalSlides = screenshotGroups.length;
 
-  // 预加载当前/前一张/后一张的图片以避免切换白屏
-  useEffect(() => {
-    if (typeof window === "undefined" || totalSlides === 0) return;
-
-    const loaded = new Set<string>();
-    const preloadGroup = (index: number) => {
-      if (index < 0 || index >= totalSlides) return;
-      screenshotGroups[index]?.forEach(({ src }) => {
-        if (loaded.has(src)) return;
-        const img = new window.Image();
-        img.src = src;
-        loaded.add(src);
-      });
-    };
-
-    preloadGroup(currentIndex);
-    preloadGroup((currentIndex + 1) % totalSlides);
-    preloadGroup((currentIndex - 1 + totalSlides) % totalSlides);
-  }, [currentIndex, screenshotGroups, totalSlides]);
 
   // 自动播放效果
   useEffect(() => {
@@ -221,6 +202,7 @@ export default function ScreenshotsSection({
                       src={currentGroup[0].src}
                       alt={currentGroup[0].alt}
                       fill
+                      sizes="280px"
                       className="rounded-lg object-contain shadow-lg"
                       priority={currentIndex === 0}
                     />
@@ -241,6 +223,7 @@ export default function ScreenshotsSection({
                           src={currentGroup[0].src}
                           alt={currentGroup[0].alt}
                           fill
+                          sizes="(max-width: 1280px) 100vw, 896px"
                           className="rounded-lg object-cover shadow-lg"
                           priority={currentIndex === 0}
                         />
@@ -262,6 +245,7 @@ export default function ScreenshotsSection({
                             src={screenshot.src}
                             alt={screenshot.alt}
                             fill
+                            sizes="280px"
                             className="rounded-lg object-contain shadow-lg"
                             priority={currentIndex === 0 && idx === 0}
                           />
@@ -335,18 +319,23 @@ export default function ScreenshotsSection({
 
             {/* Dots indicator */}
             {totalSlides > 1 && (
-              <div className="flex justify-center gap-2 pb-4">
+              <div className="flex justify-center gap-1 pb-4">
                 {Array.from({ length: totalSlides }).map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}
-                    className={`h-2 w-2 rounded-full transition-all ${
-                      idx === currentIndex
-                        ? "bg-primary w-4"
-                        : "bg-primary/30 hover:bg-primary/50"
-                    }`}
+                    className="flex h-6 w-6 items-center justify-center"
                     aria-label={`切换到第 ${idx + 1} 张截图`}
-                  />
+                    aria-current={idx === currentIndex ? "true" : undefined}
+                  >
+                    <span
+                      className={`block h-2 rounded-full transition-all ${
+                        idx === currentIndex
+                          ? "bg-primary w-4"
+                          : "bg-primary/30 w-2 hover:bg-primary/50"
+                      }`}
+                    />
+                  </button>
                 ))}
               </div>
             )}
