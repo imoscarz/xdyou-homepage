@@ -1,17 +1,19 @@
 import dynamic from "next/dynamic";
 
 import DownloadsSection from "@/components/project/downloads-section";
-import FeaturesSection from "@/components/project/features-section";
 import HeroSection from "@/components/project/hero-section";
-import ScreenshotsSection from "@/components/project/screenshots-section";
-import { contributors } from "@/config/contributors";
+import HomeChapters from "@/components/project/home-chapters";
+import HomeEffects from "@/components/project/home-effects-client";
+import HomeToc from "@/components/project/home-toc-client";
+import JoinSection from "@/components/project/join-section";
+import { getContributors } from "@/config/contributors";
+import { homeSections } from "@/config/home-chapters";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { fetchLatestRelease } from "@/lib/github";
 import { renderMarkdownToHTML } from "@/lib/markdown-server";
 import {
   getPageI18n,
-  PAGE_CONTAINER_CLASSES,
   type PageProps,
   selectLocalizedText,
 } from "@/lib/page-helpers";
@@ -19,25 +21,24 @@ import {
 // 懒加载非首屏组件
 const ContributorsSectionDynamic = dynamic(
   () => import("@/components/project/contributors-section"),
-  { ssr: true }
+  { ssr: true },
 );
 
 export default async function Page({ searchParams }: PageProps) {
   const { locale, dict } = await getPageI18n(searchParams);
 
-  // Prepare features with localized text
-  const features = projectConfig.features.map((feature) => ({
-    icon: feature.icon,
-    title: selectLocalizedText(locale, feature.title),
-    description: selectLocalizedText(locale, feature.description),
-  }));
-
-  // Prepare screenshots with localized captions
-  const screenshots = projectConfig.screenshots.map((screenshot) => ({
-    src: screenshot.src,
-    alt: screenshot.alt,
-    type: screenshot.type,
-    caption: selectLocalizedText(locale, screenshot.caption),
+  const tocItems = homeSections.map((id) => ({
+    id,
+    label:
+      id === "hero"
+        ? dict.home.pages.overview
+        : id === "downloads"
+          ? dict.home.downloads.badge
+          : id === "join"
+            ? dict.home.pages.join.label
+            : id === "contributors"
+              ? dict.home.contributors.badge
+              : dict.home.pages.chapters[id].label,
   }));
 
   // Prepare platforms
@@ -53,46 +54,33 @@ export default async function Page({ searchParams }: PageProps) {
     ? {
         version: release.tag_name,
         date: new Date(release.published_at).toLocaleDateString(locale),
-        notes: release.body || "No release notes available.",
-        notesHtml: await renderMarkdownToHTML(release.body || "No release notes available."),
+        notes: release.body || dict.home.downloads.noReleaseNotes,
+        notesHtml: await renderMarkdownToHTML(
+          release.body || dict.home.downloads.noReleaseNotes,
+        ),
         downloadUrl: release.html_url,
         assets: release.assets,
       }
     : undefined;
 
-  // Find platform-specific download URLs using configured patterns
-  const androidAsset = release?.assets.find((a) =>
-    projectConfig.assetPatterns.android[0].pattern.test(a.name),
-  );
-  const iosUrl = platforms.find((p) => p.id === "ios")?.downloadUrl || "#";
-  const windowsAsset = release?.assets.find((a) =>
-    projectConfig.assetPatterns.windows[0].pattern.test(a.name),
-  );
-  const linuxAsset = release?.assets.find((a) =>
-    projectConfig.assetPatterns.linux[0].pattern.test(a.name),
-  );
+  const iosUrl =
+    platforms.find((p) => p.id === "ios")?.downloadUrl || "#download-ios";
 
   return (
-    <main className={PAGE_CONTAINER_CLASSES.home}>
-      {/* Hero Section */}
+    <main className="home-pages mx-auto w-full max-w-[1440px] px-6 pt-16 pb-24 md:px-12 md:pt-24 xl:px-16">
+      {/* Hero spans the full width; only subsequent chapters reserve a TOC column. */}
       <HeroSection
         projectName={projectConfig.fullName}
         slogan={selectLocalizedText(locale, projectConfig.slogan)}
         description={selectLocalizedText(locale, projectConfig.description)}
         logo={projectConfig.logo}
-        androidUrl={
-          androidAsset?.browser_download_url ||
-          projectConfig.repo.url + "/releases/latest"
+        assets={
+          release?.assets.map(({ name, browser_download_url }) => ({
+            name,
+            browser_download_url,
+          })) || []
         }
         iosUrl={iosUrl}
-        windowsUrl={
-          windowsAsset?.browser_download_url ||
-          projectConfig.repo.url + "/releases/latest"
-        }
-        linuxUrl={
-          linuxAsset?.browser_download_url ||
-          projectConfig.repo.url + "/releases/latest"
-        }
         githubUrl={projectConfig.repo.url}
         delay={BLUR_FADE_DELAY}
         dict={{
@@ -102,50 +90,45 @@ export default async function Page({ searchParams }: PageProps) {
         }}
       />
 
-      {/* Features Section */}
-      <FeaturesSection
-        features={features}
-        dict={{
-          badge: dict.home.features.badge,
-          title: dict.home.features.title,
-        }}
-      />
+      <div className="grid grid-cols-1 gap-x-12 xl:grid-cols-[minmax(0,1fr)_144px]">
+        <div className="min-w-0">
+          <HomeChapters locale={locale} dict={dict} />
 
-      {/* Screenshots Section */}
-      <ScreenshotsSection
-        screenshots={screenshots}
-        dict={{
-          badge: dict.home.screenshots.badge,
-          title: dict.home.screenshots.title,
-        }}
-      />
+          {/* Downloads Section */}
+          <DownloadsSection
+            platforms={platforms}
+            latestRelease={latestRelease}
+            dict={{
+              badge: dict.home.downloads.badge,
+              title: dict.home.downloads.title,
+              latestVersion: dict.home.downloads.latestVersion,
+              thirdParty: dict.home.downloads.thirdParty,
+              ohosNotice: dict.home.downloads.ohosNotice,
+              appGallery: dict.home.downloads.appGallery,
+              releaseNotes: dict.home.downloads.releaseNotes,
+              downloadFor: dict.home.downloads.downloadFor,
+              comingSoon: dict.home.downloads.comingSoon,
+              unavailable: dict.home.downloads.unavailable,
+              maintenanceLabel: dict.home.downloads.maintenanceLabel,
+              maintenanceNotice: dict.home.downloads.maintenanceNotice,
+            }}
+          />
 
-      {/* Downloads Section */}
-      <DownloadsSection
-        platforms={platforms}
-        latestRelease={latestRelease}
-        dict={{
-          badge: dict.home.downloads.badge,
-          title: dict.home.downloads.title,
-          latestVersion: dict.home.downloads.latestVersion,
-          releaseNotes: dict.home.downloads.releaseNotes,
-          downloadFor: dict.home.downloads.downloadFor,
-          comingSoon: dict.home.downloads.comingSoon,
-          unavailable: dict.home.downloads.unavailable,
-          windowsMaintenanceWarning:
-            dict.home.downloads.windowsMaintenanceWarning,
-        }}
-      />
-
-      {/* Contributors Section */}
-      <ContributorsSectionDynamic
-        contributors={contributors}
-        dict={{
-          badge: dict.home.contributors.badge,
-          title: dict.home.contributors.title,
-          viewAll: dict.home.contributors.viewAll,
-        }}
-      />
+          <JoinSection copy={dict.home.pages.join} locale={locale} />
+          {/* Contributors Section */}
+          <ContributorsSectionDynamic
+            contributors={getContributors(locale)}
+            dict={{
+              badge: dict.home.contributors.badge,
+              title: dict.home.contributors.title,
+              description: dict.home.contributors.description,
+              close: dict.home.screenshots.close,
+            }}
+          />
+        </div>
+        <HomeToc items={tocItems} label={dict.home.pages.toc} />
+      </div>
+      <HomeEffects />
     </main>
   );
 }

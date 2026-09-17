@@ -143,7 +143,7 @@
     --background: 210 11.1% 3.53%;
     --foreground: 0 0% 98%;
 
-    --card: 210 11.1% 3.53%;
+    --card: 210 11.1% 6%;
     --card-foreground: 0 0% 98%;
 
     --popover: 210 11.1% 3.53%;
@@ -176,6 +176,28 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .surface-card {
+    @apply bg-card text-card-foreground border-border/80 rounded-2xl border shadow-sm;
+  }
+  .surface-interactive {
+    @apply hover:border-foreground/25 hover:bg-accent/40 focus-visible:ring-ring transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none;
+  }
+  .surface-notice {
+    @apply bg-muted/40 text-muted-foreground border-border rounded-xl border p-4 text-sm leading-relaxed;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
@@ -328,7 +350,7 @@ pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
 }
 
 .prose pre {
-  @apply rounded-lg border border-border bg-muted p-4 overflow-x-auto;
+  @apply border-border bg-muted overflow-x-auto rounded-lg border p-4;
   background-color: var(--shiki-light-bg, #f8f8f8);
 }
 
@@ -338,7 +360,7 @@ pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
 
 /* 代码块内代码 */
 .prose code {
-  @apply bg-muted px-1.5 py-0.5 rounded text-sm;
+  @apply bg-muted rounded px-1.5 py-0.5 text-sm;
 }
 
 .prose pre code {
@@ -354,7 +376,7 @@ pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
 
 /* 目录样式 */
 .prose-toc {
-  @apply list-none pl-0 space-y-1;
+  @apply list-none space-y-1 pl-0;
 }
 
 .prose-toc li {
@@ -392,7 +414,7 @@ pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
 
 /* GitHub 风格警告块 */
 .prose .markdown-alert {
-  @apply border-l-4 px-3 py-2.5 my-4 rounded-r-lg;
+  @apply my-4 rounded-r-lg border-l-4 px-3 py-2.5;
 }
 
 .prose .markdown-alert-note {
@@ -416,11 +438,11 @@ pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
 }
 
 .prose .markdown-alert-title {
-  @apply font-semibold mb-1 flex items-center gap-2 text-sm;
+  @apply mb-1 flex items-center gap-2 text-sm font-semibold;
 }
 
 .prose .markdown-alert-title svg {
-  @apply flex-shrink-0 w-4 h-4;
+  @apply h-4 w-4 flex-shrink-0;
 }
 
 .prose .markdown-alert-note .markdown-alert-title {
@@ -473,11 +495,11 @@ pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
 }
 
 .prose th {
-  @apply border border-border bg-muted px-4 py-2 text-left font-semibold;
+  @apply border-border bg-muted border px-4 py-2 text-left font-semibold;
 }
 
 .prose td {
-  @apply border border-border px-4 py-2;
+  @apply border-border border px-4 py-2;
 }
 
 .prose tr:nth-child(even) {
@@ -508,5 +530,423 @@ pre > code[data-line-numbers-max-digits="3"] > [data-line]::before {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+/* A shared, restrained motion rhythm for content changes. */
+@keyframes content-reveal {
+  from {
+    opacity: 0.6;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.content-reveal {
+  animation: content-reveal 180ms ease-out backwards;
+}
+
+/* Only the homepage opts into gentle document scrolling; no nested scroll area. */
+.home-pages section[id] {
+  scroll-margin-top: 96px;
+}
+.home-pages #hero {
+  margin-top: 0;
+  padding-block: 32px 96px;
+}
+.home-chapter {
+  display: flex;
+  align-items: center;
+  padding-block: 72px;
+}
+.home-pages #downloads,
+.home-pages #contributors {
+  padding-block: 72px;
+}
+@media (min-width: 1280px) and (prefers-reduced-motion: no-preference) {
+  html.home-paging {
+    scroll-snap-type: y proximity;
+  }
+  .home-pages section[id] {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+  }
+}
+@media (min-width: 1280px) {
+  .home-chapter {
+    min-height: calc(100dvh - 96px);
+    padding-block: 64px;
+  }
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+  animation-timing-function: ease-out;
+  mix-blend-mode: normal;
+}
+@media (prefers-reduced-motion: reduce) {
+  .content-reveal {
+    animation: none;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* Reference-inspired stacked pages, implemented with native sticky positioning. */
+.home-page-marker {
+  display: block;
+  height: 1px;
+  margin-bottom: -1px;
+  scroll-margin-top: 80px;
+  scroll-snap-align: start;
+}
+.home-chapter {
+  position: sticky;
+  top: 80px;
+  height: calc(100svh - 80px);
+  min-height: 0;
+  padding: 32px 0;
+  background: hsl(var(--background));
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+}
+.chapter-layout {
+  height: 100%;
+  min-height: 0;
+  gap: 32px;
+}
+.chapter-copy {
+  display: grid;
+  gap: 20px;
+}
+.chapter-media {
+  height: 100%;
+  max-height: 62svh;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.chapter-capture {
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
+}
+.chapter-capture > button {
+  aspect-ratio: auto !important;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.chapter-capture > button > img {
+  width: auto;
+  height: auto;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid hsl(var(--border));
+}
+.home-chapter[data-layout="wide"] .chapter-layout {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.home-chapter[data-layout="wide"] .chapter-copy {
+  gap: 12px;
+  max-width: none;
+}
+.home-chapter[data-layout="wide"] .chapter-copy ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.home-chapter[data-layout="daily"] .chapter-capture {
+  margin-top: 0;
+}
+.home-chapter[data-layout="daily"] .chapter-capture:last-child {
+  transform: translateY(18px);
+}
+.home-pages #downloads {
+  position: relative;
+  z-index: 10;
+  background: hsl(var(--background));
+  border-top: 1px solid hsl(var(--border));
+  border-radius: 24px 24px 0 0;
+  min-height: calc(100svh - 80px);
+  padding-block: 64px;
+}
+.home-pages #downloads.has-entered > div {
+  animation: download-arrive 700ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+@keyframes download-arrive {
+  from {
+    opacity: 0.2;
+    transform: translateY(42px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.home-join {
+  position: relative;
+  z-index: 9;
+  background: hsl(var(--background));
+  min-height: calc(100svh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 0;
+}
+[data-home-reveal].has-entered {
+  animation: download-arrive 700ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.home-pages #contributors {
+  position: relative;
+  z-index: 11;
+  background: hsl(var(--background));
+  min-height: calc(100svh - 80px);
+  padding: 72px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.contributor-field {
+  position: relative;
+  flex: 1;
+  min-height: 480px;
+  isolation: isolate;
+}
+.contributor-field[data-ready="false"] {
+  visibility: hidden;
+}
+.contributor-bubble {
+  position: absolute;
+  width: var(--bubble-size);
+  height: var(--bubble-size);
+  translate: -50% -50%;
+  animation: bubble-float var(--float-time) ease-in-out var(--float-delay)
+    infinite alternate;
+  animation-play-state: paused;
+}
+.contributor-field.in-view .contributor-bubble {
+  animation-play-state: running;
+}
+.contributor-field:hover .contributor-bubble,
+.contributor-field:focus-within .contributor-bubble {
+  animation-play-state: paused;
+}
+.contributor-bubble:has(:hover, :focus-visible) {
+  z-index: 2;
+}
+.bubble-avatar {
+  width: var(--bubble-size);
+  height: var(--bubble-size);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px hsl(var(--border));
+  transition: box-shadow 180ms;
+}
+.bubble-trigger:hover .bubble-avatar,
+.bubble-trigger:focus-visible .bubble-avatar {
+  box-shadow: 0 0 0 3px hsl(var(--foreground) / 0.2);
+}
+.bubble-name {
+  position: absolute;
+  top: calc(100% + 6px);
+  max-width: 120px;
+  width: max-content;
+  padding: 4px 8px;
+  border: 1px solid hsl(var(--border) / 0.7);
+  border-radius: 8px;
+  background: hsl(var(--background) / 0.85);
+  backdrop-filter: blur(16px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms;
+}
+.bubble-trigger:hover .bubble-name,
+.bubble-trigger:focus-visible .bubble-name {
+  opacity: 1;
+}
+.bubble-name p {
+  font-size: 11px;
+}
+@keyframes bubble-float {
+  from {
+    transform: translate(0, -4px);
+  }
+  to {
+    transform: translate(var(--float-x), 4px);
+  }
+}
+.dialog-surface[data-state="open"] {
+  animation: dialog-appear 180ms ease-out;
+}
+.dialog-surface[data-state="closed"] {
+  animation: dialog-appear 150ms ease-in reverse;
+}
+@keyframes dialog-appear {
+  from {
+    opacity: 0;
+    scale: 0.98;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dialog-surface[data-state] {
+    animation: none;
+  }
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .dialog-surface,
+  .bubble-name {
+    background: hsl(var(--background));
+  }
+}
+@media (max-width: 767px) {
+  .home-pages section[id] {
+    scroll-margin-top: 0;
+  }
+  .home-page-marker {
+    scroll-margin-top: 0;
+  }
+  .home-chapter {
+    top: 0;
+    height: 100svh;
+    padding: 60px 0 112px;
+    border-radius: 16px 16px 0 0;
+  }
+  .chapter-layout,
+  .home-chapter[data-layout="wide"] .chapter-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 20px;
+  }
+  .chapter-copy {
+    gap: 12px;
+  }
+  .chapter-copy h2 {
+    font-size: clamp(24px, 6vw, 30px);
+  }
+  .chapter-copy > p:not(:first-child) {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .chapter-copy ul {
+    display: block;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .chapter-copy ul li + li {
+    margin-top: 2px;
+  }
+  .chapter-media {
+    max-height: none;
+    padding: 0;
+    flex-direction: row;
+    gap: 12px;
+  }
+  .home-chapter[data-layout="daily"] .chapter-capture {
+    width: 50%;
+  }
+  .home-chapter[data-layout="daily"] .chapter-capture:last-child {
+    transform: none;
+  }
+  .home-pages #contributors {
+    min-height: 100svh;
+    padding: 60px 0 112px;
+  }
+  .contributor-field {
+    min-height: 440px;
+  }
+  .home-join {
+    padding: 60px 0 112px;
+    min-height: 100svh;
+  }
+}
+@media (max-height: 540px), (prefers-reduced-motion: reduce) {
+  .home-chapter {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+  }
+  .chapter-layout {
+    height: auto;
+  }
+  .chapter-media {
+    height: 48svh;
+    min-height: 200px;
+  }
+  .contributor-bubble {
+    animation: none;
+  }
+  .home-pages #downloads.has-entered > div,
+  [data-home-reveal].has-entered {
+    animation: none;
+  }
+}
+.chapter-gallery {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+.chapter-gallery-stage {
+  min-height: 0;
+  height: 100%;
+}
+.chapter-gallery .chapter-capture {
+  width: 100%;
+  margin: 0 auto;
+}
+.chapter-gallery .chapter-capture[data-format="mobile"] {
+  max-width: 280px;
+}
+.chapter-gallery-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+.chapter-gallery-options button {
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+  transition:
+    background-color 180ms,
+    color 180ms;
+}
+.chapter-gallery-options button:hover {
+  background: hsl(var(--muted));
+}
+.chapter-gallery-options button[aria-pressed="true"] {
+  color: hsl(var(--background));
+  background: hsl(var(--foreground));
+}
+.chapter-gallery-options button:focus-visible {
+  outline: 2px solid hsl(var(--foreground));
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chapter-gallery-options button {
+    transition: none;
   }
 }

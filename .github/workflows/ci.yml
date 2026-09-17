@@ -1,37 +1,29 @@
 name: CI
-
 on:
   push:
-    branches: ["master", "dev"]
+    branches: [master, dev]
   pull_request:
-    branches: ["master", "dev"]
-
+    branches: [master, dev]
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node.js 22
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
-          node-version: '22'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Check images
-        run: node scripts/check-images.mjs
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Build
-        run: pnpm build
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check:images
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm typecheck
+      - name: Ensure build does not modify source
+        run: git diff --exit-code -- src package.json pnpm-lock.yaml

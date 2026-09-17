@@ -19,16 +19,17 @@ export default tseslint.config(
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
     },
-    languageOptions: { 
+    languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.node,
-      }
+      },
     },
   },
   {
     ignores: [
       ".next/**",
+      "temp/**",
       "node_modules/**",
       "out/**",
       "build/**",
@@ -38,5 +39,5 @@ export default tseslint.config(
       "*.config.ts",
       "*.config.mjs",
     ],
-  }
+  },
 );

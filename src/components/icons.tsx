@@ -6,6 +6,7 @@ import {
   BookMarkedIcon,
   BrainCircuitIcon,
   CalendarIcon,
+  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ClipboardListIcon,
@@ -80,6 +81,7 @@ export const Icons = {
   // Existing Icons
   book: (props: IconProps) => <BookIcon {...props} />,
   brain: (props: IconProps) => <BrainCircuitIcon {...props} />,
+  chevrondown: (props: IconProps) => <ChevronDownIcon {...props} />,
   chevronleft: (props: IconProps) => <ChevronLeftIcon {...props} />,
   chevronright: (props: IconProps) => <ChevronRightIcon {...props} />,
   code: (props: IconProps) => <CodeIcon {...props} />,

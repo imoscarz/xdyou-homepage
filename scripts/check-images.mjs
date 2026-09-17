@@ -5,8 +5,8 @@
  *
  * 检查范围：
  * - contents/ 目录下的 Markdown 文件
- * - src/config/contributors.ts 中的贡献者头像
- * - src/config/project.ts 中的截图配置
+ * - src/generated/contributors.json 中的贡献者头像
+ * - src/config/screenshots.ts 中的静态截图与 project.ts 中的平台图标
  *
  * 检查内容：
  * - 外部图片域名是否在 next.config.ts 的 remotePatterns 中声明
@@ -14,37 +14,41 @@
  * - 本地图片文件是否实际存在于 public/ 目录
  */
 
-import { existsSync, readdirSync, readFileSync, statSync } from 'fs';
-import { dirname, extname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { existsSync, readdirSync, readFileSync, statSync } from "fs";
+import { dirname, extname, join } from "path";
+import { fileURLToPath } from "url";
+
+import { projectConfig } from "../src/config/project.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const projectRoot = join(__dirname, '..');
-const publicDir = join(projectRoot, 'public');
+const projectRoot = join(__dirname, "..");
+const publicDir = join(projectRoot, "public");
 
-const nextConfigPath = join(projectRoot, 'next.config.ts');
-const nextConfigContent = readFileSync(nextConfigPath, 'utf-8');
+const nextConfigPath = join(projectRoot, "next.config.ts");
+const nextConfigContent = readFileSync(nextConfigPath, "utf-8");
 
 // 提取 remotePatterns 中的 hostname
 const allowedHostnames = [];
-const hostnameMatches = nextConfigContent.matchAll(/hostname:\s*["']([^"']+)["']/g);
+const hostnameMatches = nextConfigContent.matchAll(
+  /hostname:\s*["']([^"']+)["']/g,
+);
 for (const match of hostnameMatches) {
   allowedHostnames.push(match[1]);
 }
 
-console.log('允许的外部图片域名：', allowedHostnames);
+console.log("允许的外部图片域名：", allowedHostnames);
 
 const imageExtractors = [
   {
-    kind: 'markdown',
+    kind: "markdown",
     regex: /!\[[^\]]*\]\(([^)]+)\)/g,
     getUrl: (match) => normalizeMarkdownTarget(match[1]),
   },
   {
-    kind: 'html',
+    kind: "html",
     regex: /<img[^>]+src=["']([^"']+)["']/g,
-    getUrl: (match) => match[1]?.trim() ?? '',
+    getUrl: (match) => match[1]?.trim() ?? "",
   },
 ];
 
@@ -52,7 +56,7 @@ function normalizeMarkdownTarget(target) {
   const trimmed = target.trim();
 
   // 处理 ![](<url>) 语法
-  if (trimmed.startsWith('<') && trimmed.endsWith('>')) {
+  if (trimmed.startsWith("<") && trimmed.endsWith(">")) {
     return trimmed.slice(1, -1).trim();
   }
 
@@ -74,7 +78,7 @@ function findMarkdownFiles(dir, fileList = []) {
 
     if (stat.isDirectory()) {
       findMarkdownFiles(filePath, fileList);
-    } else if (extname(file).toLowerCase() === '.md') {
+    } else if (extname(file).toLowerCase() === ".md") {
       fileList.push(filePath);
     }
   }
@@ -83,17 +87,17 @@ function findMarkdownFiles(dir, fileList = []) {
 }
 
 function isExternalUrl(url) {
-  return url.startsWith('http://') || url.startsWith('https://');
+  return url.startsWith("http://") || url.startsWith("https://");
 }
 
 function isIgnorableUrl(url) {
   return (
     !url ||
-    url.startsWith('#') ||
-    url.startsWith('data:') ||
-    url.startsWith('mailto:') ||
-    url.startsWith('tel:') ||
-    url.startsWith('javascript:')
+    url.startsWith("#") ||
+    url.startsWith("data:") ||
+    url.startsWith("mailto:") ||
+    url.startsWith("tel:") ||
+    url.startsWith("javascript:")
   );
 }
 
@@ -106,14 +110,20 @@ function extractHostname(url) {
 }
 
 function getLineNumber(content, index) {
-  return content.slice(0, index).split('\n').length;
+  return content.slice(0, index).split("\n").length;
 }
 
 function stripQueryAndHash(url) {
-  return url.split('#')[0].split('?')[0];
+  return url.split("#")[0].split("?")[0];
 }
 
-function validateImageUrl({ sourcePath, sourceContent, url, matchIndex }) {
+function validateImageUrl({
+  sourcePath,
+  sourceContent,
+  url,
+  matchIndex,
+  optimized = true,
+}) {
   const issues = [];
   const line = getLineNumber(sourceContent, matchIndex);
 
@@ -123,9 +133,9 @@ function validateImageUrl({ sourcePath, sourceContent, url, matchIndex }) {
 
   if (isExternalUrl(url)) {
     const hostname = extractHostname(url);
-    if (hostname && !allowedHostnames.includes(hostname)) {
+    if (!hostname || (optimized && !allowedHostnames.includes(hostname))) {
       issues.push({
-        type: 'external-hostname',
+        type: "external-hostname",
         file: sourcePath,
         line,
         url,
@@ -136,9 +146,9 @@ function validateImageUrl({ sourcePath, sourceContent, url, matchIndex }) {
   }
 
   // 避免使用 img/... 这类无前导 / 的路径。
-  if (url.startsWith('img/')) {
+  if (url.startsWith("img/")) {
     issues.push({
-      type: 'local-path-format',
+      type: "local-path-format",
       file: sourcePath,
       line,
       url,
@@ -148,23 +158,24 @@ function validateImageUrl({ sourcePath, sourceContent, url, matchIndex }) {
   }
 
   // 本项目约定本地静态资源使用 public 根路径绝对引用，例如 /img/xx.png
-  if (!url.startsWith('/')) {
+  if (!url.startsWith("/")) {
     issues.push({
-      type: 'local-path-format',
+      type: "local-path-format",
       file: sourcePath,
       line,
       url,
-      detail: '本地图片路径应以 / 开头并指向 public/ 下文件，例如 /img/example.png',
+      detail:
+        "本地图片路径应以 / 开头并指向 public/ 下文件，例如 /img/example.png",
     });
     return issues;
   }
 
   const cleanUrl = stripQueryAndHash(url);
-  const expectedFilePath = join(publicDir, cleanUrl.replace(/^\/+/, ''));
+  const expectedFilePath = join(publicDir, cleanUrl.replace(/^\/+/, ""));
 
   if (!existsSync(expectedFilePath)) {
     issues.push({
-      type: 'local-file-missing',
+      type: "local-file-missing",
       file: sourcePath,
       line,
       url,
@@ -176,7 +187,7 @@ function validateImageUrl({ sourcePath, sourceContent, url, matchIndex }) {
 }
 
 function checkMarkdownFile(filePath) {
-  const content = readFileSync(filePath, 'utf-8');
+  const content = readFileSync(filePath, "utf-8");
   const issues = [];
 
   for (const extractor of imageExtractors) {
@@ -198,19 +209,20 @@ function checkMarkdownFile(filePath) {
   return issues;
 }
 
-function checkConfigImageField(configPath, fieldPattern) {
-  const content = readFileSync(configPath, 'utf-8');
+function checkConfigImageField(configPath, fieldPattern, optimized = true) {
+  const content = readFileSync(configPath, "utf-8");
   const issues = [];
   const matches = content.matchAll(fieldPattern);
 
   for (const match of matches) {
-    const url = match[1]?.trim() ?? '';
+    const url = match[1]?.trim() ?? "";
     issues.push(
       ...validateImageUrl({
         sourcePath: configPath,
         sourceContent: content,
         url,
         matchIndex: match.index ?? 0,
+        optimized,
       }),
     );
   }
@@ -219,7 +231,7 @@ function checkConfigImageField(configPath, fieldPattern) {
 }
 
 function main() {
-  const contentsDir = join(projectRoot, 'contents');
+  const contentsDir = join(projectRoot, "contents");
   const markdownFiles = findMarkdownFiles(contentsDir);
 
   console.log(`\n检查 ${markdownFiles.length} 个 Markdown 文件...\n`);
@@ -230,18 +242,56 @@ function main() {
     allIssues = allIssues.concat(checkMarkdownFile(file));
   }
 
-  console.log('检查贡献者头像...\n');
-  const contributorsConfigPath = join(projectRoot, 'src', 'config', 'contributors.ts');
+  console.log("检查贡献者头像...\n");
+  const contributorsConfigPath = join(
+    projectRoot,
+    "src",
+    "generated",
+    "contributors.json",
+  );
   allIssues = allIssues.concat(
-    checkConfigImageField(contributorsConfigPath, /avatar:\s*["']([^"']+)["']/g),
+    checkConfigImageField(
+      contributorsConfigPath,
+      /"avatar":\s*["']([^"']+)["']/g,
+      // AvatarImage uses unoptimized direct URLs, not the Next image proxy.
+      false,
+    ),
   );
 
-  console.log('检查项目截图配置...\n');
-  const projectConfigPath = join(projectRoot, 'src', 'config', 'project.ts');
-  allIssues = allIssues.concat(checkConfigImageField(projectConfigPath, /src:\s*["']([^"']+)["']/g));
+  console.log("检查平台图标与截图配置...\n");
+  const projectConfigPath = join(projectRoot, "src", "config", "project.ts");
+  allIssues = allIssues.concat(
+    checkConfigImageField(projectConfigPath, /logo:\s*["']([^"']+)["']/g),
+  );
+  for (const platform of projectConfig.platforms) {
+    allIssues.push(
+      ...validateImageUrl({
+        sourcePath: projectConfigPath,
+        sourceContent: "",
+        url: `/images/platforms/${platform.id}.webp`,
+        matchIndex: 0,
+      }),
+    );
+  }
+
+  const screenshotPath = join(projectRoot, "src", "config", "screenshots.ts");
+  const captures = readFileSync(screenshotPath, "utf8");
+  for (const match of captures.matchAll(
+    /from\s+["'](\.\.\/\.\.\/public\/[^"']+)["']/g,
+  )) {
+    if (!existsSync(join(dirname(screenshotPath), match[1]))) {
+      allIssues.push({
+        type: "local-file-missing",
+        file: screenshotPath,
+        line: 1,
+        url: match[1],
+        detail: "Missing imported screenshot",
+      });
+    }
+  }
 
   if (allIssues.length > 0) {
-    console.error('❌ 发现图片引用问题：\n');
+    console.error("❌ 发现图片引用问题：\n");
 
     for (const issue of allIssues) {
       console.error(`类型: ${issue.type}`);
@@ -249,19 +299,21 @@ function main() {
       console.error(`行号: ${issue.line}`);
       console.error(`URL: ${issue.url}`);
       console.error(`详情: ${issue.detail}`);
-      console.error('---');
+      console.error("---");
     }
 
     console.error(`\n共发现 ${allIssues.length} 个问题。`);
-    console.error('\n修复建议：');
-    console.error('1. 本地图片路径统一使用 / 开头（例如 /img/a.png）');
-    console.error('2. 确保引用文件真实存在于 public/ 目录中');
-    console.error('3. 外部图片域名需在 next.config.ts 的 remotePatterns 中声明\n');
+    console.error("\n修复建议：");
+    console.error("1. 本地图片路径统一使用 / 开头（例如 /img/a.png）");
+    console.error("2. 确保引用文件真实存在于 public/ 目录中");
+    console.error(
+      "3. 外部图片域名需在 next.config.ts 的 remotePatterns 中声明\n",
+    );
 
     process.exit(1);
   }
 
-  console.log('✅ 所有图片引用检查通过！');
+  console.log("✅ 所有图片引用检查通过！");
 }
 
 main();

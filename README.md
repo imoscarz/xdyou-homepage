@@ -1,12 +1,11 @@
 <div align="center">
 
-
 # XDYou 主页
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.5.9-black)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.2.0-blue)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.14-38B2AC)](https://tailwindcss.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.3.5-black)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.3.0-blue)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0.3-blue)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3.3-38B2AC)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 XDYou 项目的主页，为西安电子科技大学学生提供课程表查询、考试安排、校园服务等功能的移动应用。
@@ -81,42 +80,32 @@ assetPatterns: {
 }
 ```
 
-#### 截图配置 (`project.ts`)
+#### 截图与贡献者配置
 
-截图支持两种类型标记：
+截图位于 `src/config/screenshots.ts`，按功能场景组织，包含中英文替代文本标题及手机/桌面截图。使用静态图片导入，尺寸自动读取。替换素材时保留真实截图，不裁剪产品内容；请清除账号、姓名等个人信息。首页使用 `src/config/home-chapters.ts` 定义连续场景章节和目录顺序；正文说明统一维护在双语字典 `home.pages` 中，截图支持点击放大；学习、自习与校园信息章节支持紧凑的图片切换。
 
-```typescript
-{
-  src: "/img/screenshots/desktop-1.png",
-  alt: "桌面端截图",
-  caption: "课程表视图",
-  type: "desktop"  // 或 "mobile"
-}
-```
+贡献者来源、同步与补充字段维护见 [维护说明](docs/maintenance.md)。不要手工修改 `src/generated/contributors.json`。
 
-- **desktop 类型**：桌面端单张显示，移动端不显示
-- **mobile 类型**：桌面端两张一组并排显示，移动端单张显示
+HarmonyOS / OHOS 使用独立的应用市场入口，明确标注为项目认可的第三方版本，不继承主仓库的发布版本号或安装包。
 
-#### 贡献者链接配置 (`contributors.ts`)
+## 贡献者链接配置 (`contributors.ts`)
 
-贡献者的社交链接需按以下格式配置：
+上游贡献者通过同步快照维护；网站专属链接在 `src/config/contributor-overrides.json` 中按贡献者身份键补充，由 `contributors.ts` 合并。链接字段格式如下：
 
 ```typescript
 links: [
   { icon: "github", text: "GitHub", url: "https://github.com/username" },
-  { icon: "email", text: "邮件", url: "mailto:user@example.com" }
-]
+  { icon: "email", text: "邮件", url: "mailto:user@example.com" },
+];
 ```
 
 **注意**：图标必须在 `src/components/icons.tsx` 中预先声明，不要直接从 `lucide-react` 导入。
-
-
 
 ## 贡献
 
 ### 快速开始
 
-项目使用 `pnpm` 进行包管理，推荐使用 Node.js 18-22 版本。
+项目使用 Node.js 24 LTS（本次验证为 24.21.0）和 package.json 固定的 pnpm 10.34.5。CI 从 .nvmrc 读取 Node 版本。
 
 ```shell
 # 安装依赖
@@ -143,17 +132,18 @@ pnpm start
 项目文档的源文件位于 `contents/docs` 目录中。
 
 **注意事项：**
+
 - 出于维护方便考虑，从文档目录进入文档内容后会将 i18n 选项固定为中文，因此文档不需要考虑国际化
 - Markdown 文件的文件名将作为 `slug` 参数，即网页 URL 的后缀
 
 #### Markdown Frontmatter 配置
 
-| 参数        | 类型   | 说明                                      |
-| ----------- | ------ | ----------------------------------------- |
-| title       | string | 文档的标题                                |
-| description | string | 文档的简介，将会在目录页显示在标题下方    |
-| category    | string | 文档的分类                                |
-| order       | number | 文档排序时的权重，将会决定文档的显示顺序  |
+| 参数        | 类型   | 说明                                     |
+| ----------- | ------ | ---------------------------------------- |
+| title       | string | 文档的标题                               |
+| description | string | 文档的简介，将会在目录页显示在标题下方   |
+| category    | string | 文档的分类                               |
+| order       | number | 文档排序时的权重，将会决定文档的显示顺序 |
 
 **示例：**
 
@@ -169,14 +159,15 @@ order: 2
 #### 编写文档时的注意事项
 
 1. **图片引用**：由于 Next.js 的安全策略限制与图片优化需要，您无法引用在 `next.config.ts` 中 `remotePatterns` 声明过的 hostname 之外的站点的图片。因此，在引用图片时，请将图片存放在 `public/img` 下的适当位置并通过相对链接引用图片。
-   
+
    **图片检查**：项目已配置 CI 自动检查，本地也可运行 `pnpm check:images` 验证所有图片引用是否合规。
 
 2. **GFM 支持**：文档支持使用 GitHub Flavored Markdown 的特性，如带有提示的引用块（alerts）：
+
    ```markdown
    > [!NOTE]
    > 这是一个提示信息
-   
+
    > [!WARNING]
    > 这是一个警告信息
    ```
@@ -208,11 +199,13 @@ frontmatter配置如下：
 **添加新图标的步骤：**
 
 1. 在 `icons.tsx` 顶部从 `lucide-react` 导入需要的图标：
+
    ```typescript
    import { NewIcon } from "lucide-react";
    ```
 
 2. 在 `Icons` 对象中添加图标定义：
+
    ```typescript
    export const Icons = {
      // ... 其他图标
@@ -223,7 +216,7 @@ frontmatter配置如下：
 3. 在组件中使用：
    ```typescript
    import { Icons } from "@/components/icons";
-   
+
    <Icons.newicon className="size-4" />
    ```
 
@@ -233,13 +226,13 @@ frontmatter配置如下：
 
 - 使用 TypeScript 严格模式
 - 遵循 ESLint 配置规则
-- 组件文件使用 PascalCase 命名
+- 组件文件沿用 kebab-case 命名
 - 客户端组件文件建议使用 `-client.tsx` 后缀并在文件头部添加 `"use client"`
 - 提交前执行 `pnpm lint` 和 `pnpm build` 确保代码质量
 
 ## 技术栈
 
-- **框架**: [Next.js 15](https://nextjs.org/) - React 服务端渲染框架
+- **框架**: [Next.js 16](https://nextjs.org/) - React 服务端渲染框架
 - **语言**: [TypeScript](https://www.typescriptlang.org/) - 类型安全的 JavaScript
 - **样式**: [Tailwind CSS](https://tailwindcss.com/) - 原子化 CSS 框架
 - **UI 组件**: [shadcn/ui](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/)

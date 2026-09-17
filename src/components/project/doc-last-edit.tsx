@@ -12,7 +12,8 @@ type DocLastEditProps = {
     name: string;
     branch: string;
   };
-  locale?: string;
+  locale: string;
+  dict: { updated: string; view: string; viewOnGithub: string };
 };
 
 /**
@@ -23,7 +24,8 @@ export default function DocLastEdit({
   lastCommit,
   slug,
   docsRepo,
-  locale = "zh-CN",
+  locale,
+  dict,
 }: DocLastEditProps) {
   const author = lastCommit.author;
   const commitDate = lastCommit.commit.author.date;
@@ -32,7 +34,7 @@ export default function DocLastEdit({
 
   return (
     <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
-      <span className="whitespace-nowrap">最后更新：</span>
+      <span className="whitespace-nowrap">{dict.updated}</span>
 
       {author ? (
         <Link
@@ -76,8 +78,8 @@ export default function DocLastEdit({
         className="hover:text-foreground inline-flex items-center gap-1 whitespace-nowrap transition-colors"
       >
         <Icons.externalLink className="h-3 w-3" />
-        <span className="hidden sm:inline">在Github上查看</span>
-        <span className="sm:hidden">查看</span>
+        <span className="hidden sm:inline">{dict.viewOnGithub}</span>
+        <span className="sm:hidden">{dict.view}</span>
       </Link>
     </div>
   );

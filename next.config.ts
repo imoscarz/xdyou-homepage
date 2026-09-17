@@ -2,6 +2,14 @@ import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  turbopack: {},
+  env: {
+    NEXT_PUBLIC_BUILD_DATE: new Date().toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    }),
+  },
   reactStrictMode: true,
   images: {
     formats: ["image/avif", "image/webp"],

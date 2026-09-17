@@ -24,7 +24,10 @@ type ReleasesClientProps = {
     loadMore: string;
     noReleases: string;
     toc: string;
-    windowsMaintenanceWarning?: string;
+    maintenanceNotice?: string;
+    maintenanceLabel: string;
+    copyChecksum: string;
+    copied: string;
   };
   delay?: number;
 };
@@ -118,7 +121,10 @@ export default function ReleasesClient({
               downloadCount: dict.downloadCount,
               checksum: dict.checksum,
               download: dict.download,
-              windowsMaintenanceWarning: dict.windowsMaintenanceWarning,
+              maintenanceNotice: dict.maintenanceNotice,
+              maintenanceLabel: dict.maintenanceLabel,
+              copyChecksum: dict.copyChecksum,
+              copied: dict.copied,
             }}
           />
         ))}

@@ -1,0 +1,434 @@
+{
+  "source": {
+    "repository": "BenderBlog/traintime_pda",
+    "revision": "98ef3317d0b31ed23a31c189df1233fc927d399e",
+    "license": "MPL-2.0",
+    "files": [
+      "lib/model/about_page.dart",
+      "assets/flutter_i18n/zh_CN.yaml",
+      "assets/flutter_i18n/en_US.yaml"
+    ]
+  },
+  "contributors": [
+    {
+      "id": "setting.about_page.alnair",
+      "name": "A1nair",
+      "avatar": "https://avatars.githubusercontent.com/u/36269472",
+      "url": "https://github.com/A1nair",
+      "description": {
+        "zh": "开发：图书馆搜索和封面",
+        "en": "Development: Library search and cover"
+      }
+    },
+    {
+      "id": "setting.about_page.aqqkad",
+      "name": "aqqkad (Kevin)",
+      "avatar": "https://avatars.githubusercontent.com/u/97880629",
+      "url": "https://github.com/aqqkad",
+      "description": {
+        "zh": "开发：考勤历史记录",
+        "en": "Development: Class attandance history"
+      }
+    },
+    {
+      "id": "setting.about_page.bellssgit",
+      "name": "BellssGit",
+      "avatar": "https://avatars.githubusercontent.com/u/107785251",
+      "url": "https://space.bilibili.com/17772726",
+      "description": {
+        "zh": "支持：最佳&最久故障反馈者",
+        "en": "Support: best and longest feedback source"
+      }
+    },
+    {
+      "id": "setting.about_page.benderblog",
+      "name": "BenderBlog Rodriguez",
+      "avatar": "https://avatars.githubusercontent.com/u/14026321",
+      "url": "https://space.bilibili.com/284290692",
+      "description": {
+        "zh": "主要开发者，iOS 小部件编写和拼接",
+        "en": "Main developer, iOS widget"
+      }
+    },
+    {
+      "id": "setting.about_page.brackrat",
+      "name": "BrackRat",
+      "avatar": "https://avatars.githubusercontent.com/u/35328547",
+      "url": "https://github.com/BrackRat",
+      "description": {
+        "zh": "设计：主页，登录页，配色，iOS 小部件等",
+        "en": "Design: homepage, login page, color scheme, iOS widgets, etc."
+      }
+    },
+    {
+      "id": "setting.about_page.breezeline",
+      "name": "Breezeline",
+      "avatar": "https://avatars.githubusercontent.com/u/74224286",
+      "url": "mailto:ydzhang.ruc@gmail.com",
+      "description": {
+        "zh": "支持：无价值无意义的产品经理(他自己的描述)",
+        "en": "Support: valueless and meaningless product manager (from his own description)"
+      }
+    },
+    {
+      "id": "setting.about_page.cafebabe",
+      "name": "0xCAFEBABE",
+      "avatar": "https://blog.hxzzz.asia/usr/uploads/2024/05/1717631110.jpg",
+      "url": "https://blog.hxzzz.asia/",
+      "description": {
+        "zh": "支持：提供彩蛋代码 / 开发：2026版本滑块验证码适配",
+        "en": "Support: provide Easter egg code / Development: Development: New Slider '26"
+      }
+    },
+    {
+      "id": "setting.about_page.chitao1234",
+      "name": "chitao1234",
+      "avatar": "https://avatars.githubusercontent.com/u/25598632",
+      "url": "https://github.com/chitao1234",
+      "description": {
+        "zh": "开发：修复滑块不对齐问题",
+        "en": "Development: fix slider misalignment issue"
+      }
+    },
+    {
+      "id": "setting.about_page.copperkoi",
+      "name": "CopperKoi",
+      "avatar": "https://avatars.githubusercontent.com/u/91732947",
+      "url": "https://copperkoi.cn/about",
+      "description": {
+        "zh": "开发：系统日历最新课表同步",
+        "en": "Development: latest time arrangement sync to calendar"
+      }
+    },
+    {
+      "id": "setting.about_page.dimole",
+      "name": "Dimole",
+      "avatar": "https://avatars.githubusercontent.com/u/24828354",
+      "url": "https://github.com/Dimole",
+      "description": {
+        "zh": "开发支持：辅助修复滑块问题",
+        "en": "Development support: assist in fixing slider issue"
+      }
+    },
+    {
+      "id": "setting.about_page.elitewars",
+      "name": "EliteWars",
+      "avatar": "https://avatars.githubusercontent.com/u/44139545",
+      "url": "https://space.bilibili.com/49892391/",
+      "description": {
+        "zh": "设计：体育成绩页面",
+        "en": "Design: sports score page"
+      }
+    },
+    {
+      "id": "setting.about_page.elliot",
+      "name": "Mother Elliot Flores",
+      "avatar": "https://legacy.superbart.top/picture/Random/hirasawa.jpg",
+      "url": "https://mp.weixin.qq.com/s/_egmj3rjwOTAB-KHzKsYGw",
+      "description": {
+        "zh": "国际化：软件英语翻译 / 开发指导：情侣课表功能开发指导（该功能已经被移除）",
+        "en": "Internationalization: English translation / Development guidance: on partner classtable development (This function has been removed)"
+      }
+    },
+    {
+      "id": "setting.about_page.flyingpig",
+      "name": "FlyingPig278",
+      "avatar": "https://avatars.githubusercontent.com/u/88129602",
+      "url": "https://github.com/FlyingPig278",
+      "description": {
+        "zh": "开发：修复自定义课程编辑页的空指针异常",
+        "en": "Development: Fix null pointer exception at user defined class info"
+      }
+    },
+    {
+      "id": "setting.about_page.godhu777777",
+      "name": "GodHu777777",
+      "avatar": "https://avatars.githubusercontent.com/u/111997394",
+      "url": "https://github.com/GodHu777777",
+      "description": {
+        "zh": "国际化：繁体中文转换代码和彩蛋代码 / 开发：优化导出日历文件大小",
+        "en": "Internationalization: Traditional Chinese conversion code & Easter egg code / Development: Optimize outputing arrangements to the calendar"
+      }
+    },
+    {
+      "id": "setting.about_page.hancl777",
+      "name": "Hancl777",
+      "avatar": "https://avatars.githubusercontent.com/u/74408609",
+      "url": "https://github.com/Hancl777",
+      "description": {
+        "zh": "国际化：繁体中文转换代码",
+        "en": "Internationalization: Traditional Chinese conversion code"
+      }
+    },
+    {
+      "id": "setting.about_page.hazuki-keatsu",
+      "name": "Hazuki Keatsu (叶月枫)",
+      "avatar": "https://avatars.githubusercontent.com/u/111259147",
+      "url": "https://keatsu.top",
+      "description": {
+        "zh": "开发：物理实验成绩查询和识别",
+        "en": "Development: Physics experiment score query and recognization"
+      }
+    },
+    {
+      "id": "setting.about_page.hawa130",
+      "name": "hawa130",
+      "avatar": "https://avatars.githubusercontent.com/u/26119430",
+      "url": "https://hawa130.com/",
+      "description": {
+        "zh": "设计：课程详情卡片",
+        "en": "Design: Class info card"
+      }
+    },
+    {
+      "id": "setting.about_page.hhzm",
+      "name": "hhzm (闪电豹猫)",
+      "avatar": "https://avatars.githubusercontent.com/u/19224718",
+      "url": "https://hhzm.win/",
+      "description": {
+        "zh": "开发：电费查询账号计算",
+        "en": "Development: electricity fee inquiry account calculation"
+      }
+    },
+    {
+      "id": "setting.about_page.imaginary_17",
+      "name": "imaginary_17",
+      "avatar": "https://avatars.githubusercontent.com/u/70046513",
+      "url": "https://github.com/clever-max",
+      "description": {
+        "zh": "开发：睿思论坛路由修复",
+        "en": "Developement: Ruisi navigator stack fix"
+      }
+    },
+    {
+      "id": "setting.about_page.imoscarz",
+      "name": "imoscarz",
+      "avatar": "https://avatars.githubusercontent.com/u/52318095",
+      "url": "https://imoscarz.me/",
+      "description": {
+        "zh": "开发：设计软件主页 / 开发：平板考勤查询页面 / 开发：优化了体育查询界面的UI",
+        "en": "Development: Homepage for software / Development: Checkin check for pad / Development: Sport UI Change"
+      }
+    },
+    {
+      "id": "setting.about_page.ka-mate-ka-ora",
+      "name": "Ka-mate-ka-ora",
+      "avatar": "https://avatars.githubusercontent.com/u/187651078",
+      "url": "https://github.com/Ka-mate-ka-ora/",
+      "description": {
+        "zh": "国际化：软件英语翻译优化",
+        "en": "Internationalization: English correction"
+      }
+    },
+    {
+      "id": "setting.about_page.lagrange-x",
+      "name": "Lagrange-X",
+      "avatar": "https://avatars.githubusercontent.com/u/110022915",
+      "url": "https://github.com/Lagrange-X/",
+      "description": {
+        "zh": "开发：课程表时间进度展示（终版方案） / 开发：课程表上过课程灰度化和其他课程界面特性",
+        "en": "Development: Class progress indicator (adopted) / Development: Gray cover on attended class and other classtable design"
+      }
+    },
+    {
+      "id": "setting.about_page.lhx-666-cool",
+      "name": "lhx-666-cool",
+      "avatar": "https://avatars.githubusercontent.com/u/63273792",
+      "url": "https://github.com/lhx-666-cool/",
+      "description": {
+        "zh": "支持：Windows 和 Linux 构建脚本 / 开发：2026版本滑块验证码适配",
+        "en": "Support: Windows and Linux build scripts / Development: New Slider '26"
+      }
+    },
+    {
+      "id": "setting.about_page.lichtyy",
+      "name": "LichtYy",
+      "avatar": "https://avatars.githubusercontent.com/u/105974550",
+      "url": "https://github.com/lichtYy",
+      "description": {
+        "zh": "设计：配色，空白页面贴图 / 开发：实验系统页面读取代码",
+        "en": "Design: color pattern and blank page picture / Development: HTML reader for the experiment system"
+      }
+    },
+    {
+      "id": "setting.about_page.lqsy-h",
+      "name": "LQSY-H",
+      "avatar": "https://avatars.githubusercontent.com/u/142521812",
+      "url": "https://github.com/LQSY-H",
+      "description": {
+        "zh": "支持：推文宣传图片制作",
+        "en": "Support: Promotion Picture"
+      }
+    },
+    {
+      "id": "setting.about_page.lsy223622",
+      "name": "lsy223622 (木生睡不着)",
+      "avatar": "https://avatars.githubusercontent.com/u/57913213",
+      "url": "https://lsy223622.com/",
+      "description": {
+        "zh": "设计：iOS 和 Android 图标 / 支持：冠名 XDYou",
+        "en": "Design: iOS and Android icons / Support: titled XDYou"
+      }
+    },
+    {
+      "id": "setting.about_page.mrbrilliant2046",
+      "name": "MrBrilliant2046",
+      "avatar": "https://avatars.githubusercontent.com/u/94728421?v=4",
+      "url": "https://github.com/MrBrilliant2046",
+      "description": {
+        "zh": "支持：提供网络服务使用说明文档 / 国际化：优化英语翻译",
+        "en": "Support: Provided the school net user guide / Internationalization: English correction"
+      }
+    },
+    {
+      "id": "setting.about_page.nancunchild",
+      "name": "NanCunChild",
+      "avatar": "https://avatars.githubusercontent.com/u/85873278?v=4",
+      "url": "https://github.com/NanCunChild",
+      "description": {
+        "zh": "开发：图书馆搜索功能 / 国际化：优化英语翻译",
+        "en": "Development: library search function / Internationalization: English correction"
+      }
+    },
+    {
+      "id": "setting.about_page.nkanf",
+      "name": "nkAnF",
+      "avatar": "https://avatars.githubusercontent.com/u/172456830",
+      "url": "https://github.com/nkanf-dev",
+      "description": {
+        "zh": "开发：课程表时间进度展示（初版方案） / 支持：MacOS 构建支持",
+        "en": "Development: Class progress indicator (original) / Support: MacOS build support"
+      }
+    },
+    {
+      "id": "setting.about_page.pairman",
+      "name": "Pairman",
+      "avatar": "https://avatars.githubusercontent.com/u/18365163",
+      "url": "https://github.com/Pairman",
+      "description": {
+        "zh": "开发：成绩缓存功能和优化滑块算法 / 国际化：优化英语翻译",
+        "en": "Development: score cache and optimize slider algorithm / Internationalization: English correction"
+      }
+    },
+    {
+      "id": "setting.about_page.reverierxu",
+      "name": "ReverierXu",
+      "avatar": "https://avatars.githubusercontent.com/u/41937333",
+      "url": "https://blog.woooo.tech/",
+      "description": {
+        "zh": "设计：用于信息展示的 ReX 卡片 / 开发支持：研究生课表",
+        "en": "Design: REX card for information display / Development support: on postgraduate class schedule"
+      }
+    },
+    {
+      "id": "setting.about_page.rrrilac",
+      "name": "Rrrilac",
+      "avatar": "https://avatars.githubusercontent.com/u/128341096",
+      "url": "https://github.com/Rrrilac",
+      "description": {
+        "zh": "开发支持：电费查询",
+        "en": "Development support: electricity query"
+      }
+    },
+    {
+      "id": "setting.about_page.ray",
+      "name": "Ray Flores",
+      "avatar": "https://sns-avatar-qc.xhscdn.com/avatar/65fb96e24f8a7c5709c421f2.jpg",
+      "url": "https://www.xiaohongshu.com/user/profile/63d293990000000026010075",
+      "description": {
+        "zh": "设计：开屏画面 / 支持：iOS 发行商 & 搭子课表 / 开发指导：情侣课表功能开发指导（该功能已经被移除） / 国际化：优化英语翻译",
+        "en": "Design: splash screen / Support: iOS publisher / Development guidance: on partner classtable development (This function has been removed) / Internationalization: English correction"
+      }
+    },
+    {
+      "id": "setting.about_page.shadowyingyi",
+      "name": "shadowyingyi",
+      "avatar": "https://avatars.githubusercontent.com/u/42831635",
+      "url": "https://github.com/shadowyingyi",
+      "description": {
+        "zh": "支持：两次鸽子公众号宣传",
+        "en": "Support: two times of pigeon house official account publicity"
+      }
+    },
+    {
+      "id": "setting.about_page.stalomeow",
+      "name": "stalomeow",
+      "avatar": "https://avatars.githubusercontent.com/u/47203031",
+      "url": "https://stalomeow.com",
+      "description": {
+        "zh": "设计：首页时间轴 / 开发：异步登录 & 验证码预测",
+        "en": "Design: homepage timeline / Development: asynchronous login and captcha predict"
+      }
+    },
+    {
+      "id": "setting.about_page.xeonds",
+      "name": "xeonds",
+      "avatar": "https://avatars.githubusercontent.com/u/68117734",
+      "url": "https://mxts.jiujiuer.xyz",
+      "description": {
+        "zh": "设计：设置页面 / 开发：XDU Planet / 开发：校园卡付款码",
+        "en": "Design: settings page / Development: XDU Planet / Development: Payment Code"
+      }
+    },
+    {
+      "id": "setting.about_page.xingshuyu",
+      "name": "XingShuyu",
+      "avatar": "https://avatars.githubusercontent.com/u/82715884",
+      "url": "https://xingshuyu.github.io",
+      "description": {
+        "zh": "开发：修复物理实验获取问题和电费窗口问题",
+        "en": "Development: Fix physics experiment api and electricity graph"
+      }
+    },
+    {
+      "id": "setting.about_page.xiue233",
+      "name": "Xiue233",
+      "avatar": "https://avatars.githubusercontent.com/u/30972246",
+      "url": "https://xiue233.github.io/",
+      "description": {
+        "zh": "开发：Android 小部件和拼接",
+        "en": "Development: Android applet"
+      }
+    },
+    {
+      "id": "setting.about_page.xizi",
+      "name": "xizi",
+      "avatar": "https://static.wikia.nocookie.net/chiikawa/images/c/c3/Hachi_main.png/revision/latest?cb=20231016011752&path-prefix=zh",
+      "url": "https://www.bilibili.com/video/BV1Rg4y1x7su/",
+      "description": {
+        "zh": "开发支持：研究生版本开发",
+        "en": "Development support: on postgraduate version"
+      }
+    },
+    {
+      "id": "setting.about_page.wirsbf",
+      "name": "wirsbf",
+      "avatar": "https://avatars.githubusercontent.com/u/144008530",
+      "url": "https://xiue233.github.io/",
+      "description": {
+        "zh": "开发：修复调课未按预期进行",
+        "en": "Development: fix course adjustment did not proceed as expected"
+      }
+    },
+    {
+      "id": "setting.about_page.zcwzy",
+      "name": "ZCWzy",
+      "avatar": "https://avatars.githubusercontent.com/u/87163986",
+      "url": "https://github.com/ZCWzy",
+      "description": {
+        "zh": "开发：修复丁香电费 / 开发支持：研究生版本开发 / 设计：空白页面贴图",
+        "en": "Development: fix Dingxiang apartment electricity fee / development support: on postgraduate version / design: blank page picture"
+      }
+    },
+    {
+      "id": "setting.about_page.zyar-er",
+      "name": "ZYar-er",
+      "avatar": "https://avatars.githubusercontent.com/u/95170599?v=4",
+      "url": "https://github.com/ZYar-er",
+      "description": {
+        "zh": "开发支持：小工具页面地址更新",
+        "en": "Development support: fix shortcut url"
+      }
+    }
+  ]
+}

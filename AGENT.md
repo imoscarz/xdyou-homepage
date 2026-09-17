@@ -6,13 +6,13 @@
 - **Dev server**: `pnpm dev`
 - **Build**: `pnpm build`
 - **Lint**: `pnpm lint`
-- **Node**: `>=18.18.0 <=22`
+- **Node**: `24 LTS`
 
 Run `pnpm lint` and `pnpm build` before every commit to verify correctness.
 
 ## Tech Stack
 
-- Next.js 15 (App Router) + React 19 + TypeScript 5.9 + Tailwind CSS 4.1
+- Next.js 16 (App Router) + React 19 + TypeScript 6.0 + Tailwind CSS 4.3
 - shadcn/ui (Radix UI) component library
 - next-themes for light/dark/system theming
 
@@ -51,14 +51,21 @@ import {
 } from "@/lib/page-helpers";
 
 export async function generateMetadata({ searchParams }: PageProps) {
-  return generateSimpleMetadata(searchParams, "section.title", "section.description");
+  return generateSimpleMetadata(
+    searchParams,
+    "section.title",
+    "section.description",
+  );
 }
 
 export default async function MyPage({ searchParams }: PageProps) {
   const { locale, dict } = await getPageI18n(searchParams);
   return (
     <main className={PAGE_CONTAINER_CLASSES.standard}>
-      <PageHeader title={dict.section.title} description={dict.section.description} />
+      <PageHeader
+        title={dict.section.title}
+        description={dict.section.description}
+      />
     </main>
   );
 }
@@ -66,11 +73,11 @@ export default async function MyPage({ searchParams }: PageProps) {
 
 ### PAGE_CONTAINER_CLASSES variants
 
-| Key        | Use case                        |
-| ---------- | ------------------------------- |
-| `standard` | General pages (max-w-7xl)       |
-| `article`  | Reading layout (max-w-4xl)      |
-| `home`     | Homepage (larger spacing)       |
+| Key        | Use case                             |
+| ---------- | ------------------------------------ |
+| `standard` | General pages (max-w-7xl)            |
+| `article`  | Reading layout (max-w-4xl)           |
+| `home`     | Homepage (larger spacing)            |
 | `docs`     | Docs pages (no right margin for TOC) |
 
 ### Components
@@ -102,6 +109,7 @@ assetPatterns: {
 ### Markdown Content
 
 **Docs** (`contents/docs/*.md`):
+
 ```md
 ---
 title: "Title"
@@ -112,6 +120,7 @@ category: "Category"
 ```
 
 **News** (`contents/news/YYYY-MM-DD-slug-zh.md`):
+
 ```md
 ---
 title: "Title"

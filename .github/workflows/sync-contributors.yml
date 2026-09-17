@@ -1,0 +1,38 @@
+name: Sync contributors
+on:
+  schedule:
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: sync-contributors
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm sync:contributors
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - run: pnpm check:images
+      - run: pnpm lint
+      - run: pnpm build
+      - run: pnpm typecheck
+      - uses: peter-evans/create-pull-request@v8
+        with:
+          branch: automation/sync-contributors
+          commit-message: "chore: sync upstream contributors"
+          title: "chore: sync upstream contributors"
+          body: "Updates the contributor snapshot from a pinned upstream commit. Review the generated data diff and source revision before merging."
+          add-paths: src/generated/contributors.json
+          delete-branch: true

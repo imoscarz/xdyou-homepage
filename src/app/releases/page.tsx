@@ -26,7 +26,7 @@ export default async function ReleasesPage({ searchParams }: PageProps) {
   const releases = await fetchGitHubReleases(
     projectConfig.repo.owner,
     projectConfig.repo.name,
-    10 // Fetch 10 releases initially
+    10, // Fetch 10 releases initially
   );
 
   // 服务端预渲染 release body 为 HTML
@@ -34,7 +34,7 @@ export default async function ReleasesPage({ searchParams }: PageProps) {
     releases.map(async (release) => ({
       ...release,
       html: release.body ? await renderMarkdownToHTML(release.body) : "",
-    }))
+    })),
   );
 
   return (
@@ -60,7 +60,10 @@ export default async function ReleasesPage({ searchParams }: PageProps) {
             loadMore: dict.releases.loadMore,
             noReleases: dict.releases.noReleases,
             toc: dict.releases.toc || "Table of Contents",
-            windowsMaintenanceWarning: dict.releases.windowsMaintenanceWarning,
+            maintenanceNotice: dict.home.downloads.maintenanceNotice,
+            maintenanceLabel: dict.home.downloads.maintenanceLabel,
+            copyChecksum: dict.releases.copyChecksum,
+            copied: dict.releases.copied,
           }}
           delay={BLUR_FADE_DELAY * 2}
         />

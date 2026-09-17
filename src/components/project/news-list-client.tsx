@@ -8,7 +8,11 @@ import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useSearchWithTags } from "@/lib/hooks/useSearch";
 import { NewsPost } from "@/lib/news";
 
@@ -117,11 +121,15 @@ function DateRangePicker({
   });
 
   const prevMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1),
+    );
   };
 
   const nextMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1),
+    );
   };
 
   return (
@@ -134,8 +142,18 @@ function DateRangePicker({
           type="button"
           aria-label="Previous month"
         >
-          <svg className="h-5 w-5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          <svg
+            className="h-5 w-5 sm:h-4 sm:w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
         <div className="text-base font-semibold sm:text-sm">{monthName}</div>
@@ -145,14 +163,24 @@ function DateRangePicker({
           type="button"
           aria-label="Next month"
         >
-          <svg className="h-5 w-5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          <svg
+            className="h-5 w-5 sm:h-4 sm:w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </button>
       </div>
 
       {/* Weekday Headers */}
-      <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-muted-foreground sm:gap-0.5 sm:text-xs">
+      <div className="text-muted-foreground grid grid-cols-7 gap-1 text-center text-xs font-medium sm:gap-0.5 sm:text-xs">
         <div>Su</div>
         <div>Mo</div>
         <div>Tu</div>
@@ -173,7 +201,7 @@ function DateRangePicker({
               onClick={() => handleDayClick(day)}
               className={`aspect-square rounded text-sm font-medium transition-colors sm:text-xs ${
                 isStartDate(day)
-                  ? "bg-primary text-primary-foreground font-semibold hover:bg-primary/90"
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
                   : isInRange(day)
                     ? "bg-secondary text-secondary-foreground hover:bg-secondary/80"
                     : "hover:bg-muted active:bg-muted/50"
@@ -190,25 +218,25 @@ function DateRangePicker({
       <div className="space-y-3 sm:space-y-2">
         <div className="flex gap-2 text-xs sm:text-xs">
           <div className="flex-1">
-            <label className="mb-2 block text-sm font-medium text-muted-foreground sm:mb-1 sm:text-xs">
+            <label className="text-muted-foreground mb-2 block text-sm font-medium sm:mb-1 sm:text-xs">
               From
             </label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => onStartDateChange(e.target.value)}
-              className="border-input bg-background w-full rounded-lg border px-3 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-2 sm:py-1.5 sm:text-xs"
+              className="border-input bg-background focus-visible:ring-ring w-full rounded-lg border px-3 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none sm:px-2 sm:py-1.5 sm:text-xs"
             />
           </div>
           <div className="flex-1">
-            <label className="mb-2 block text-sm font-medium text-muted-foreground sm:mb-1 sm:text-xs">
+            <label className="text-muted-foreground mb-2 block text-sm font-medium sm:mb-1 sm:text-xs">
               To
             </label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => onEndDateChange(e.target.value)}
-              className="border-input bg-background w-full rounded-lg border px-3 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-2 sm:py-1.5 sm:text-xs"
+              className="border-input bg-background focus-visible:ring-ring w-full rounded-lg border px-3 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none sm:px-2 sm:py-1.5 sm:text-xs"
             />
           </div>
         </div>
@@ -251,10 +279,14 @@ export default function NewsListClient({
   dict,
   delay = 0,
 }: NewsListClientProps) {
-  const { searchTerm, setSearchTerm, selectedTags, toggleTag, allTags, filteredItems: postsAfterTagFilter } = useSearchWithTags(
-    posts,
-    ["title", "excerpt"],
-  );
+  const {
+    searchTerm,
+    setSearchTerm,
+    selectedTags,
+    toggleTag,
+    allTags,
+    filteredItems: postsAfterTagFilter,
+  } = useSearchWithTags(posts, ["title", "excerpt"]);
 
   // 日期范围筛选
   const [startDate, setStartDate] = useState<string>("");
@@ -315,23 +347,20 @@ export default function NewsListClient({
               >
                 <Icons.tag className="h-4 w-4" />
                 {selectedTags.length > 0 && (
-                  <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                  <span className="bg-primary text-primary-foreground absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full text-xs">
                     {selectedTags.length}
                   </span>
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent
-              className="w-56 p-0"
-              align="end"
-            >
+            <PopoverContent className="w-56 p-0" align="end">
               <div className="p-2">
                 <input
                   type="text"
                   placeholder={dict.searchTags}
                   value={tagSearchTerm}
                   onChange={(e) => setTagSearchTerm(e.target.value)}
-                  className="border-input bg-background placeholder:text-muted-foreground w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="border-input bg-background placeholder:text-muted-foreground focus-visible:ring-ring w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none"
                 />
               </div>
               <div className="max-h-60 overflow-y-auto">
@@ -345,7 +374,7 @@ export default function NewsListClient({
                       <div
                         key={tag}
                         onClick={() => toggleTag(tag)}
-                        className="flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-muted"
+                        className="hover:bg-muted flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors"
                       >
                         <div
                           className={`mr-2 flex h-4 w-4 items-center justify-center rounded border-2 transition-all ${
@@ -356,7 +385,7 @@ export default function NewsListClient({
                         >
                           {selectedTags.includes(tag) && (
                             <svg
-                              className="h-3 w-3 text-primary-foreground"
+                              className="text-primary-foreground h-3 w-3"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -370,7 +399,11 @@ export default function NewsListClient({
                             </svg>
                           )}
                         </div>
-                        <span className={selectedTags.includes(tag) ? "font-medium" : ""}>
+                        <span
+                          className={
+                            selectedTags.includes(tag) ? "font-medium" : ""
+                          }
+                        >
                           {tag}
                         </span>
                       </div>
@@ -392,16 +425,13 @@ export default function NewsListClient({
               >
                 <Icons.calendar className="h-4 w-4" />
                 {(startDate || endDate) && (
-                  <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                  <span className="bg-primary text-primary-foreground absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full text-xs">
                     1
                   </span>
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent
-              className="w-auto p-0"
-              align="end"
-            >
+            <PopoverContent className="w-auto p-0" align="end">
               <DateRangePicker
                 startDate={startDate}
                 endDate={endDate}
@@ -423,7 +453,7 @@ export default function NewsListClient({
           {filteredPosts.map((post, idx) => (
             <BlurFade key={post.slug} delay={delay + 0.1 + idx * 0.05}>
               <Link href={`/news/${post.slug}?lang=${locale}`}>
-                <Card className="flex h-full flex-col transition-shadow hover:shadow-lg">
+                <Card className="surface-interactive flex h-full flex-col">
                   <CardHeader>
                     <div className="mb-2 flex flex-wrap gap-2">
                       {post.tags.map((tag) => (

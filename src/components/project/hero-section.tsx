@@ -5,16 +5,15 @@ import Link from "next/link";
 import PlatformDownloadButton from "@/components/project/platform-download-button";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
+import type { DownloadAsset } from "@/lib/platform-detection";
 
 type HeroSectionProps = {
   projectName: string;
   slogan: string;
   description: string;
   logo: string;
-  androidUrl: string;
   iosUrl: string;
-  windowsUrl: string;
-  linuxUrl: string;
+  assets: DownloadAsset[];
   githubUrl?: string;
   delay?: number;
   dict: {
@@ -29,10 +28,8 @@ export default function HeroSection({
   slogan,
   description,
   logo,
-  androidUrl,
   iosUrl,
-  windowsUrl,
-  linuxUrl,
+  assets,
   githubUrl,
   delay = 0,
   dict,
@@ -41,7 +38,7 @@ export default function HeroSection({
     <section id="hero" className="mt-16 sm:mt-28">
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12">
         {/* Logo on mobile - top left */}
-        <div className="flex md:hidden h-[120px] w-[120px]">
+        <div className="flex h-[120px] w-[120px] md:hidden">
           <BlurFade delay={delay}>
             <Image
               src={logo}
@@ -81,10 +78,8 @@ export default function HeroSection({
             <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
               <PlatformDownloadButton
                 dict={dict}
-                androidUrl={androidUrl}
                 iosUrl={iosUrl}
-                windowsUrl={windowsUrl}
-                linuxUrl={linuxUrl}
+                assets={assets}
               />
 
               {githubUrl && (
@@ -111,6 +106,7 @@ export default function HeroSection({
                 src={logo}
                 alt={`${projectName} Logo`}
                 fill
+                sizes="(max-width: 768px) 120px, 448px"
                 className="rounded-3xl object-contain"
                 priority
               />

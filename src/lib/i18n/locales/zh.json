@@ -13,6 +13,7 @@
     }
   },
   "nav": {
+    "label": "主导航",
     "home": "首页",
     "docs": "文档",
     "news": "新闻",
@@ -26,31 +27,95 @@
       "moreDownloads": "更多下载选项",
       "viewOnGithub": "在GitHub上查看"
     },
-    "features": {
-      "badge": "核心功能",
-      "title": "强大的功能，服务校园生活"
-    },
     "screenshots": {
-      "badge": "应用截图",
-      "title": "直观的界面，流畅的体验"
+      "mobile": "手机版",
+      "desktop": "横屏版",
+      "enlarge": "放大查看",
+      "close": "关闭",
+      "imageError": "截图暂时无法加载，请切换视图或稍后重试。"
     },
     "downloads": {
       "badge": "下载",
       "title": "选择您的平台",
-      "latestVersion": "最新版本",
+      "latestVersion": "主仓库最新版本",
       "releaseNotes": "更新日志",
       "downloadFor": "下载",
       "comingSoon": "即将推出",
       "unavailable": "暂不可用",
-      "windowsMaintenanceWarning": "开发者无法保证该平台的软件包得到积极维护"
+      "maintenanceNotice": "开发者无法保证该平台的软件包得到积极维护",
+      "thirdParty": "项目认可的第三方版本",
+      "ohosNotice": "此版本由第三方独立维护，已获 XDYou 项目认可，与主仓库版本树不同步；版本号、功能与更新节奏可能不同。",
+      "appGallery": "前往华为应用市场",
+      "maintenanceLabel": "维护不保证",
+      "noReleaseNotes": "暂无更新说明。"
     },
     "contributors": {
       "badge": "贡献者",
       "title": "感谢所有贡献者",
-      "subtitle": "角色",
-      "viewProfile": "查看主页",
-      "viewDetails": "查看详情",
-      "viewAll": "查看贡献者详细信息"
+      "description": "不同的背景，共同让校园生活更方便。点击头像，认识项目的贡献者。"
+    },
+    "pages": {
+      "toc": "目录",
+      "overview": "概览",
+      "chapters": {
+        "study": {
+          "label": "学习安排",
+          "title": "一周安排，一眼看清。",
+          "description": "按周查看课程与日程，把上课时间和教室放在同一张表里。",
+          "points": ["切换周次，查看课程分布", "对照时间与教室，安排每天的学习"]
+        },
+        "spaces": {
+          "label": "自习空间",
+          "title": "先找空闲，再去自习。",
+          "description": "按日期和教学楼查看教室占用情况，为一段专注时间找到合适的位置。",
+          "points": ["按教室名称或代码搜索", "查看各节次的空闲与占用状态"]
+        },
+        "daily": {
+          "label": "校园信息",
+          "title": "常用信息，打开就看到。",
+          "description": "从课程安排到电量、借书与校园卡余额，在首页查看日常信息；也能查询消费记录，搜索图书馆藏书。",
+          "points": [
+            "集中查看校园信息与常用入口",
+            "按日期查询校园卡交易记录",
+            "搜索馆藏，查看可借数量"
+          ]
+        },
+        "services": {
+          "label": "生活服务",
+          "title": "上网、用水，少找几个入口。",
+          "description": "查看校园网套餐与流量使用情况，也能从宿舍水机列表找到常用设备。",
+          "points": ["查看已用、剩余与总流量", "收藏常用水机，进入用水操作"]
+        },
+        "explore": {
+          "label": "轻松一刻",
+          "title": "忙完正事，看看猪图。",
+          "description": "校园工具之外，留一点轻松的空间。换一张猪图，或把喜欢的图片保存下来。",
+          "points": ["随机更换猪图", "保存喜欢的图片"]
+        }
+      },
+      "join": {
+        "label": "参与开发",
+        "title": "期待您的加入",
+        "description": "XDYou 从校园里的真实需求出发，也在一次次反馈与修改中成长。一起把常用的工具做得更好。",
+        "guide": "阅读开发文档",
+        "github": "前往项目 GitHub",
+        "invitation": "不必熟悉全部代码。可以从复现一个问题、一张界面草图，或一段更准确的英文开始。参与前请先阅读贡献指引。",
+        "panelTitle": "从你关心的一件小事开始",
+        "ways": [
+          {
+            "title": "功能与修复",
+            "description": "看看源码，从一个具体问题入手。"
+          },
+          {
+            "title": "界面与国际化",
+            "description": "设计界面、打磨英文，让使用更顺畅。"
+          },
+          {
+            "title": "反馈与想法",
+            "description": "说明复现步骤，分享可行的改进建议。"
+          }
+        ]
+      }
     }
   },
   "news": {
@@ -81,7 +146,8 @@
     "loadMore": "加载更多",
     "noReleases": "暂无发行记录",
     "toc": "目录",
-    "windowsMaintenanceWarning": "开发者无法保证该平台的软件包得到积极维护"
+    "copyChecksum": "复制校验和",
+    "copied": "已复制"
   },
   "docs": {
     "title": "文档",
@@ -92,7 +158,12 @@
     "noDocs": "暂无文档",
     "comingSoon": "文档即将推出。请访问我们的GitHub仓库获取详细信息。",
     "chineseOnlyNotice": "",
-    "editOnGitHub": "在GitHub上编辑"
+    "editOnGitHub": "在GitHub上编辑",
+    "lastEdit": {
+      "updated": "最后更新：",
+      "view": "查看",
+      "viewOnGithub": "在 GitHub 上查看"
+    }
   },
   "footer": {
     "sections": {

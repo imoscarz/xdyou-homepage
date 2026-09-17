@@ -4,75 +4,77 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+  type DeviceInfo,
+  type DownloadAsset,
+  resolvePlatformDownload,
+} from "@/lib/platform-detection";
 
 type PlatformDownloadButtonProps = {
   dict: {
     downloadButton: string;
     moreDownloads: string;
   };
-  androidUrl: string;
   iosUrl: string;
-  windowsUrl: string;
-  linuxUrl: string;
+  assets: DownloadAsset[];
 };
-
-function detectPlatform(): "android" | "ios" | "windows" | "linux" | "unknown" {
-  if (typeof window === "undefined") return "unknown";
-
-  const userAgent = window.navigator.userAgent.toLowerCase();
-
-  if (/android/.test(userAgent)) {
-    return "android";
-  }
-  if (/iphone|ipad|ipod/.test(userAgent)) {
-    return "ios";
-  }
-  if (/win/.test(userAgent)) {
-    return "windows";
-  }
-  if (/linux/.test(userAgent)) {
-    return "linux";
-  }
-
-  return "unknown";
-}
 
 export default function PlatformDownloadButton({
   dict,
-  androidUrl,
   iosUrl,
-  windowsUrl,
-  linuxUrl,
+  assets,
 }: PlatformDownloadButtonProps) {
   const [downloadUrl, setDownloadUrl] = useState<string>("#downloads");
 
   useEffect(() => {
-    const platform = detectPlatform();
-
-    switch (platform) {
-      case "android":
-        setDownloadUrl(androidUrl);
-        break;
-      case "ios":
-        setDownloadUrl(iosUrl);
-        break;
-      case "windows":
-        setDownloadUrl(windowsUrl);
-        break;
-      case "linux":
-        setDownloadUrl(linuxUrl);
-        break;
-      default:
-        setDownloadUrl("#downloads");
-    }
-  }, [androidUrl, iosUrl, windowsUrl, linuxUrl]);
+    let cancelled = false;
+    const nav = navigator as Navigator & {
+      userAgentData?: {
+        platform?: string;
+        getHighEntropyValues?: (
+          keys: string[],
+        ) => Promise<{ architecture?: string; bitness?: string }>;
+      };
+    };
+    const info: DeviceInfo = {
+      userAgent: nav.userAgent,
+      platform: nav.platform,
+      maxTouchPoints: nav.maxTouchPoints,
+      hintPlatform: nav.userAgentData?.platform,
+    };
+    setDownloadUrl(resolvePlatformDownload(info, assets, iosUrl));
+    // Hints are optional and may be denied. The initial platform selector stays usable.
+    void nav.userAgentData
+      ?.getHighEntropyValues?.(["architecture", "bitness"])
+      .then((hints) => {
+        if (!cancelled)
+          setDownloadUrl(
+            resolvePlatformDownload({ ...info, ...hints }, assets, iosUrl),
+          );
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [assets, iosUrl]);
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row">
       <Button asChild size="lg" className="text-base font-semibold">
-        <Link href={downloadUrl} target="_blank" rel="noopener noreferrer">
+        <a
+          href={downloadUrl}
+          onClick={() => {
+            if (downloadUrl.startsWith("#download-")) {
+              window.dispatchEvent(
+                new CustomEvent("platform-download", { detail: downloadUrl }),
+              );
+            }
+          }}
+          target={downloadUrl.startsWith("#") ? undefined : "_blank"}
+          rel="noopener noreferrer"
+        >
           {dict.downloadButton}
-        </Link>
+        </a>
       </Button>
       <Button
         asChild

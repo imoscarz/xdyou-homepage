@@ -16,6 +16,8 @@ import {
 } from "@/app/jsonld";
 import Footer from "@/components/blocks/footer";
 import Navbar from "@/components/blocks/navbar/navbar";
+import DocumentLanguage from "@/components/layout/document-language";
+import PageTransition from "@/components/layout/page-transition";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { siteConfig } from "@/config/site";
 import { DATA } from "@/data";
@@ -96,7 +98,7 @@ export default function ChineseLayout({
         <link rel="preconnect" href="https://avatars.githubusercontent.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        
+
         {/* Google Analytics */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.gaMeasurementId}`}
@@ -129,9 +131,12 @@ export default function ChineseLayout({
         <ThemeProvider attribute="class" defaultTheme="system">
           <TooltipProvider delayDuration={0}>
             <Suspense fallback={null}>
+              <DocumentLanguage />
               <Navbar />
             </Suspense>
-            {children}
+            <Suspense fallback={children}>
+              <PageTransition>{children}</PageTransition>
+            </Suspense>
             <Suspense fallback={null}>
               <Footer />
             </Suspense>

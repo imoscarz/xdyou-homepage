@@ -40,7 +40,7 @@ export function LanguageToggle() {
     const queryString = params.toString();
     const targetUrl = queryString ? `${pathname}?${queryString}` : pathname;
 
-    router.push(targetUrl);
+    router.push(targetUrl + window.location.hash, { scroll: false });
   };
 
   return (
@@ -48,9 +48,9 @@ export function LanguageToggle() {
       variant="ghost"
       type="button"
       size="icon"
-      className="px-2"
+      className="size-11 rounded-xl p-0 shadow-none"
       onClick={isNewsDetail || isDocsDetail ? undefined : handleLanguageToggle}
-      aria-label="Toggle language"
+      aria-label={dict?.nav.language}
       aria-disabled={isNewsDetail || isDocsDetail}
       disabled={isNewsDetail || isDocsDetail}
     >

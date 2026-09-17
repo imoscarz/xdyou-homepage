@@ -7,10 +7,13 @@ import { BlurFade } from "@/components/ui/blur-fade";
 import { projectConfig } from "@/config/project";
 import { BLUR_FADE_DELAY } from "@/data";
 import { getAllDocSlugs, getDocBySlugWithCommit } from "@/lib/docs";
-import { getDictionary } from "@/lib/i18n";
-import { PAGE_CONTAINER_CLASSES } from "@/lib/page-helpers";
+import {
+  getPageI18n,
+  PAGE_CONTAINER_CLASSES,
+  type PageProps as BasePageProps,
+} from "@/lib/page-helpers";
 
-type PageProps = {
+type PageProps = BasePageProps & {
   params: Promise<{ slug: string }>;
 };
 
@@ -42,10 +45,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function DocPage({ params }: PageProps) {
+export default async function DocPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
-  // Force documentation content pages to use Chinese locale
-  const dict = await getDictionary("zh");
+  const { locale, dict } = await getPageI18n(searchParams);
   const doc = await getDocBySlugWithCommit(
     slug,
     projectConfig.docsRepo.owner,
@@ -71,10 +73,12 @@ export default async function DocPage({ params }: PageProps) {
               </p>
             )}
           </div>
-          
+
           {doc.lastCommit && (
             <DocLastEdit
               lastCommit={doc.lastCommit}
+              locale={locale}
+              dict={dict.docs.lastEdit}
               slug={slug}
               docsRepo={projectConfig.docsRepo}
             />
@@ -86,7 +90,7 @@ export default async function DocPage({ params }: PageProps) {
         <DocContent
           content={doc.html || ""}
           dict={{
-            toc: dict.releases.toc,
+            toc: dict.docs.toc,
           }}
         />
       </BlurFade>

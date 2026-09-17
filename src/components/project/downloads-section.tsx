@@ -1,29 +1,10 @@
-"use client";
-
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
-
-import DownloadClient from "@/components/project/download-client";
+import DownloadClient, {
+  type DownloadDictionary,
+  type Platform,
+} from "@/components/project/download-client";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import type { GitHubAsset } from "@/lib/github";
-
-type Platform = {
-  id: string;
-  name: string;
-  icon: keyof typeof import("@/components/icons").Icons;
-  downloadUrl?: string;
-  alternativeUrl?: string;
-  alternativeName?: string;
-  available: boolean;
-  comingSoon?: boolean;
-};
 
 type LatestRelease = {
   version: string;
@@ -33,49 +14,35 @@ type LatestRelease = {
   downloadUrl: string;
   assets?: GitHubAsset[];
 };
-
-type DownloadsSectionProps = {
-  platforms: Platform[];
-  latestRelease?: LatestRelease;
-  delay?: number;
-  dict: {
-    title: string;
-    badge: string;
-    latestVersion: string;
-    releaseNotes: string;
-    downloadFor: string;
-    comingSoon: string;
-    unavailable: string;
-    windowsMaintenanceWarning?: string;
-  };
-};
-
 export default function DownloadsSection({
   platforms,
   latestRelease,
   dict,
-}: DownloadsSectionProps) {
-  const [isReleaseNotesOpen, setIsReleaseNotesOpen] = useState(false);
-
+}: {
+  platforms: Platform[];
+  latestRelease?: LatestRelease;
+  dict: DownloadDictionary & {
+    title: string;
+    badge: string;
+    latestVersion: string;
+    releaseNotes: string;
+  };
+}) {
   return (
-    <section id="downloads" className="py-12">
+    <section id="downloads" className="scroll-mt-10 py-12">
       <div className="mx-auto w-full space-y-8">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="space-y-2">
-            <div className="bg-foreground text-background inline-block rounded-lg px-3 py-1 text-sm">
-              {dict.badge}
-            </div>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-              {dict.title}
-            </h2>
-          </div>
+        <div className="space-y-3 text-center">
+          <span className="bg-foreground text-background inline-block rounded-lg px-3 py-1 text-sm">
+            {dict.badge}
+          </span>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-5xl">
+            {dict.title}
+          </h2>
         </div>
-
-        {/* Latest Release Info */}
         {latestRelease && (
-          <Card className="mx-auto max-w-4xl">
+          <Card className="mx-auto max-w-6xl">
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <CardTitle className="text-xl">
                   {dict.latestVersion}: {latestRelease.version}
                 </CardTitle>
@@ -83,48 +50,30 @@ export default function DownloadsSection({
               </div>
             </CardHeader>
             <CardContent>
-              <Collapsible
-                open={isReleaseNotesOpen}
-                onOpenChange={setIsReleaseNotesOpen}
-              >
-                <CollapsibleTrigger asChild>
-                  <Button variant="ghost" className="w-full justify-between">
-                    <span>{dict.releaseNotes}</span>
-                    <ChevronDown
-                      className={`size-4 transition-transform ${
-                        isReleaseNotesOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </Button>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pt-4">
-                  {latestRelease.notesHtml ? (
-                    <div 
-                      className="prose prose-sm dark:prose-invert max-w-none text-sm"
-                      dangerouslySetInnerHTML={{ __html: latestRelease.notesHtml }}
-                    />
-                  ) : (
-                    <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">
-                      {latestRelease.notes}
-                    </div>
-                  )}
-                </CollapsibleContent>
-              </Collapsible>
+              <details>
+                <summary className="text-foreground cursor-pointer rounded-lg py-2 text-sm font-medium focus-visible:outline-2">
+                  {dict.releaseNotes}
+                </summary>
+                {latestRelease.notesHtml ? (
+                  <div
+                    className="prose prose-sm dark:prose-invert max-w-none pt-4"
+                    dangerouslySetInnerHTML={{
+                      __html: latestRelease.notesHtml,
+                    }}
+                  />
+                ) : (
+                  <p className="pt-4 whitespace-pre-wrap">
+                    {latestRelease.notes}
+                  </p>
+                )}
+              </details>
             </CardContent>
           </Card>
         )}
-
-        {/* Download Buttons */}
         <DownloadClient
           platforms={platforms}
           assets={latestRelease?.assets}
-          delay={0}
-          dict={{
-            downloadFor: dict.downloadFor,
-            comingSoon: dict.comingSoon,
-            unavailable: dict.unavailable,
-            windowsMaintenanceWarning: dict.windowsMaintenanceWarning,
-          }}
+          dict={dict}
         />
       </div>
     </section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, ChevronDown, FileBox, FileCode, ScrollText, Tag } from "lucide-react";
+import { ChevronDown, FileBox, FileCode, ScrollText, Tag } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -33,7 +33,10 @@ type ReleaseCardProps = {
     downloadCount: string;
     checksum: string;
     download: string;
-    windowsMaintenanceWarning?: string;
+    maintenanceNotice?: string;
+    maintenanceLabel: string;
+    copyChecksum: string;
+    copied: string;
   };
 };
 
@@ -81,12 +84,7 @@ export default function ReleaseCard({
                 </span>
               </div>
             </div>
-            <Button
-              asChild
-              variant="default"
-              size="sm"
-              className="shrink-0"
-            >
+            <Button asChild variant="default" size="sm" className="shrink-0">
               <Link
                 href={release.html_url}
                 target="_blank"
@@ -120,7 +118,7 @@ export default function ReleaseCard({
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <div className="prose prose-sm dark:prose-invert max-w-none mt-3 rounded-lg border border-border bg-card p-4">
+                  <div className="prose prose-sm dark:prose-invert surface-card mt-3 max-w-none p-4">
                     {releaseHtml ? (
                       <div dangerouslySetInnerHTML={{ __html: releaseHtml }} />
                     ) : (
@@ -159,86 +157,86 @@ export default function ReleaseCard({
                         .toLowerCase()
                         .includes("watermeter");
                       return (
-                        <div
-                          key={asset.id}
-                          className="rounded-lg border border-border bg-card p-3 sm:p-4"
-                        >
-                            <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
-                              <div className="flex-1 space-y-1">
-                                <div className="flex items-center gap-2">
-                                  <p className="text-sm font-medium break-all sm:text-base">
-                                    {asset.name}
-                                  </p>
-                                  {isDesktopAsset && dict.windowsMaintenanceWarning && (
-                                    <TooltipProvider delayDuration={0}>
-                                      <Tooltip>
-                                        <TooltipTrigger asChild>
-                                          <button 
-                                            className="inline-flex items-center focus:outline-none"
-                                            aria-label="Maintenance warning"
-                                          >
-                                            <AlertTriangle className="size-4 flex-shrink-0 text-yellow-600 dark:text-yellow-400" />
-                                          </button>
-                                        </TooltipTrigger>
-                                        <TooltipContent className="max-w-xs">
-                                          <p className="text-xs">{dict.windowsMaintenanceWarning}</p>
-                                        </TooltipContent>
-                                      </Tooltip>
-                                    </TooltipProvider>
-                                  )}
-                                </div>
-                                <div className="text-muted-foreground flex flex-wrap gap-1.5 text-xs">
-                                  <span>{formatFileSize(asset.size)}</span>
-                                  <span>•</span>
-                                  <span>
-                                    {dict.downloadCount}:{" "}
-                                    {asset.download_count.toLocaleString()}
-                                  </span>
-                                  <span className="hidden lg:inline">•</span>
-                                  <span className="hidden lg:inline">
-                                    {asset.content_type.split("/")[1] ||
-                                      asset.content_type}
-                                  </span>
-                                </div>
+                        <div key={asset.id} className="surface-card p-3 sm:p-4">
+                          <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
+                            <div className="min-w-0 flex-1 space-y-1">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <p className="text-sm font-medium break-all sm:text-base">
+                                  {asset.name}
+                                </p>
+                                {isDesktopAsset && dict.maintenanceNotice && (
+                                  <TooltipProvider delayDuration={0}>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <button
+                                          className="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2"
+                                          aria-label={dict.maintenanceNotice}
+                                        >
+                                          <Badge variant="secondary">
+                                            {dict.maintenanceLabel}
+                                          </Badge>
+                                        </button>
+                                      </TooltipTrigger>
+                                      <TooltipContent className="max-w-xs">
+                                        <p className="text-xs">
+                                          {dict.maintenanceNotice}
+                                        </p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                )}
                               </div>
-
-                              {asset.checksum && (
-                                <div className="hidden items-center gap-2 pr-4 sm:flex">
-                                  <span className="text-muted-foreground text-xs">
-                                    SHA256:
-                                  </span>
-                                  <code
-                                    className={`bg-muted hover:bg-muted/80 cursor-pointer rounded px-1.5 py-0.5 font-mono text-[5px] transition-colors ${
-                                      copiedChecksum === asset.name
-                                        ? "text-green-600"
-                                        : ""
-                                    }`}
-                                    onClick={() =>
-                                      copyChecksum(asset.checksum!, asset.name)
-                                    }
-                                    title="Click to copy checksum"
-                                  >
-                                    {copiedChecksum === asset.name
-                                      ? "copied!"
-                                      : truncateChecksum(asset.checksum)}
-                                  </code>
-                                </div>
-                              )}
-
-                              <Button
-                                asChild
-                                size="sm"
-                                className="shrink-0"
-                              >
-                                <Link
-                                  href={asset.browser_download_url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  {dict.download}
-                                </Link>
-                              </Button>
+                              <div className="text-muted-foreground flex flex-wrap gap-1.5 text-xs">
+                                <span>{formatFileSize(asset.size)}</span>
+                                <span>•</span>
+                                <span>
+                                  {dict.downloadCount}:{" "}
+                                  {asset.download_count.toLocaleString()}
+                                </span>
+                                <span className="hidden lg:inline">•</span>
+                                <span className="hidden lg:inline">
+                                  {asset.content_type.split("/")[1] ||
+                                    asset.content_type}
+                                </span>
+                              </div>
                             </div>
+
+                            {asset.checksum && (
+                              <div className="hidden items-center gap-2 pr-4 sm:flex">
+                                <span className="text-muted-foreground text-xs">
+                                  SHA256:
+                                </span>
+                                <button
+                                  type="button"
+                                  className={`bg-muted hover:bg-muted/80 cursor-pointer rounded px-1.5 py-0.5 font-mono text-xs transition-colors ${
+                                    copiedChecksum === asset.name
+                                      ? "text-foreground"
+                                      : ""
+                                  }`}
+                                  onClick={() =>
+                                    copyChecksum(asset.checksum!, asset.name)
+                                  }
+                                  title={dict.copyChecksum}
+                                  aria-label={dict.copyChecksum}
+                                  aria-live="polite"
+                                >
+                                  {copiedChecksum === asset.name
+                                    ? dict.copied
+                                    : truncateChecksum(asset.checksum)}
+                                </button>
+                              </div>
+                            )}
+
+                            <Button asChild size="sm" className="shrink-0">
+                              <Link
+                                href={asset.browser_download_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {dict.download}
+                              </Link>
+                            </Button>
+                          </div>
                         </div>
                       );
                     })}

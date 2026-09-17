@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  AnimatePresence,
   motion,
   MotionProps,
   useInView,
   UseInViewOptions,
+  useReducedMotion,
   Variants,
 } from "motion/react";
 import { useRef } from "react";
@@ -32,16 +32,17 @@ export function BlurFade({
   children,
   className,
   variant,
-  duration = 0.4,
+  duration = 0.22,
   delay = 0,
-  offset = 6,
+  offset = 4,
   direction = "down",
   inView = false,
   inViewMargin = "-50px",
-  blur = "6px",
+  blur = "0px",
   ...props
 }: BlurFadeProps) {
   const ref = useRef(null);
+  const reducedMotion = useReducedMotion();
   const inViewResult = useInView(ref, { once: true, margin: inViewMargin });
   const isInView = !inView || inViewResult;
   const defaultVariants: Variants = {
@@ -59,23 +60,20 @@ export function BlurFade({
   };
   const combinedVariants = variant || defaultVariants;
   return (
-    <AnimatePresence>
-      <motion.div
-        ref={ref}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        exit="hidden"
-        variants={combinedVariants}
-        transition={{
-          delay: 0.04 + delay,
-          duration,
-          ease: "easeOut",
-        }}
-        className={className}
-        {...props}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      ref={ref}
+      initial={false}
+      animate={reducedMotion || isInView ? "visible" : "hidden"}
+      variants={combinedVariants}
+      transition={{
+        delay: reducedMotion ? 0 : Math.min(delay, 0.12),
+        duration: reducedMotion ? 0 : duration,
+        ease: "easeOut",
+      }}
+      className={className}
+      {...props}
+    >
+      {children}
+    </motion.div>
   );
 }

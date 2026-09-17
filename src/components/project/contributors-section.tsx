@@ -1,61 +1,82 @@
 "use client";
 
 import Link from "next/link";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 
 import { Icons } from "@/components/icons";
+import SectionHeading from "@/components/project/section-heading";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { BlurFade } from "@/components/ui/blur-fade";
-import type { contributors } from "@/config/contributors";
-
-type Contributor = (typeof contributors)[number];
+import type { Contributor } from "@/config/contributors";
+import {
+  type BubblePosition,
+  scatterContributors,
+} from "@/lib/contributor-layout";
 
 interface ContributorsSectionProps {
   contributors: readonly Contributor[];
-  delay?: number;
   dict: {
     badge: string;
     title: string;
-    viewAll: string;
+    description: string;
+    close: string;
   };
 }
 
 export default function ContributorsSection({
   contributors,
-  delay = 0,
   dict,
 }: ContributorsSectionProps) {
-  if (contributors.length === 0) {
-    return null;
-  }
-
+  const fieldRef = useRef<HTMLDivElement>(null);
+  const [positions, setPositions] = useState<BubblePosition[]>([]);
+  useEffect(() => {
+    const field = fieldRef.current;
+    if (!field) return;
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      setPositions(scatterContributors(contributors.length, width, height));
+    });
+    observer.observe(field);
+    return () => observer.disconnect();
+  }, [contributors.length]);
+  if (!contributors.length) return null;
   return (
-    <section id="contributors" className="py-12">
-      <div className="mx-auto w-full space-y-8">
-        <BlurFade delay={delay}>
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <div className="bg-foreground text-background inline-block rounded-lg px-3 py-1 text-sm">
-                {dict.badge}
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                {dict.title}
-              </h2>
-            </div>
+    <section
+      id="contributors"
+      className="home-contributors"
+      aria-labelledby="contributors-title"
+    >
+      <SectionHeading
+        id="contributors-title"
+        label={dict.badge}
+        title={dict.title}
+        description={dict.description}
+      />
+      <div
+        className="contributor-field"
+        ref={fieldRef}
+        data-ready={positions.length > 0}
+      >
+        {contributors.map((contributor, index) => (
+          <div
+            key={contributor.id}
+            className="contributor-bubble"
+            style={
+              {
+                "--float-time": `${4 + (index % 4)}s`,
+                "--float-delay": `${-(index % 7)}s`,
+                left: positions[index]?.x ?? 0,
+                top: positions[index]?.y ?? 0,
+                "--bubble-size": `${positions[index]?.size ?? 40}px`,
+                "--float-x": `${index % 2 ? 4 : -4}px`,
+              } as CSSProperties
+            }
+          >
+            <ContributorDialog
+              contributor={contributor}
+              closeLabel={dict.close}
+            />
           </div>
-        </BlurFade>
-
-        <BlurFade delay={delay + 0.1}>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {contributors.map((contributor, index) => (
-              <BlurFade
-                key={contributor.name}
-                delay={delay + 0.1 + index * 0.02}
-              >
-                <ContributorDialog contributor={contributor} />
-              </BlurFade>
-            ))}
-          </div>
-        </BlurFade>
+        ))}
       </div>
     </section>
   );
@@ -70,53 +91,54 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 
-function ContributorDialog({ contributor }: { contributor: Contributor }) {
+function ContributorDialog({
+  contributor,
+  closeLabel,
+}: {
+  contributor: Contributor;
+  closeLabel: string;
+}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="bg-card hover:bg-accent flex h-full w-full cursor-pointer flex-col items-center space-y-2 rounded-lg border p-4 transition">
-          <Avatar className="h-16 w-16">
-            <AvatarImage src={contributor.avatar} alt={contributor.name} />
+        <button
+          type="button"
+          aria-label={contributor.name}
+          className="bubble-trigger flex w-full cursor-pointer flex-col items-center gap-1 rounded-full focus-visible:outline-2 focus-visible:outline-offset-4"
+        >
+          <Avatar className="bubble-avatar">
+            <AvatarImage
+              src={contributor.avatar}
+              alt={contributor.name}
+              loading="lazy"
+            />
             <AvatarFallback>
               {contributor.name.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="w-full text-center">
+          <div className="bubble-name text-center">
             <p className="max-w-full truncate text-sm font-medium">
               {contributor.name}
             </p>
           </div>
-        </div>
+        </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent
+        className="sm:max-w-lg"
+        closeLabel={closeLabel}
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle>{contributor.name}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           {/* 双栏布局：左侧avatar，右侧subtitle */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 sm:gap-6">
             <div className="shrink-0">
-              {/* 使用原生 img 标签，避免消耗 Vercel 图片优化限额 */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={(function addSize(src: string) {
-                  try {
-                    const u = new URL(src);
-                    if (u.hostname === "avatars.githubusercontent.com") {
-                      if (!u.searchParams.has("s") && !u.searchParams.has("size")) {
-                        u.searchParams.set("s", "96");
-                      }
-                      return u.toString();
-                    }
-                  } catch {
-                    return src;
-                  }
-                  return src;
-                })(contributor.avatar)}
-                alt={contributor.name}
-                className="h-24 w-24 rounded-full"
-                loading="lazy"
-              />
+              <Avatar className="size-16 sm:size-24">
+                <AvatarImage src={contributor.avatar} alt={contributor.name} />
+                <AvatarFallback>{contributor.name.slice(0, 2)}</AvatarFallback>
+              </Avatar>
             </div>
             <div className="min-w-0 flex-1">
               <ul className="list-inside list-disc space-y-1 text-sm">
@@ -142,7 +164,7 @@ function ContributorDialog({ contributor }: { contributor: Contributor }) {
           {contributor.links &&
           Array.isArray(contributor.links) &&
           contributor.links.length > 0 ? (
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               {contributor.links.map(
                 (
                   link: { icon: string; text?: string; url: string },

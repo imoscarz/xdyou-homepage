@@ -39,6 +39,7 @@ export async function fetchGitHubReleases(
 
   try {
     const response = await fetch(url, {
+      signal: AbortSignal.timeout(5000),
       headers: {
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
@@ -56,9 +57,9 @@ export async function fetchGitHubReleases(
     const releases: GitHubRelease[] = await response.json();
 
     // Parse checksums from release assets and bodies
-    return releases.map(release => ({
+    return releases.map((release) => ({
       ...release,
-      assets: parseChecksumsFromAssetsAndBody(release.body, release.assets)
+      assets: parseChecksumsFromAssetsAndBody(release.body, release.assets),
     }));
   } catch (error) {
     console.error("Error fetching GitHub releases:", error);
@@ -77,6 +78,7 @@ export async function fetchLatestRelease(
 
   try {
     const response = await fetch(url, {
+      signal: AbortSignal.timeout(5000),
       headers: {
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
@@ -96,7 +98,7 @@ export async function fetchLatestRelease(
     // Parse checksums from release assets and body
     return {
       ...release,
-      assets: parseChecksumsFromAssetsAndBody(release.body, release.assets)
+      assets: parseChecksumsFromAssetsAndBody(release.body, release.assets),
     };
   } catch (error) {
     console.error("Error fetching latest GitHub release:", error);
@@ -107,8 +109,11 @@ export async function fetchLatestRelease(
 /**
  * Parse checksums from release assets (digest field) and body (as fallback)
  */
-export function parseChecksumsFromAssetsAndBody(body: string, assets: GitHubAsset[]): GitHubAsset[] {
-  return assets.map(asset => {
+export function parseChecksumsFromAssetsAndBody(
+  body: string,
+  assets: GitHubAsset[],
+): GitHubAsset[] {
+  return assets.map((asset) => {
     let checksum = undefined;
 
     // First, try to extract from digest field (GitHub API provides this)
@@ -125,11 +130,13 @@ export function parseChecksumsFromAssetsAndBody(body: string, assets: GitHubAsse
       const checksums: Record<string, string> = {};
 
       // Parse various checksum formats from body
-      const lines = body.split('\n');
+      const lines = body.split("\n");
 
       for (const line of lines) {
         // Format: filename: checksum
-        const colonMatch = line.match(/^[\s]*([^\s:]+)[\s]*:[\s]*([a-fA-F0-9]{32,128})[\s]*$/);
+        const colonMatch = line.match(
+          /^[\s]*([^\s:]+)[\s]*:[\s]*([a-fA-F0-9]{32,128})[\s]*$/,
+        );
         if (colonMatch) {
           const [, filename, fileChecksum] = colonMatch;
           checksums[filename] = fileChecksum;
@@ -137,7 +144,9 @@ export function parseChecksumsFromAssetsAndBody(body: string, assets: GitHubAsse
         }
 
         // Format: - SHA256: `checksum` for filename
-        const sha256Match = line.match(/SHA256:[\s]*`([a-fA-F0-9]{64})`[\s]*for[\s]*([^\s]+)/i);
+        const sha256Match = line.match(
+          /SHA256:[\s]*`([a-fA-F0-9]{64})`[\s]*for[\s]*([^\s]+)/i,
+        );
         if (sha256Match) {
           const [, fileChecksum, filename] = sha256Match;
           checksums[filename] = fileChecksum;
@@ -145,7 +154,9 @@ export function parseChecksumsFromAssetsAndBody(body: string, assets: GitHubAsse
         }
 
         // Format: - MD5: `checksum` for filename
-        const md5Match = line.match(/MD5:[\s]*`([a-fA-F0-9]{32})`[\s]*for[\s]*([^\s]+)/i);
+        const md5Match = line.match(
+          /MD5:[\s]*`([a-fA-F0-9]{32})`[\s]*for[\s]*([^\s]+)/i,
+        );
         if (md5Match) {
           const [, fileChecksum, filename] = md5Match;
           checksums[filename] = fileChecksum;
@@ -153,7 +164,9 @@ export function parseChecksumsFromAssetsAndBody(body: string, assets: GitHubAsse
         }
 
         // Format: filename checksum
-        const spaceMatch = line.match(/^[\s]*([^\s]+)[\s]+([a-fA-F0-9]{32,128})[\s]*$/);
+        const spaceMatch = line.match(
+          /^[\s]*([^\s]+)[\s]+([a-fA-F0-9]{32,128})[\s]*$/,
+        );
         if (spaceMatch) {
           const [, filename, fileChecksum] = spaceMatch;
           checksums[filename] = fileChecksum;
@@ -166,7 +179,7 @@ export function parseChecksumsFromAssetsAndBody(body: string, assets: GitHubAsse
 
     return {
       ...asset,
-      checksum
+      checksum,
     };
   });
 }
@@ -231,6 +244,7 @@ export async function fetchFileLastCommit(
 
   try {
     const response = await fetch(url, {
+      signal: AbortSignal.timeout(5000),
       headers: {
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
@@ -246,7 +260,7 @@ export async function fetchFileLastCommit(
     }
 
     const commits: GitHubCommit[] = await response.json();
-    
+
     if (commits.length === 0) {
       return null;
     }
@@ -261,7 +275,10 @@ export async function fetchFileLastCommit(
 /**
  * Format date to relative time (e.g., "2 days ago")
  */
-export function formatRelativeTime(dateString: string, locale: string = "zh-CN"): string {
+export function formatRelativeTime(
+  dateString: string,
+  locale: string = "zh-CN",
+): string {
   const date = new Date(dateString);
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);

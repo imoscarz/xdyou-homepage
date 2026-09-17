@@ -28,48 +28,7 @@ export function useLocale(): Locale {
   return i18n.defaultLocale;
 }
 
-type Dictionary = {
-  common: {
-    language: {
-      zh: string;
-      en: string;
-    };
-    time: {
-      today: string;
-      daysAgo: string;
-      weeksAgo: string;
-      monthsAgo: string;
-      yearsAgo: string;
-    };
-  };
-  blog: {
-    by: string;
-    readMore: string;
-    title: string;
-    noPosts: string;
-    visitBlogHome: string;
-    toc: {
-      title: string;
-      toggle: string;
-      close: string;
-      noContent: string;
-    };
-  };
-  anime: {
-    progress: string;
-  };
-  footer: Record<string, unknown>;
-  nav: {
-    home: string;
-    docs: string;
-    news: string;
-    releases: string;
-    theme: string;
-    language: string;
-  };
-  page: Record<string, unknown>;
-  home: Record<string, unknown>;
-};
+type Dictionary = typeof import("./locales/zh.json");
 
 /**
  * Get dictionary for current locale (Client Component hook)

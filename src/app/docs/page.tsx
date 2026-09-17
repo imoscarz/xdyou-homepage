@@ -13,11 +13,7 @@ import {
 } from "@/lib/page-helpers";
 
 export async function generateMetadata({ searchParams }: PageProps) {
-  return generateSimpleMetadata(
-    searchParams,
-    "docs.title",
-    "docs.description",
-  );
+  return generateSimpleMetadata(searchParams, "docs.title", "docs.description");
 }
 
 export default async function DocsPage({ searchParams }: PageProps) {
@@ -28,17 +24,12 @@ export default async function DocsPage({ searchParams }: PageProps) {
 
   return (
     <main className={PAGE_CONTAINER_CLASSES.standard}>
-      <PageHeader
-        title={dict.docs.title}
-        description={dict.docs.description}
-      />
+      <PageHeader title={dict.docs.title} description={dict.docs.description} />
 
       {/* Chinese Only Notice for English users */}
       {locale === "en" && dict.docs.chineseOnlyNotice && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/30">
-          <p className="text-sm text-blue-800 dark:text-blue-200">
-            ℹ️ {dict.docs.chineseOnlyNotice}
-          </p>
+        <div className="surface-notice">
+          <p className="text-sm">{dict.docs.chineseOnlyNotice}</p>
         </div>
       )}
 
@@ -56,8 +47,8 @@ export default async function DocsPage({ searchParams }: PageProps) {
                     key={doc.slug}
                     delay={BLUR_FADE_DELAY * 2 + catIdx * 0.1 + idx * 0.05}
                   >
-                    <Link href={`/docs/${doc.slug}?lang=zh`}>
-                      <Card className="h-full transition-shadow hover:shadow-lg">
+                    <Link href={`/docs/${doc.slug}?lang=${locale}`}>
+                      <Card className="surface-interactive h-full">
                         <CardHeader>
                           <CardTitle>{doc.metadata.title}</CardTitle>
                         </CardHeader>
@@ -75,9 +66,7 @@ export default async function DocsPage({ searchParams }: PageProps) {
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <Card className="bg-muted/50">
               <CardContent className="p-8 text-center">
-                <p className="text-muted-foreground">
-                  {dict.docs.comingSoon}
-                </p>
+                <p className="text-muted-foreground">{dict.docs.comingSoon}</p>
               </CardContent>
             </Card>
           </BlurFade>

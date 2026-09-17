@@ -37,7 +37,7 @@ export async function generateSimpleMetadata(
   descriptionKey: string,
 ): Promise<Metadata> {
   const { dict } = await getPageI18n(searchParams);
-  
+
   // 解析嵌套键路径
   const title = getNestedValue(dict, titleKey);
   const description = getNestedValue(dict, descriptionKey);
@@ -54,12 +54,14 @@ export async function generateSimpleMetadata(
  * @param path - 点分隔的路径字符串（例如 "releases.title"）
  */
 function getNestedValue(obj: Record<string, unknown>, path: string): string {
-  return path.split(".").reduce<unknown>((current, key) => {
-    if (current && typeof current === "object" && key in current) {
-      return (current as Record<string, unknown>)[key];
-    }
-    return undefined;
-  }, obj) as string || "";
+  return (
+    (path.split(".").reduce<unknown>((current, key) => {
+      if (current && typeof current === "object" && key in current) {
+        return (current as Record<string, unknown>)[key];
+      }
+      return undefined;
+    }, obj) as string) || ""
+  );
 }
 
 /**
@@ -85,8 +87,6 @@ export const PAGE_CONTAINER_CLASSES = {
   // 文章内容容器（max-w-4xl，用于阅读体验）
   article:
     "mx-auto flex min-h-dvh max-w-4xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20",
-  // 首页容器（更大间距）
-  home: "mx-auto flex min-h-dvh max-w-7xl flex-col space-y-16 px-6 py-8 pb-24 sm:space-y-20 sm:px-16 md:px-20 md:py-16 md:pt-14 lg:px-24 lg:py-20 xl:px-32 xl:py-24",
   // 文档页面容器（无右侧边距，留给 TOC）
   docs: "mx-auto flex min-h-dvh max-w-7xl flex-col space-y-8 px-6 py-8 pb-24 sm:px-16 md:px-20 md:py-16 lg:px-24 lg:py-20",
 } as const;

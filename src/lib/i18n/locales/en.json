@@ -13,6 +13,7 @@
     }
   },
   "nav": {
+    "label": "Main navigation",
     "home": "Home",
     "docs": "Docs",
     "news": "News",
@@ -26,31 +27,104 @@
       "moreDownloads": "More Download Options",
       "viewOnGithub": "View on GitHub"
     },
-    "features": {
-      "badge": "Core Features",
-      "title": "Powerful Features for Campus Life"
-    },
     "screenshots": {
-      "badge": "Screenshots",
-      "title": "Intuitive Interface, Smooth Experience"
+      "mobile": "Mobile",
+      "desktop": "Landscape view",
+      "enlarge": "Enlarge screenshot",
+      "close": "Close",
+      "imageError": "This screenshot could not be loaded. Try another view or return later."
     },
     "downloads": {
       "badge": "Downloads",
       "title": "Choose Your Platform",
-      "latestVersion": "Latest Version",
+      "latestVersion": "Latest upstream release",
       "releaseNotes": "Release Notes",
       "downloadFor": "Download",
       "comingSoon": "Coming Soon",
       "unavailable": "Unavailable",
-      "windowsMaintenanceWarning": "The developer cannot guarantee active maintenance of packages for this platform"
+      "maintenanceNotice": "The developer cannot guarantee active maintenance of packages for this platform",
+      "thirdParty": "Project-recognized third-party version",
+      "ohosNotice": "Independently maintained and recognized by the XDYou project. Its version tree is not synchronized with the main repository; versions, features and updates may differ.",
+      "appGallery": "Open Huawei AppGallery",
+      "maintenanceLabel": "Maintenance not guaranteed",
+      "noReleaseNotes": "No release notes available."
     },
     "contributors": {
       "badge": "Contributors",
       "title": "Thanks to All Contributors",
-      "subtitle": "Role",
-      "viewProfile": "View Profile",
-      "viewDetails": "View Details",
-      "viewAll": "View contributors' details"
+      "description": "Different backgrounds, one shared campus project. Select an avatar to meet a contributor."
+    },
+    "pages": {
+      "toc": "Contents",
+      "overview": "Overview",
+      "chapters": {
+        "study": {
+          "label": "Study plans",
+          "title": "Your week, at a glance.",
+          "description": "Browse classes and events by week, with times and classrooms together in one timetable.",
+          "points": [
+            "Switch weeks to see your schedule",
+            "Plan your day around class times and rooms"
+          ]
+        },
+        "spaces": {
+          "label": "Study spaces",
+          "title": "Find a free room before you go.",
+          "description": "Check classroom availability by date and building, and find a place for some focused study.",
+          "points": [
+            "Search by classroom name or code",
+            "See which class periods are free or occupied"
+          ]
+        },
+        "daily": {
+          "label": "Campus overview",
+          "title": "Everyday information, close at hand.",
+          "description": "Check your schedule, electricity, loans and campus card balance at a glance. Browse card transactions or search the library collection.",
+          "points": [
+            "Campus information and everyday shortcuts",
+            "Campus card transactions by date",
+            "Library search and available copies"
+          ]
+        },
+        "services": {
+          "label": "Daily services",
+          "title": "Network and water, within reach.",
+          "description": "Check your campus network plan and data usage, then find familiar devices in the dorm water dispenser list.",
+          "points": [
+            "See used, remaining and total data",
+            "Save favorite dispensers and access water controls"
+          ]
+        },
+        "explore": {
+          "label": "A little break",
+          "title": "Take a break. Meet a pig.",
+          "description": "A small moment of fun alongside your campus tools. Pick another pig picture, or save one you like.",
+          "points": ["Shuffle the pig gallery", "Save your favorite pictures"]
+        }
+      },
+      "join": {
+        "label": "Get involved",
+        "title": "Build with us.",
+        "description": "XDYou grows from real campus needs, thoughtful feedback, and everyday improvements. Help make the tools we share a little better.",
+        "guide": "Developer guide",
+        "github": "Project on GitHub",
+        "invitation": "You do not need to know the entire codebase. Start with a reproducible issue, an interface sketch, or clearer English. Read the contribution guide before getting started.",
+        "panelTitle": "Start with something you care about",
+        "ways": [
+          {
+            "title": "Features & fixes",
+            "description": "Explore the source and tackle a specific problem."
+          },
+          {
+            "title": "Design & translation",
+            "description": "Shape interfaces and make English clearer."
+          },
+          {
+            "title": "Feedback & ideas",
+            "description": "Share reproduction steps and practical suggestions."
+          }
+        ]
+      }
     }
   },
   "news": {
@@ -81,7 +155,8 @@
     "loadMore": "Load More",
     "noReleases": "No releases available",
     "toc": "Table of Contents",
-    "windowsMaintenanceWarning": "The developer cannot guarantee active maintenance of packages for this platform"
+    "copyChecksum": "Copy checksum",
+    "copied": "Copied"
   },
   "docs": {
     "title": "Documentation",
@@ -92,7 +167,12 @@
     "noDocs": "No documentation available",
     "comingSoon": "Documentation is coming soon. Please visit our GitHub repository for detailed information.",
     "chineseOnlyNotice": "Note: Documentation is currently available in Chinese only. We are working on English translations.",
-    "editOnGitHub": "Edit on GitHub"
+    "editOnGitHub": "Edit on GitHub",
+    "lastEdit": {
+      "updated": "Last updated:",
+      "view": "View",
+      "viewOnGithub": "View on GitHub"
+    }
   },
   "footer": {
     "sections": {
