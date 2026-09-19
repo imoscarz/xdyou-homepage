@@ -72,7 +72,9 @@ export const projectConfig = {
       icon: "apple",
       available: true,
       downloadUrl:
-        "https://apps.apple.com/us/app/xdyou/id6461723688?l=zh-Hans-CN",
+        "https://apps.apple.com/cn/app/xdyou/id6461723688?l=zh-Hans-CN",
+      alternativeUrl: "https://testflight.apple.com/join/pLKe5B4q",
+      alternativeName: "TestFlight",
     },
     {
       id: "windows",
