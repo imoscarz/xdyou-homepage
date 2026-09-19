@@ -56,14 +56,23 @@ export default function DownloadCard({
       onPointerEnter={(event) => {
         if (event.pointerType === "mouse") setOpen(true);
       }}
-      onPointerLeave={() => {
+      onPointerLeave={(event) => {
+        // Touch/pen contact ending is not a hover dismissal. Closing here can
+        // make the link inert before the browser dispatches its click.
+        if (event.pointerType !== "mouse") return;
         if (!root.current?.contains(document.activeElement)) setOpen(false);
       }}
       onFocusCapture={(event) => {
         if (event.target.matches(":focus-visible")) setOpen(true);
       }}
       onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+        // Mobile browsers can blur without a new focus target during a tap.
+        // Outside pointerdown and Escape already cover explicit dismissal.
+        if (
+          event.relatedTarget &&
+          !event.currentTarget.contains(event.relatedTarget)
+        )
+          setOpen(false);
       }}
       onKeyDown={(event) => {
         if (event.key === "Escape") {
