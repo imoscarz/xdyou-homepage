@@ -1,7 +1,7 @@
-import { Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { Icons } from "@/components/icons";
 import PlatformDownloadButton from "@/components/project/platform-download-button";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button } from "@/components/ui/button";
@@ -89,7 +89,7 @@ export default function HeroSection({
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Github className="mr-2 size-5" />
+                    <Icons.github className="mr-2 size-5" aria-hidden="true" />
                     {dict.viewOnGithub || "GitHub"}
                   </Link>
                 </Button>

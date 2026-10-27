@@ -1,12 +1,12 @@
 {
   "source": {
     "repository": "BenderBlog/traintime_pda",
-    "revision": "98ef3317d0b31ed23a31c189df1233fc927d399e",
+    "revision": "e780e4d01ea740c979ff5c31b9db439dbc586864",
     "license": "MPL-2.0",
     "files": [
       "lib/model/about_page.dart",
-      "assets/flutter_i18n/zh_CN.yaml",
-      "assets/flutter_i18n/en_US.yaml"
+      "assets/i18n/zh/setting.yaml",
+      "assets/i18n/en/setting.yaml"
     ]
   },
   "contributors": [
@@ -16,8 +16,8 @@
       "avatar": "https://avatars.githubusercontent.com/u/36269472",
       "url": "https://github.com/A1nair",
       "description": {
-        "zh": "开发：图书馆搜索和封面",
-        "en": "Development: Library search and cover"
+        "zh": "开发：图书馆搜索和封面、图书馆布局修复、饮水机接水功能及接口适配",
+        "en": "Development: Library search and covers, library layout fixes, water dispenser functionality and API updates"
       }
     },
     {
@@ -26,8 +26,8 @@
       "avatar": "https://avatars.githubusercontent.com/u/97880629",
       "url": "https://github.com/aqqkad",
       "description": {
-        "zh": "开发：考勤历史记录",
-        "en": "Development: Class attandance history"
+        "zh": "开发：考勤历史记录、空调遥控、空调电费数据接入、图书馆新接口适配",
+        "en": "Development: Class attendance history, air conditioner remote control and electricity data integration, library API updates"
       }
     },
     {
@@ -98,6 +98,16 @@
       "description": {
         "zh": "开发：系统日历最新课表同步",
         "en": "Development: latest time arrangement sync to calendar"
+      }
+    },
+    {
+      "id": "setting.about_page.dami",
+      "name": "DaMi (Kangwenqiao)",
+      "avatar": "https://avatars.githubusercontent.com/u/118408678",
+      "url": "https://github.com/Kangwenqiao",
+      "description": {
+        "zh": "开发：修复 iOS 课程偏移负数输入及输入校验",
+        "en": "Development: Fix negative course offset input and input validation on iOS"
       }
     },
     {
@@ -206,8 +216,8 @@
       "avatar": "https://avatars.githubusercontent.com/u/52318095",
       "url": "https://imoscarz.me/",
       "description": {
-        "zh": "开发：设计软件主页 / 开发：平板考勤查询页面 / 开发：优化了体育查询界面的UI",
-        "en": "Development: Homepage for software / Development: Checkin check for pad / Development: Sport UI Change"
+        "zh": "开发：设计软件主页 / 开发：平板考勤查询页面 / 开发：优化了体育查询界面的UI / 开发：设置页面分类重构及主从布局适配",
+        "en": "Development: Homepage for software / Development: Checkin check for pad / Development: Sport UI Change / Development: Settings category refactoring and master-detail layout adaptation"
       }
     },
     {
@@ -218,6 +228,16 @@
       "description": {
         "zh": "国际化：软件英语翻译优化",
         "en": "Internationalization: English correction"
+      }
+    },
+    {
+      "id": "setting.about_page.l1angyun",
+      "name": "L1angYun",
+      "avatar": "https://avatars.githubusercontent.com/u/76769653",
+      "url": "https://github.com/L1angYun",
+      "description": {
+        "zh": "开发：空闲教室实时显示、课表背景模糊、课表布局与屏幕圆角适配；修复校园网数据展示",
+        "en": "Development: Live availability of classrooms, timetable background blur, timetable layout and screen corner adaptation; fix campus network data display"
       }
     },
     {
@@ -248,6 +268,16 @@
       "description": {
         "zh": "设计：配色，空白页面贴图 / 开发：实验系统页面读取代码",
         "en": "Design: color pattern and blank page picture / Development: HTML reader for the experiment system"
+      }
+    },
+    {
+      "id": "setting.about_page.littlestejan",
+      "name": "littlestejan",
+      "avatar": "https://avatars.githubusercontent.com/u/40530340",
+      "url": "https://github.com/littlestejan",
+      "description": {
+        "zh": "开发：校园网验证码刷新及验证码输入对话框优化",
+        "en": "Development: Campus network captcha refresh and captcha input dialog improvements"
       }
     },
     {
@@ -348,6 +378,16 @@
       "description": {
         "zh": "支持：两次鸽子公众号宣传",
         "en": "Support: two times of pigeon house official account publicity"
+      }
+    },
+    {
+      "id": "setting.about_page.sixteenforever",
+      "name": "SixTeenForever",
+      "avatar": "https://avatars.githubusercontent.com/u/184718848",
+      "url": "https://github.com/16forever233",
+      "description": {
+        "zh": "开发：HarmonyOS 移植",
+        "en": "Development: HarmonyOS port"
       }
     },
     {
