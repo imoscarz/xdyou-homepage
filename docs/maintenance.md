@@ -6,6 +6,10 @@
 
 依赖已刷新到锁文件中的稳定版本。TypeScript 保持 6.0 系列，以符合 typescript-eslint 的 `<6.1.0` peer 范围；不盲目升级到 TypeScript 7。Next、React 和相关类型保持配套。安全检查运行 `pnpm audit`，结果具有时效性。
 
+Dependabot 保留 npm 与 GitHub Actions 每周检查。npm 工具组只合并 minor/patch 更新，主版本升级单独审核；Next 相关包与 React 类型不进入工具组。TypeScript 在清单中限制为 `~6.0.3`，Dependabot 暂不更新到 `>=6.1.0`；Node 类型保持 24 系列。升级运行时或 ESLint 支持范围后，应同步调整这些约束。`.npmrc` 启用严格 peer 依赖检查，防止不兼容组合通过安装。
+
+2026-10-27 的依赖修复将 Next 及其配套工具更新到 16.4.3，Lucide 更新到 1.61.0；首页 GitHub 图标复用站内 `Icons.github`，适配新版 Lucide 移除品牌图标的变化。`source-map-js` 更新到 1.2.2，`sharp` 更新到 0.35.5。`@tailwindcss/typography@0.5.20` 固定使用旧解析器，因此仅覆盖其 `postcss-selector-parser` 为 6.1.5；上游更新后应重新检查并移除该覆盖。
+
 GitHub CI 只负责安装、图片检查、Lint、测试、构建与类型检查，不负责部署。Vercel 使用仓库的构建命令及 Node 24；若项目控制台另设了旧 Node 版本，应将该覆盖设置改为 24.x。
 
 当前已移除不执行路由逻辑的 middleware。构建日期通过 Next 配置注入，不再改写源码；Next 16 所需的 tsconfig 改动已纳入版本控制。
