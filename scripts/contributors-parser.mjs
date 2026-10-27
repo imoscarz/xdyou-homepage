@@ -1,9 +1,9 @@
 import { parse } from "yaml";
 
-// A deliberately restricted parser: accept literal Developer entries only.
+// Accept literal fields and simple Slang translation references; never run Dart.
 // Upstream syntax changes must fail visibly rather than silently drop people.
-export function parseDevelopers(source) {
-  const header = /const\s+List<Developer>\s+getDevelopers\s*=\s*\[/g;
+export function parseDevelopers(source, descriptionKeys = []) {
+  const header = /(?:const|final)\s+List<Developer>\s+getDevelopers\s*=\s*\[/g;
   const match = header.exec(source);
   if (!match) throw new Error("Missing getDevelopers list");
   const tokens =
@@ -13,9 +13,14 @@ export function parseDevelopers(source) {
         /\/\/[^\n]*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[A-Za-z_]\w*|[^\s]/g,
       ) || [];
   let i = 0;
-  const next = () => {
+  const peek = () => {
     while (tokens[i]?.startsWith("//") || tokens[i]?.startsWith("/*")) i++;
-    return tokens[i++];
+    return tokens[i];
+  };
+  const next = () => {
+    const token = peek();
+    i++;
+    return token;
   };
   const expect = (value) => {
     if (next() !== value)
@@ -33,6 +38,37 @@ export function parseDevelopers(source) {
           : ({ n: "\n", r: "\r", t: "\t" }[c] ?? c),
       );
   };
+  const description = () => {
+    if (/^['"]/.test(peek() ?? "")) return literal();
+    expect("(");
+    const parameter = next();
+    if (!/^[A-Za-z_]\w*$/.test(parameter ?? ""))
+      throw new Error("Expected a translation parameter");
+    expect(")");
+    expect("=");
+    expect(">");
+    expect(parameter);
+    expect(".");
+    expect("setting");
+    expect(".");
+    expect("aboutPage");
+    expect(".");
+    const member = next();
+    // Slang camel-cases YAML keys. Resolve against the source keys so legacy
+    // identities (including hyphens and underscores) keep their site overrides.
+    const matches = descriptionKeys.filter(
+      (key) =>
+        key.replace(/[-_]([A-Za-z0-9])/g, (_, char) => char.toUpperCase()) ===
+        member,
+    );
+    if (!matches.length)
+      throw new Error(
+        `Missing Chinese description: setting.aboutPage.${member}`,
+      );
+    if (matches.length !== 1)
+      throw new Error(`Ambiguous translation key: setting.aboutPage.${member}`);
+    return `setting.about_page.${matches[0]}`;
+  };
   const people = [];
   for (;;) {
     const token = next();
@@ -43,7 +79,7 @@ export function parseDevelopers(source) {
     expect(",");
     const avatar = literal();
     expect(",");
-    const key = literal();
+    const key = description();
     expect(",");
     const url = literal();
     const end = next();
@@ -69,23 +105,24 @@ export function parseDevelopers(source) {
 export function createSnapshot(dart, zhText, enText, revision) {
   if (!/^[a-f0-9]{40}$/.test(revision))
     throw new Error("Invalid source revision");
-  const zh = parse(zhText);
-  const en = parse(enText);
-  const get = (dict, key) =>
-    key.split(".").reduce((value, part) => value?.[part], dict);
-  const contributors = parseDevelopers(dart).map((person) => {
-    const chinese = get(zh, person.id);
-    const english = get(en, person.id);
-    if (typeof chinese !== "string" || !chinese.trim())
-      throw new Error(`Missing Chinese description: ${person.id}`);
-    return {
-      ...person,
-      description: {
-        zh: chinese,
-        en: typeof english === "string" && english.trim() ? english : chinese,
-      },
-    };
-  });
+  const zh = parse(zhText)?.about_page;
+  const en = parse(enText)?.about_page;
+  const contributors = parseDevelopers(dart, Object.keys(zh ?? {})).map(
+    (person) => {
+      const key = person.id.slice("setting.about_page.".length);
+      const chinese = zh?.[key];
+      const english = en?.[key];
+      if (typeof chinese !== "string" || !chinese.trim())
+        throw new Error(`Missing Chinese description: ${person.id}`);
+      return {
+        ...person,
+        description: {
+          zh: chinese,
+          en: typeof english === "string" && english.trim() ? english : chinese,
+        },
+      };
+    },
+  );
   return {
     source: {
       repository: "BenderBlog/traintime_pda",
@@ -93,8 +130,8 @@ export function createSnapshot(dart, zhText, enText, revision) {
       license: "MPL-2.0",
       files: [
         "lib/model/about_page.dart",
-        "assets/flutter_i18n/zh_CN.yaml",
-        "assets/flutter_i18n/en_US.yaml",
+        "assets/i18n/zh/setting.yaml",
+        "assets/i18n/en/setting.yaml",
       ],
     },
     contributors,
