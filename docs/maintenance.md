@@ -27,10 +27,10 @@ pnpm audit
 `pnpm sync:contributors` 先获取 BenderBlog/traintime_pda 的 main 提交 SHA，再从同一提交读取：
 
 - `lib/model/about_page.dart`：身份、姓名、头像、主页、排列顺序。
-- `assets/flutter_i18n/zh_CN.yaml`：中文贡献说明。
-- `assets/flutter_i18n/en_US.yaml`：英文贡献说明；缺失时显示中文原文。
+- `assets/i18n/zh/setting.yaml` 的 `about_page`：中文贡献说明。
+- `assets/i18n/en/setting.yaml` 的 `about_page`：英文贡献说明；缺失时显示中文原文。
 
-解析器只接受字面量 Developer 列表，不执行 Dart，也不使用 GitHub 提交贡献者 API 替代设计、翻译和支持人员名单。身份键使用完整的 descriptionI18nKey，因此改名不会丢失网站补充资料。重复身份、空名单、非法链接、格式变化或缺失中文说明都会中止同步，旧快照保留。快照原子写入；名单和内容没有改变时不改文件。
+解析器只接受 `const`/`final List<Developer>` 中的字面量字段，以及旧版字符串描述键或简单的 `(t) => t.setting.aboutPage.xxx` Slang 翻译引用，不执行 Dart，也不使用 GitHub 提交贡献者 API 替代设计、翻译和支持人员名单。Slang 驼峰属性通过中文 YAML 原始键匹配，身份键继续使用 `setting.about_page.<原始键>`，因此改名或迁移翻译格式不会丢失网站补充资料。重复身份、空名单、非法链接、格式变化、歧义翻译键或缺失中文说明都会中止同步，旧快照保留。快照原子写入；名单和内容没有改变时不改文件。
 
 生成结果位于 `src/generated/contributors.json`，记录来源 SHA、路径和 MPL-2.0 标识。源文件版权属于 Traintime PDA authors，原文出处可通过记录的提交追溯；其许可见 <https://github.com/BenderBlog/traintime_pda/blob/main/LICENSE>。不要将同步数据的许可误写为本站代码的 MIT。
 
