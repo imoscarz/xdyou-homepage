@@ -4,11 +4,22 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # Keep TypeScript inside typescript-eslint's supported peer range.
+      - dependency-name: typescript
+        versions: [">=6.1.0"]
+      # Match the Node 24 runtime selected by .nvmrc and package.json.
+      - dependency-name: "@types/node"
+        versions: [">=25.0.0"]
     groups:
       next:
         patterns: ["next", "@next/*", "react", "react-dom", "@types/react*"]
       tooling:
         dependency-type: development
+        patterns: ["*"]
+        exclude-patterns: ["@next/*", "@types/react*"]
+        # Keep breaking upgrades separate so one cannot block routine fixes.
+        update-types: [minor, patch]
   - package-ecosystem: github-actions
     directory: /
     schedule:

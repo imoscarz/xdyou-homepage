@@ -28,8 +28,8 @@ const base = `https://raw.githubusercontent.com/BenderBlog/traintime_pda/${commi
 const files = await Promise.all(
   [
     "lib/model/about_page.dart",
-    "assets/flutter_i18n/zh_CN.yaml",
-    "assets/flutter_i18n/en_US.yaml",
+    "assets/i18n/zh/setting.yaml",
+    "assets/i18n/en/setting.yaml",
   ].map(async (path) => (await request(base + path)).text()),
 );
 const snapshot = createSnapshot(...files, commit.sha);
