@@ -6,6 +6,10 @@
 
 依赖已刷新到锁文件中的稳定版本。TypeScript 保持 6.0 系列，以符合 typescript-eslint 的 `<6.1.0` peer 范围；不盲目升级到 TypeScript 7。Next、React 和相关类型保持配套。安全检查运行 `pnpm audit`，结果具有时效性。
 
+Dependabot 保留 npm 与 GitHub Actions 每周检查。npm 工具组只合并 minor/patch 更新，主版本升级单独审核；Next 相关包与 React 类型不进入工具组。TypeScript 在清单中限制为 `~6.0.3`，Dependabot 暂不更新到 `>=6.1.0`；Node 类型保持 24 系列。升级运行时或 ESLint 支持范围后，应同步调整这些约束。`.npmrc` 启用严格 peer 依赖检查，防止不兼容组合通过安装。
+
+2026-10-27 的依赖修复将 Next 及其配套工具更新到 16.4.3，Lucide 更新到 1.61.0；首页 GitHub 图标复用站内 `Icons.github`，适配新版 Lucide 移除品牌图标的变化。`source-map-js` 更新到 1.2.2，`sharp` 更新到 0.35.5。`@tailwindcss/typography@0.5.20` 固定使用旧解析器，因此仅覆盖其 `postcss-selector-parser` 为 6.1.5；上游更新后应重新检查并移除该覆盖。
+
 GitHub CI 只负责安装、图片检查、Lint、测试、构建与类型检查，不负责部署。Vercel 使用仓库的构建命令及 Node 24；若项目控制台另设了旧 Node 版本，应将该覆盖设置改为 24.x。
 
 当前已移除不执行路由逻辑的 middleware。构建日期通过 Next 配置注入，不再改写源码；Next 16 所需的 tsconfig 改动已纳入版本控制。
@@ -27,10 +31,10 @@ pnpm audit
 `pnpm sync:contributors` 先获取 BenderBlog/traintime_pda 的 main 提交 SHA，再从同一提交读取：
 
 - `lib/model/about_page.dart`：身份、姓名、头像、主页、排列顺序。
-- `assets/flutter_i18n/zh_CN.yaml`：中文贡献说明。
-- `assets/flutter_i18n/en_US.yaml`：英文贡献说明；缺失时显示中文原文。
+- `assets/i18n/zh/setting.yaml` 的 `about_page`：中文贡献说明。
+- `assets/i18n/en/setting.yaml` 的 `about_page`：英文贡献说明；缺失时显示中文原文。
 
-解析器只接受字面量 Developer 列表，不执行 Dart，也不使用 GitHub 提交贡献者 API 替代设计、翻译和支持人员名单。身份键使用完整的 descriptionI18nKey，因此改名不会丢失网站补充资料。重复身份、空名单、非法链接、格式变化或缺失中文说明都会中止同步，旧快照保留。快照原子写入；名单和内容没有改变时不改文件。
+解析器只接受 `const`/`final List<Developer>` 中的字面量字段，以及旧版字符串描述键或简单的 `(t) => t.setting.aboutPage.xxx` Slang 翻译引用，不执行 Dart，也不使用 GitHub 提交贡献者 API 替代设计、翻译和支持人员名单。Slang 驼峰属性通过中文 YAML 原始键匹配，身份键继续使用 `setting.about_page.<原始键>`，因此改名或迁移翻译格式不会丢失网站补充资料。重复身份、空名单、非法链接、格式变化、歧义翻译键或缺失中文说明都会中止同步，旧快照保留。快照原子写入；名单和内容没有改变时不改文件。
 
 生成结果位于 `src/generated/contributors.json`，记录来源 SHA、路径和 MPL-2.0 标识。源文件版权属于 Traintime PDA authors，原文出处可通过记录的提交追溯；其许可见 <https://github.com/BenderBlog/traintime_pda/blob/main/LICENSE>。不要将同步数据的许可误写为本站代码的 MIT。
 
